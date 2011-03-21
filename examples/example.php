@@ -1,6 +1,6 @@
 <?php
 // Include the TourCMS library
-include 'tourcms.php';
+include '../tourcms.php';
 
 // Marketplace account ID
 // Leave this as zero if you are a supplier (i.e. not a Marketplace partner)
