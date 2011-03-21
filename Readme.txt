@@ -1,1 +1,0 @@
-http://www.tourcms.com/support/api/mp/code/library_php.php
