@@ -59,7 +59,7 @@ class TourCMS {
 	 * @param $verb HTTP Verb, defaults to GET
 	 * @return String or SimpleXML
 	 */
-	protected function request($path, $channel = 0, $verb = 'GET') {
+	protected function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
 		// Prepare the URL we are sending to
 		$url = $this->base_url.$path;
 		// We need a signature for the header
@@ -80,6 +80,12 @@ class TourCMS {
 		curl_setopt($ch, CURLOPT_HEADER, true);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+		
+		if($verb == "POST") {
+			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+				if(!is_null($post_data))
+					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
+		}
 		
 		$response = curl_exec($ch);
 		
@@ -179,6 +185,12 @@ class TourCMS {
 		return($this->request('/c/tour/datesprices/freesale/show.xml?id='.$tour, $channel));	
 	}
 	
+	# Enquiry methods
+	
+	public function create_enquiry($enquiry_data, $channel)
+	{
+		return($this->request('/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
+	}
 	
 }
 
