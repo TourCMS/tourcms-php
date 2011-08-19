@@ -133,6 +133,13 @@ class TourCMS {
 		return($this->request('/c/channel/show.xml', $channel));
 	}
 	
+	public function channel_performance($channel = 0) {
+		if($channel==0) 
+			return($this->request('/p/channels/performance.xml'));
+		else
+			return($this->request('/c/channel/performance.xml', $channel));
+	}
+	
 	# Tour methods
 	public function search_tours($params = "", $channel = 0) {
 		if($channel==0) 
