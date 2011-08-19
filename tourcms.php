@@ -140,7 +140,7 @@ class TourCMS {
 			return($this->request('/c/channel/performance.xml', $channel));
 	}
 	
-	# Tour methods
+	# Tour/Hotel methods
 	public function search_tours($params = "", $channel = 0) {
 		if($channel==0) 
 			return($this->request('/p/tours/search.xml?'.$params));
@@ -148,7 +148,6 @@ class TourCMS {
 			return($this->request('/c/tours/search.xml?'.$params, $channel));		
 	}
 	
-	# Tour methods
 	public function search_hotels_range($params = "", $tour = "", $channel = 0) {
 		if($channel==0) 
 			return($this->request('/p/hotels/search_range.xml?'.$params."&single_tour_id=".$tour));
@@ -202,6 +201,14 @@ class TourCMS {
 			return($this->request('/p/enquiries/search.xml?'.$params));
 		else
 			return($this->request('/c/enquiries/search.xml?'.$params, $channel));
+	}
+	
+	# Booking methods
+	public function search_bookings($params = "", $channel = 0) {
+		if($channel==0) 
+			return($this->request('/p/bookings/search.xml?'.$params));
+		else
+			return($this->request('/c/bookings/search.xml?'.$params, $channel));
 	}
 	
 }
