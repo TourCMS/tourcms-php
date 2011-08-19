@@ -3,7 +3,7 @@
 	// Leave this as zero if you are a supplier (i.e. not a Marketplace partner)
 	$marketplace_account_id = 0;
 	
-	// Marketplace account ID
+	// Channel ID
 	// Leave this as zero if you are a Marketplace partner (i.e. not a supplier)
 	$channel_id = 0;
 	
