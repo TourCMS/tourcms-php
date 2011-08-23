@@ -203,6 +203,10 @@ class TourCMS {
 			return($this->request('/c/enquiries/search.xml?'.$params, $channel));
 	}
 	
+	public function show_enquiry($enquiry, $channel) {
+		return($this->request('/c/enquiry/show.xml?enquiry_id='.$enquiry, $channel));
+	}
+	
 	# Booking methods
 	public function search_bookings($params = "", $channel = 0) {
 		if($channel==0) 
