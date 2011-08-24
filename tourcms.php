@@ -190,6 +190,14 @@ class TourCMS {
 		return($this->request('/c/tour/datesprices/freesale/show.xml?id='.$tour, $channel));	
 	}
 	
+	# Booking methods
+	public function search_bookings($params = "", $channel = 0) {
+		if($channel==0) 
+			return($this->request('/p/bookings/search.xml?'.$params));
+		else
+			return($this->request('/c/bookings/search.xml?'.$params, $channel));
+	}
+	
 	# Enquiry and customer methods
 	public function create_enquiry($enquiry_data, $channel)
 	{
@@ -210,17 +218,8 @@ class TourCMS {
 	public function show_customer($customer, $channel) {
 		return($this->request('/c/customer/show.xml?customer_id='.$customer, $channel));
 	}
+
 	
-	
-	
-	
-	# Booking methods
-	public function search_bookings($params = "", $channel = 0) {
-		if($channel==0) 
-			return($this->request('/p/bookings/search.xml?'.$params));
-		else
-			return($this->request('/c/bookings/search.xml?'.$params, $channel));
-	}
 	
 }
 
