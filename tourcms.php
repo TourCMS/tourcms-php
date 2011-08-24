@@ -218,7 +218,10 @@ class TourCMS {
 	public function show_customer($customer, $channel) {
 		return($this->request('/c/customer/show.xml?customer_id='.$customer, $channel));
 	}
-
+	
+	public function check_customer_login($customer, $password, $channel) {
+		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
+	}
 	
 	
 }
