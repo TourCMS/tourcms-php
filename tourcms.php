@@ -204,6 +204,16 @@ class TourCMS {
 		return($this->request('/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
 	}
 	
+	public function create_customer($customer_data, $channel)
+	{
+		return create_enquiry($customer_data, $channel);
+	}
+	
+	public function update_customer($customer_data, $channel)
+	{
+		return($this->request('/c/customer/update.xml', $channel, "POST", $customer_data));
+	}
+	
 	public function search_enquiries($params = "", $channel = 0) {
 		if($channel==0) 
 			return($this->request('/p/enquiries/search.xml?'.$params));
