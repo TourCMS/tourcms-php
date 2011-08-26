@@ -233,7 +233,10 @@ class TourCMS {
 		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
 	}
 	
-	
+	# Internal supplier methods
+	public function show_supplier($supplier, $channel) {
+		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
+	}
 }
 
 ?>
