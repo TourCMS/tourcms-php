@@ -202,6 +202,11 @@ class TourCMS {
 		return($this->request('/c/booking/show.xml?booking_id='.$booking, $channel));
 	}
 	
+	public function update_booking($booking_data, $channel)
+	{
+		return($this->request('/c/booking/update.xml', $channel, "POST", $booking_data));
+	}
+	
 	# Enquiry and customer methods
 	public function create_enquiry($enquiry_data, $channel)
 	{
