@@ -207,6 +207,11 @@ class TourCMS {
 		return($this->request('/c/booking/update.xml', $channel, "POST", $booking_data));
 	}
 	
+	public function create_payment($payment_data, $channel)
+	{
+		return($this->request('/c/booking/payment/new.xml', $channel, "POST", $payment_data));
+	}
+	
 	# Enquiry and customer methods
 	public function create_enquiry($enquiry_data, $channel)
 	{
