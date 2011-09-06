@@ -180,6 +180,11 @@ class TourCMS {
 		return($this->request('/c/tour/show.xml?id='.$tour, $channel));		
 	}
 	
+	public function show_tour_datesanddeals($tour, $channel)
+	{
+		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour, $channel));	
+	}
+	
 	public function show_tour_departures($tour, $channel)
 	{
 		return($this->request('/c/tour/datesprices/dep/show.xml?id='.$tour, $channel));	
