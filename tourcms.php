@@ -59,7 +59,7 @@ class TourCMS {
 	 * @param $verb HTTP Verb, defaults to GET
 	 * @return String or SimpleXML
 	 */
-	protected function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
+	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
 		// Prepare the URL we are sending to
 		$url = $this->base_url.$path;
 		// We need a signature for the header
