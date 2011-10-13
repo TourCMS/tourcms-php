@@ -196,7 +196,14 @@ class TourCMS {
 	}
 	
 	# Booking methods
-	public function search_bookings($params = "", $channel = 0) {
+
+	public function get_booking_redirect_url($url_data, $channel)
+	{
+		return($this->request('/c/booking/new/get_redirect_url.xml', $channel, "POST", $url_data));
+	}
+	
+	public function search_bookings($params = "", $channel = 0) 
+	{
 		if($channel==0) 
 			return($this->request('/p/bookings/search.xml?'.$params));
 		else
@@ -223,10 +230,10 @@ class TourCMS {
 		return($this->request('/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
 	}
 	
-	public function create_customer($customer_data, $channel)
+	/*public function create_customer($customer_data, $channel)
 	{
 		return create_enquiry($customer_data, $channel);
-	}
+	}*/
 	
 	public function update_customer($customer_data, $channel)
 	{
