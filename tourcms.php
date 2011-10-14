@@ -210,6 +210,11 @@ class TourCMS {
 		return($this->request('/c/booking/new/get_redirect_url.xml', $channel, "POST", $url_data));
 	}
 	
+	public function start_new_booking($booking_data, $channel)
+	{
+		return($this->request('/c/booking/new/start.xml', $channel, "POST", $booking_data));
+	}
+	
 	public function search_bookings($params = "", $channel = 0) 
 	{
 		if($channel==0) 
