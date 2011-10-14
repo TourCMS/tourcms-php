@@ -169,21 +169,29 @@ class TourCMS {
 			return($this->request('/c/tours/list.xml', $channel));
 	}
 	
-	public function list_tour_images($channel = 0) {
+	public function list_tour_images($channel = 0) 
+	{
 		if($channel==0) 
 			return($this->request('/p/tours/images/list.xml'));
 		else
 			return($this->request('/c/tours/images/list.xml', $channel));	
 	}
 	
-	public function show_tour($tour, $channel) {
+	public function show_tour($tour, $channel) 
+	{
 		return($this->request('/c/tour/show.xml?id='.$tour, $channel));		
+	}
+	
+	public function check_tour_availability($params, $tour, $channel)
+	{
+		return ($this->request('/c/tour/datesprices/checkavail.xml?id='.$tour."&".$params, $channel));
 	}
 	
 	public function show_tour_datesanddeals($tour, $channel)
 	{
 		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour, $channel));	
 	}
+
 	
 	public function show_tour_departures($tour, $channel)
 	{
