@@ -119,12 +119,14 @@ class TourCMS {
 		return $signature;
 	}
 	
-	# API methods
+	# API methods (Housekeeping)
+	
 	public function api_rate_limit_status($channel = 0) {
 		return($this->request('/api/rate_limit_status.xml', $channel));
 	}
 	
 	# Channel methods
+	
 	public function list_channels() {
 		return($this->request('/p/channels/list.xml'));
 	}
@@ -141,6 +143,7 @@ class TourCMS {
 	}
 	
 	# Tour/Hotel methods
+	
 	public function search_tours($params = "", $channel = 0) {
 		if($channel==0) 
 			return($this->request('/p/tours/search.xml?'.$params));
@@ -204,6 +207,10 @@ class TourCMS {
 	}
 	
 	# Booking methods
+	
+	/* 
+		Making bookings
+	*/
 
 	public function get_booking_redirect_url($url_data, $channel)
 	{
@@ -214,6 +221,15 @@ class TourCMS {
 	{
 		return($this->request('/c/booking/new/start.xml', $channel, "POST", $booking_data));
 	}
+	
+	public function commit_new_booking($booking_data, $channel)
+	{
+		return($this->request('/c/booking/new/commit.xml', $channel, "POST", $booking_data));
+	}
+	
+	/*
+		Retrieving bookings
+	*/
 	
 	public function search_bookings($params = "", $channel = 0) 
 	{
@@ -227,6 +243,10 @@ class TourCMS {
 		return($this->request('/c/booking/show.xml?booking_id='.$booking, $channel));
 	}
 	
+	/*
+		Updating bookings
+	*/
+	
 	public function update_booking($booking_data, $channel)
 	{
 		return($this->request('/c/booking/update.xml', $channel, "POST", $booking_data));
@@ -238,15 +258,11 @@ class TourCMS {
 	}
 	
 	# Enquiry and customer methods
+	
 	public function create_enquiry($enquiry_data, $channel)
 	{
 		return($this->request('/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
 	}
-	
-	/*public function create_customer($customer_data, $channel)
-	{
-		return create_enquiry($customer_data, $channel);
-	}*/
 	
 	public function update_customer($customer_data, $channel)
 	{
