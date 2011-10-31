@@ -165,6 +165,19 @@ class TourCMS {
 			return($this->request('/c/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour, $channel));
 	}
 	
+	public function update_tour($tour_data, $channel) {
+		return($this->request('/c/tour/update.xml', $channel, "POST", $tour_data));
+	}
+	
+	public function update_tour_url($tour, $channel, $tour_url) {
+		// Create a SimpleXMLElement to hold the new url 
+		$url_data = new SimpleXMLElement('<tour />'); 
+		$url_data->addChild('tour_id', $tour); 
+		$url_data->addChild('tour_url', $tour_url); 
+		
+		return($this->request('/c/tour/update.xml', $channel, "POST", $url_data));
+	}
+	
 	public function list_tours($channel = 0) {
 		if($channel==0) 
 			return($this->request('/p/tours/list.xml'));
