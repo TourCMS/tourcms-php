@@ -175,7 +175,7 @@ class TourCMS {
 		$url_data->addChild('tour_id', $tour); 
 		$url_data->addChild('tour_url', $tour_url); 
 		
-		return($this->request('/c/tour/update.xml', $channel, "POST", $url_data));
+		return($this->update_tour($url_data, $channel));
 	}
 	
 	public function list_tours($channel = 0) {
