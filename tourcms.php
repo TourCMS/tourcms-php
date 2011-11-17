@@ -203,9 +203,9 @@ class TourCMS {
 		return ($this->request('/c/tour/datesprices/checkavail.xml?id='.$tour."&".$params, $channel));
 	}
 	
-	public function show_tour_datesanddeals($tour, $channel)
+	public function show_tour_datesanddeals($tour, $channel, $qs = "")
 	{
-		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour, $channel));	
+		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour.'&'.$qs, $channel));	
 	}
 
 	
