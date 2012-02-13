@@ -1,9 +1,9 @@
 <?php
 	// Include the TourCMS API class
-	include '../../tourcms.php';
+	include '../../../tourcms.php';
 	
 	// Include our API settings
-	include '../config.php';
+	include '../../../config.php';
 	
 	// Partners override the Channel ID here if you want
 	// $channel_id = 0;
