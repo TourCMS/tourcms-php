@@ -94,7 +94,7 @@
 				print_status($has_curl, "CURL is loaded ok", "CURL is not loaded <a href='http://uk3.php.net/manual/en/curl.installation.php'>?</a>");
 				
 				if($has_curl) {
-					$ch = curl_init("https://live.tourcms.com/favicon.sico");
+					$ch = curl_init("https://live.tourcms.com/favicon.ico");
 					curl_setopt($ch, CURLOPT_HEADER, 1); 
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
