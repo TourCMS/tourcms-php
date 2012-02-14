@@ -160,6 +160,6 @@
 			print_status($all_ok, $has_tours ? "Everything looks OK" : "Server &amp; settings OK, <strong>you just need some Tours/Hotels</strong>", "Check the issues listed above");
 		?>
 		</ul>
-		<h2>----</h2>
+		<p>Problems? <a href="http://www.tourcms.com/company/contact.php">Contact TourCMS support</a><br />@<a href="http://twitter.com/TourCMS">TourCMS</a> on Twitter (page by @<a href="http://twitter.com/paulslugocki">paulslugocki</a>)</p>
 	</body>
 </html>
