@@ -10,7 +10,7 @@
 				font-size: 14px;
 			}
 			ul {
-				max-width: 440px;
+				max-width: 460px;
 				margin: auto;
 				list-style-type: none;
 			}
@@ -133,19 +133,21 @@
 						
 						$api_ok = (string)$api_check->error == "OK";
 						
-						print_status($api_ok, "Your API settings work", "Your API settings return the following error: <strong>" . $api_check->error . "</strong>");
+						if(!$api_ok && strpos((string)$api_check->error, "FAIL_TIME")!==false) {
+							?>
+							<li class="fail">It looks like the Date/Time of your server is incorrect. According to your server the time in GMT is: <strong><?php print gmdate('H:i  l (\G\M\T)'); ?></strong>. You can compare that to the actual time in GMT by using this <a href="https://www.google.co.uk/search?q=current+time+gmt">Google search</a><br />(it doesn't matter if it's a few minutes out).</li>
+							<?php
+						}
+						
+						print_status($api_ok, "Your API settings work", "Your API settings return the following error: <em>" . $api_check->error . "</em> <a href='http://www.tourcms.com/support/api/mp/error_messages.php'>?</a>");
 						
 						if($api_ok) {
 							$tour_search = $tc->search_tours("", $channel_id);
 							
 							$has_tours = (int)$tour_search->total_tour_count > 0;
 							
-							print_status($has_tours, "Found <strong>" . $tour_search->total_tour_count . "</strong> Tours/Hotels", "No Tours/Hotels found");
-						} elseif((string)$api_check->error == "FAIL_TIME") {
-							?>
-							<li class="warn">This page isn't currently clever enough to check your servers date/time settings. Please check these manually. According to your server the time in GMT is: <strong><?php print gmdate('H:i  l (\G\M\T)'); ?></strong>. You can compare that to the value of this <a href="https://www.google.co.uk/search?q=current+time+gmt">Google search</a><br />(it doesn't matter if it's a few minutes out).</li>
-							<?php
-						}
+							print_status($has_tours, "Found <strong>" . $tour_search->total_tour_count . "</strong> Tours/Hotels", "No Tours/Hotels found <a href='http://www.tourcms.com/support/api/mp/useful.php'>?</a>");
+						} 
 					}
 				} 
 			?>
