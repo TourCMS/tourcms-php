@@ -146,7 +146,7 @@
 							
 							$has_tours = (int)$tour_search->total_tour_count > 0;
 							
-							print_status($has_tours, "Found <strong>" . $tour_search->total_tour_count . "</strong> Tours/Hotels", "No Tours/Hotels found <a href='http://www.tourcms.com/support/api/mp/useful.php'>?</a>");
+							print_status($has_tours, "Found <strong>" . $tour_search->total_tour_count . "</strong> Tours/Hotels", "No Tours/Hotels found");
 						} 
 					}
 				} 
