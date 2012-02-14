@@ -92,6 +92,23 @@
 				print_status($has_simplexml, "SimpleXML is loaded ok", "SimpleXML is not loaded <a href='http://www.php.net/manual/en/simplexml.installation.php'>?</a>");
 				print_status($has_curl, "CURL is loaded ok", "CURL is not loaded <a href='http://uk3.php.net/manual/en/curl.installation.php'>?</a>");
 				
+				if($has_curl) {
+					$ch = curl_init("https://live.tourcms.com/favicon.ico");
+					curl_setopt($ch, CURLOPT_HEADER, 1); 
+					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_NOBODY, true);
+					curl_setopt($ch, CURLOPT_TIMEOUT, 30 );
+					$c = curl_exec($ch); 
+					$curl_info = curl_getinfo($ch);
+					if(isset($curl_info['http_code'])) {
+						$curl_ok = (int)$curl_info['http_code']==200;
+						print_status($curl_ok, "Downloaded a test file from TourCMS OK", "Unable to download a test file from TourCMS, status: <strong>".$curl_info['http_code']."</strong>");
+					} else {
+						print_status(false, "", "Unable to contact TourCMS server, no status code returned");
+					}
+				}
 			?>
 		</ul>
 		<h2>config.php</h2>
