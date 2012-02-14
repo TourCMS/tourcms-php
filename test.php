@@ -78,6 +78,7 @@
 			$has_phpversion = strnatcmp(phpversion(),'5.1.2') >= 0;
 			$has_simplexml = function_exists("simplexml_load_file");
 			$has_curl = function_exists("curl_init");
+			$curl_ok = false;
 			
 			$has_configfile = file_exists("config.php");
 			$is_configured = false;
@@ -93,7 +94,7 @@
 				print_status($has_curl, "CURL is loaded ok", "CURL is not loaded <a href='http://uk3.php.net/manual/en/curl.installation.php'>?</a>");
 				
 				if($has_curl) {
-					$ch = curl_init("https://live.tourcms.com/favicon.ico");
+					$ch = curl_init("https://live.tourcms.com/favicon.sico");
 					curl_setopt($ch, CURLOPT_HEADER, 1); 
 					curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 					curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
@@ -154,7 +155,7 @@
 		<ul>
 		<?php 
 		
-			$all_ok = $has_phpversion && $has_simplexml && $has_curl && $has_configfile && $is_configured && $api_ok;
+			$all_ok = $has_phpversion && $has_simplexml && $has_curl && $curl_ok && $has_configfile && $is_configured && $api_ok;
 			
 			print_status($all_ok, $has_tours ? "Everything looks OK" : "Server &amp; settings OK, <strong>you just need some Tours/Hotels</strong>", "Check the issues listed above");
 		?>
