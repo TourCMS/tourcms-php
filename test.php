@@ -133,7 +133,7 @@
 						
 						$api_ok = (string)$api_check->error == "OK";
 						
-						if(!$api_ok && strpos((string)$api_check->error, "FAIL_TIME")!==false) {
+						if(!$api_ok && strpos((string)$api_check->error, "_TIME")!==false) {
 							?>
 							<li class="fail">It looks like the Date/Time of your server is incorrect. According to your server the time in GMT is: <strong><?php print gmdate('H:i  l (\G\M\T)'); ?></strong>. You can compare that to the actual time in GMT by using this <a href="https://www.google.co.uk/search?q=current+time+gmt">Google search</a><br />(it doesn't matter if it's a few minutes out).</li>
 							<?php
