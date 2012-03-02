@@ -127,7 +127,7 @@
 						include_once('tourcms.php');
 						
 						
-						$tc = new TourCMS($marketplace_account_id, $api_private_key, $result_type);
+						$tc = new TourCMS($marketplace_account_id, $api_private_key, 'simplexml');
 						
 						$api_check = $tc->api_rate_limit_status($channel_id);
 						
