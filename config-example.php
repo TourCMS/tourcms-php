@@ -13,4 +13,9 @@
 	// Result type required
 	// 'raw' or 'simplexml', if not supplied defaults to 'raw'
 	$result_type = 'simplexml';
+	
+	// Include the TourCMS library
+	include 'tourcms.php';
+	
+	$tc = new TourCMS($marketplace_account_id, $api_private_key, "simplexml");
 ?>

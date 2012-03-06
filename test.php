@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+<?php 
+
+/**
+ * test.php
+ * Displays information regarding server configuration and config file settings
+ * Call this file in a browser to test, delete once verified ok
+ * @author Paul Slugocki
+ */
+ 
+?><!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">

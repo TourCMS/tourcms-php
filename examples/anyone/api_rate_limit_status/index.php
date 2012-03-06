@@ -1,6 +1,4 @@
 <?php
-// Include the TourCMS library
-include '../../../tourcms.php';
 
 // Include our API settings
 include '../../../config.php';

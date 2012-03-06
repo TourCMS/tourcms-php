@@ -1,0 +1,20 @@
+* {
+	font-family: helvetica, sans-serif;
+}
+
+body {
+	width: 800px;
+	margin: auto;
+	background: #eee;
+	color: #222;
+	text-shadow: 1px 1px 2px white;
+}
+
+a {
+	color: #0088CC;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
