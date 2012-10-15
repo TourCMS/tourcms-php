@@ -10,6 +10,10 @@ body {
 	text-shadow: 1px 1px 2px white;
 }
 
+h1 {
+	text-align: center;
+}
+
 a {
 	color: #0088CC;
 	text-decoration: none;
@@ -17,4 +21,60 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.tour {
+	background: white;
+	padding: 24px;
+	border-radius: 6px;
+	box-shadow: 0 0 8px rgba(0, 0, 0, .3);
+}
+
+.tour h4 {
+	margin: 0;
+}
+
+p.buttons {
+	margin-bottom: 0;
+	text-align: right;
+}
+
+p.buttons a {
+	display: inline-block;
+	margin: 4px;
+	font-size: .9em;
+	background: #0088CC;
+	color: white;
+	border-radius: 3px;
+	padding: 5px 10px 5px 10px;
+	text-shadow: none;
+}
+
+p.buttons a:hover {
+	text-decoration: none;
+	background: #0076b3;
+}
+
+.ancillary {
+	font-size: .8em;
+	color: #667;
+	font-style: italic;
+}
+
+.ancillary a {
+	color: #667;
+	text-transform: lowercase;
+}
+
+.summary {
+	font-weight: bold;	
+}
+
+.pagination {
+	text-align: center;
+}
+
+.pagination a {
+	display: inline-block;
+	margin: 0 10px 0 10px;
 }
