@@ -308,6 +308,11 @@ class TourCMS {
 		return($this->request('/c/booking/payment/new.xml', $channel, "POST", $payment_data));
 	}
 	
+	public function delete_booking($booking, $channel)
+	{
+		return($this->request('/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
+	}
+	
 	# Enquiry and customer methods
 	
 	public function create_enquiry($enquiry_data, $channel)
