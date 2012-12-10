@@ -201,10 +201,16 @@ class TourCMS {
 			return($this->request('/c/tours/locations/list.xml?'.$params, $channel));	
 	}
 
-	public function show_tour($tour, $channel) 
+	public function show_tour($tour, $channel, $show_options = false) 
 	{
-		return($this->request('/c/tour/show.xml?id='.$tour, $channel));		
+		$url = '/c/tour/show.xml?id='.$tour;
+		
+		if($show_options)
+			$url .= "&show_options=1";
+		
+		return($this->request($url, $channel));		
 	}
+
 	
 	public function check_tour_availability($params, $tour, $channel)
 	{
