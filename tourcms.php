@@ -219,6 +219,30 @@ class TourCMS {
 		return($this->request('/c/tour/datesprices/freesale/show.xml?id='.$tour, $channel));	
 	}
 	
+	/*
+		Raw departure methods
+	*/
+	
+	public function search_raw_departures($tour, $channel)
+	{
+		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour, $channel));	
+	}
+	
+	public function create_departure($departure_data, $channel)
+	{
+		return($this->request('/c/tour/datesprices/dep/manage/new.xml', $channel, "POST", $departure_data));	
+	}
+	
+	public function update_departure($departure_data, $channel)
+	{
+		return($this->request('/c/tour/datesprices/dep/manage/update.xml', $channel, "POST", $departure_data));	
+	}
+	
+	public function delete_departure($departure, $tour, $channel)
+	{
+		return($this->request('/c/tour/datesprices/dep/manage/delete.xml?id='.$tour.'&departure_id='.$departure, $channel, "POST"));	
+	}
+	
 	# Booking methods
 	
 	/* 
