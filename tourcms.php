@@ -192,7 +192,15 @@ class TourCMS {
 		else
 			return($this->request('/c/tours/images/list.xml', $channel));	
 	}
-	
+
+	public function list_tour_locations($channel = 0, $params = "") 
+	{
+		if($channel==0) 
+			return($this->request('/p/tours/locations.xml?'.$params));
+		else
+			return($this->request('/c/tours/locations/list.xml?'.$params, $channel));	
+	}
+
 	public function show_tour($tour, $channel) 
 	{
 		return($this->request('/c/tour/show.xml?id='.$tour, $channel));		
