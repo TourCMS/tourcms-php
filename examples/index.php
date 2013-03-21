@@ -13,24 +13,26 @@
 			<li>
 				<a href="anyone/api_rate_limit_status/">Check current API rate limit status</a> 
 				<span class="ancillary">
-					<a href="http://www.tourcms.com/support/api/mp/rate_limit_status.php">API rate limit status</a>
+					<a href="http://www.tourcms.com/support/api/mp/rate_limit_status.php" target="_blank">API rate limit status</a>
 				</span>
 			</li>
 			<li>
 				<a href="anyone/search_tours/">Display a list of Tours/Hotels</a> 
 				<span class="ancillary">
-					<a href="http://www.tourcms.com/support/api/mp/search_tours.php">Search Tours/Hotels</a>
+					<a href="http://www.tourcms.com/support/api/mp/tour_search.php" target="_blank">Search Tours/Hotels</a>
 				</span>
 			</li>
-			<li>
+			<!--li>
 				<a href="anyone/search_tours_paged/">Display a list of Tours/Hotels with pagination</a> 
 				<span class="ancillary">
 					<a href="http://www.tourcms.com/support/api/mp/search_tours.php">Search Tours/Hotels</a>
 				</span>
-			</li>
+			</li-->
 		</ul>
-		<h4>For Operator/Supplier accounts only</h4>
-		<h4>For Partner/Affiliate accounts only</h4>
+		<p>More examples in future versions of the wrapper, for now check out the <a href="http://www.tourcms.com/support/api/mp/examples.php" target="_blank">examples page on our website</a> and don't forget each of the methods in <a href="http://www.tourcms.com/support/api/mp/" target="_blank">our documentation</a> contains sample code.</p>
+		
+		<!--h4>For Operator/Supplier accounts only</h4>
+		<h4>For Partner/Affiliate accounts only</h4-->
 		<h2>Problems?</h2>
 		<ul>
 			<li>Check the <a href="../test.php">test page</a></li>
