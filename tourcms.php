@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2010-2013 Travel UCD
+Copyright (c) 2010-2012 Travel UCD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -199,15 +199,6 @@ class TourCMS {
 		else
 			return($this->request('/c/tours/locations/list.xml?'.$params, $channel));	
 	}
-<<<<<<< HEAD
-
-	public function show_tour($tour, $channel, $show_options = false) 
-	{
-		$url = '/c/tour/show.xml?id='.$tour;
-		
-		if($show_options)
-			$url .= "&show_options=1";
-=======
 	
 	
 
@@ -235,7 +226,6 @@ class TourCMS {
 					$url .= "&show_options=1";
 					
 			}
->>>>>>> New method wrappers, additional params for show_tour
 		
 		return($this->request($url, $channel));		
 	}
@@ -286,8 +276,6 @@ class TourCMS {
 		return($this->request('/c/tour/datesprices/dep/manage/delete.xml?id='.$tour.'&departure_id='.$departure, $channel, "POST"));	
 	}
 	
-<<<<<<< HEAD
-=======
 	/*
 		Promo code
 	*/
@@ -297,7 +285,6 @@ class TourCMS {
 		return($this->request('/c/promo/show.xml?promo_code='.$promo, $channel));	
 	}
 	
->>>>>>> New method wrappers, additional params for show_tour
 	# Booking methods
 	
 	/* 
@@ -349,13 +336,10 @@ class TourCMS {
 		return($this->request('/c/booking/payment/new.xml', $channel, "POST", $payment_data));
 	}
 	
-<<<<<<< HEAD
-=======
 	public function log_failed_payment($payment_data, $channel) {
 		return($this->request('/c/booking/payment/fail.xml', $channel, "POST", $payment_data));
 	}
 	
->>>>>>> New method wrappers, additional params for show_tour
 	public function delete_booking($booking, $channel)
 	{
 		return($this->request('/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
