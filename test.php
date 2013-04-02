@@ -114,7 +114,7 @@
 					$curl_info = curl_getinfo($ch);
 					if(isset($curl_info['http_code'])) {
 						$curl_ok = (int)$curl_info['http_code']==200;
-						print_status($curl_ok, "Downloaded a test file from TourCMS OK", "Unable to download a test file from TourCMS, status: <strong>".$curl_info['http_code']."</strong>");
+						print_status($curl_ok, "Downloaded a test file from TourCMS ok", "Unable to download a test file from TourCMS, status: <strong>".$curl_info['http_code']."</strong>");
 					} else {
 						print_status(false, "", "Unable to contact TourCMS server, no status code returned");
 					}
