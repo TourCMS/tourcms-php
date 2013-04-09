@@ -177,11 +177,11 @@ class TourCMS {
 		return($this->update_tour($url_data, $channel));
 	}
 	
-	public function list_tours($channel = 0) {
+	public function list_tours($channel = 0, $params = "") {
 		if($channel==0) 
-			return($this->request('/p/tours/list.xml'));
+			return($this->request('/p/tours/list.xml?'.$params));
 		else
-			return($this->request('/c/tours/list.xml', $channel));
+			return($this->request('/c/tours/list.xml?'.$params, $channel));
 	}
 	
 	public function list_tour_images($channel = 0) 
