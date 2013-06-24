@@ -84,9 +84,9 @@ $result = $tc->search_tours($querystring, $channel_id);
 				</p>
 			<?php
 			
-			print "<pre>";
-			print_r($result);
-			print "</pre>";
+//			print "<pre>";
+//			print_r($result);
+//			print "</pre>";
 		} else {
 			// If not output the error
 			print "There has been an error: ";
