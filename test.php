@@ -17,6 +17,7 @@
 				text-align: center;
 				font-family: helvetica, sans-serif;
 				font-size: 14px;
+				background: #eee;
 			}
 			ul {
 				max-width: 460px;
