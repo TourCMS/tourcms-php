@@ -336,8 +336,14 @@ class TourCMS {
 		return($this->request('/c/booking/payment/new.xml', $channel, "POST", $payment_data));
 	}
 	
-	public function log_failed_payment($payment_data, $channel) {
+	public function log_failed_payment($payment_data, $channel) 
+	{
 		return($this->request('/c/booking/payment/fail.xml', $channel, "POST", $payment_data));
+	}
+	
+	public function cancel_booking($booking, $channel)
+	{
+		return($this->request('/c/booking/cancel.xml?booking_id='.$booking, $channel, "POST"));
 	}
 	
 	public function delete_booking($booking, $channel)
@@ -364,11 +370,13 @@ class TourCMS {
 			return($this->request('/c/enquiries/search.xml?'.$params, $channel));
 	}
 	
-	public function show_enquiry($enquiry, $channel) {
+	public function show_enquiry($enquiry, $channel) 
+	{
 		return($this->request('/c/enquiry/show.xml?enquiry_id='.$enquiry, $channel));
 	}
 	
-	public function show_customer($customer, $channel) {
+	public function show_customer($customer, $channel) 
+	{
 		return($this->request('/c/customer/show.xml?customer_id='.$customer, $channel));
 	}
 	
