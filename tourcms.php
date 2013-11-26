@@ -322,6 +322,21 @@ class TourCMS {
 		return($this->request('/c/booking/show.xml?booking_id='.$booking, $channel));
 	}
 	
+	public function search_voucher($voucher_data = null, $channel = 0) {
+	
+		if($voucher_data == null) {
+			$voucher_data = new SimpleXMLElement('<voucher />');
+			$voucher_data->addChild('barcode_data', '');
+		}
+	
+		if($chanel_id == 0) {
+			return($this->request('/p/voucher/search.xml', $channel, 'POST', $voucher_data));
+		} else {
+			return($this->request('/c/voucher/search.xml', $channel, 'POST', $voucher_data));
+		}
+	}
+
+	
 	/*
 		Updating bookings
 	*/
@@ -349,6 +364,10 @@ class TourCMS {
 	public function delete_booking($booking, $channel)
 	{
 		return($this->request('/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
+	}
+	
+	public function redeem_voucher($voucher_data, $channel = 0) {
+		return($this->request('/c/voucher/redeem.xml', $channel, 'POST', $voucher_data));
 	}
 	
 	# Enquiry and customer methods
