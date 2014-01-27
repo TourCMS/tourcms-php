@@ -197,7 +197,7 @@ class TourCMS {
 		if($channel==0) 
 			return($this->request('/p/tours/locations.xml?'.$params));
 		else
-			return($this->request('/c/tours/locations/list.xml?'.$params, $channel));	
+			return($this->request('/c/tours/locations.xml?'.$params, $channel));	
 	}
 	
 	
