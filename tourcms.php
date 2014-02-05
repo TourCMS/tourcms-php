@@ -356,9 +356,9 @@ class TourCMS {
 		return($this->request('/c/booking/payment/fail.xml', $channel, "POST", $payment_data));
 	}
 	
-	public function cancel_booking($booking, $channel)
+	public function cancel_booking($booking_data, $channel)
 	{
-		return($this->request('/c/booking/cancel.xml?booking_id='.$booking, $channel, "POST"));
+		return($this->request('/c/booking/cancel.xml', $channel, "POST", $booking_data));
 	}
 	
 	public function delete_booking($booking, $channel)
