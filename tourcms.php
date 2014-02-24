@@ -78,8 +78,6 @@ class TourCMS {
 		curl_setopt($ch, CURLOPT_TIMEOUT, 0 );
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_HEADER, true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
 		
 		if($verb == "POST") {
 			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
