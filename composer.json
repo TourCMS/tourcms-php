@@ -19,5 +19,10 @@
         "autoload": {
                 "classmap": ["tourcms.php"]
             }
-    }
+    },
+    "extra": {
+            "branch-alias": {
+                "dev-master": "1.8-dev"
+            }
+        }
 }
