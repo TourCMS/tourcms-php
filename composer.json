@@ -1,0 +1,23 @@
+{
+    "name": "tourcms/tourcms-php",
+    "type": "library",
+    "description": "TourCMS API wrapper for PHP",
+    "keywords": ["tourcms","api"],
+    "homepage": "https://github.com/TourCMS/tourcms-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "TourCMS",
+            "email": "support@tourcms.com",
+            "homepage": "http://www.tourcms.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.2"
+    },
+    "autoload": {
+        "autoload": {
+                "classmap": ["tourcms.php"]
+            }
+    }
+}
