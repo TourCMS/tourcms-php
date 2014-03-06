@@ -16,9 +16,7 @@
         "php": ">=5.2"
     },
     "autoload": {
-        "autoload": {
                 "files": ["tourcms.php"]
-            }
     },
     "extra": {
             "branch-alias": {
