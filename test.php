@@ -83,7 +83,7 @@
 					<li class="<?php $status ? print "ok" : print "fail" ?>">
 						<?php $status ? print $ok_text : print $fail_text; ?>
 					</li>
-				<?
+				<?php
 			}
 			$has_phpversion = strnatcmp(phpversion(),'5.1.2') >= 0;
 			$has_simplexml = function_exists("simplexml_load_file");
