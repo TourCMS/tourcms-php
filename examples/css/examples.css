@@ -30,6 +30,20 @@ a:hover {
 	box-shadow: 0 0 8px rgba(0, 0, 0, .3);
 }
 
+.tour-details .basic-image-wrapper {
+	
+	    white-space:nowrap;
+}
+.tour-details .basic-image-wrapper-wrapper {
+	height: 220px;
+	width: auto;
+	overflow-x: scroll;
+}
+
+.tour-details img {
+	height: 200px;
+}
+
 .tour h4 {
 	margin: 0;
 }

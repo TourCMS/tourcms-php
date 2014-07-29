@@ -17,9 +17,16 @@
 				</span>
 			</li>
 			<li>
-				<a href="anyone/search_tours/">Display a list of Tours/Hotels</a> 
+				<a href="anyone/search_tours/">Display a list of Tours, link through to supplier site for full details</a> 
 				<span class="ancillary">
-					<a href="http://www.tourcms.com/support/api/mp/tour_search.php" target="_blank">Search Tours/Hotels</a>
+					<a href="http://www.tourcms.com/support/api/mp/tour_search.php" target="_blank">Search Tours</a>
+				</span>
+			</li>
+			<li>
+				<a href="anyone/search_and_show_tours/">Display a list of Tours, stay on site when viewing tour details</a> 
+				<span class="ancillary">
+					<a href="http://www.tourcms.com/support/api/mp/tour_search.php" target="_blank">Search Tours</a>
+						<a href="http://www.tourcms.com/support/api/mp/tour_search.php" target="_blank">Show Tour</a>
 				</span>
 			</li>
 			<!--li>
