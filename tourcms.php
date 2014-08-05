@@ -33,9 +33,6 @@ class TourCMS {
 	protected $private_key = "";
 	protected $result_type = "";
 
-	// API config
-	protected $api = array();
-
 	/**
 	 * __construct
 	 *
