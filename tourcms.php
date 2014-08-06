@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 1.8
+# Version: 1.8.2
 # Author: Paul Slugocki
 
 class TourCMS {
