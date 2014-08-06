@@ -324,7 +324,7 @@ class TourCMS {
 			$voucher_data->addChild('barcode_data', '');
 		}
 
-		if($chanel_id == 0) {
+		if($channel == 0) {
 			return($this->request('/p/voucher/search.xml', $channel, 'POST', $voucher_data));
 		} else {
 			return($this->request('/c/voucher/search.xml', $channel, 'POST', $voucher_data));
