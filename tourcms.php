@@ -256,6 +256,11 @@ class TourCMS {
 		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour, $channel));
 	}
 
+	public function show_departure($departure, $tour, $channel)
+	{
+		return($this->request('/c/tour/datesprices/dep/manage/show.xml?id='.$tour.'&departure_id='.$departure, $channel));
+	}
+
 	public function create_departure($departure_data, $channel)
 	{
 		return($this->request('/c/tour/datesprices/dep/manage/new.xml', $channel, "POST", $departure_data));
