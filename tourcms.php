@@ -237,9 +237,9 @@ class TourCMS {
 	}
 
 
-	public function show_tour_departures($tour, $channel)
+	public function show_tour_departures($tour, $channel, $qs = "")
 	{
-		return($this->request('/c/tour/datesprices/dep/show.xml?id='.$tour, $channel));
+		return($this->request('/c/tour/datesprices/dep/show.xml?id='.$tour.'&'.$qs, $channel));
 	}
 
 	public function show_tour_freesale($tour, $channel)
