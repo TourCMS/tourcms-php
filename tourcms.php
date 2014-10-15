@@ -222,7 +222,9 @@ class TourCMS {
 
 			}
 
-		return($this->request($url, $channel));
+		if((int)$tour > 0) {
+			return($this->request($url, $channel));		
+		}
 	}
 
 
