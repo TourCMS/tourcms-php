@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 1.8.2
+# Version: 1.8.3
 # Author: Paul Slugocki
 
 class TourCMS {
@@ -223,7 +223,7 @@ class TourCMS {
 			}
 
 		if((int)$tour > 0) {
-			return($this->request($url, $channel));		
+			return($this->request($url, $channel));
 		}
 	}
 
@@ -419,6 +419,11 @@ class TourCMS {
 
 	public function check_customer_login($customer, $password, $channel) {
 		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
+	}
+
+	# Agents
+	public function search_agents($params, $channel) {
+		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
 
 	# Internal supplier methods
