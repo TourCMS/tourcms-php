@@ -4,15 +4,12 @@ Currently updating this file, additional documentation available at: http://www.
 
 ## Installation
 
-### [Option A] Install via Composer (Recommended)
+### Installing via Composer (Recommended)
 
-Install [Composer](https://getcomposer.org/), add the following to the `requires` section of your `composer.json`:
+1. Install [Composer](https://getcomposer.org/), add `"tourcms/tourcms-php": "2.0.*",` to the `requires` section of your `composer.json`:
+2. Ensure you are including composer's `autoload.php` in your source, alternatively include `tourcms.php` directly.
 
-"tourcms/tourcms-php": "2.0.*",
-
-Ensure you are including composer's `autoload.php` in your source, alternatively include `tourcms.php` directly.
-
-### [Option B] Manual install
+### Installing Manually
 
 1. Download the source zip, extract to your web server
 2. Include `tourcms.php` in your source
@@ -41,6 +38,8 @@ $channel_id = 0;
 
 // Create a new TourCMS instance
 $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml');
+// 'simplexml' returns as a SimpleXMLObject
+// 'raw' returns the XML as as String
 
 // Call the API
 // Here as a quick example we search for some tours
