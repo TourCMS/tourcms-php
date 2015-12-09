@@ -10,12 +10,12 @@ Install [Composer](https://getcomposer.org/), add the following to the `requires
 
 "tourcms/tourcms-php": "2.0.*",
 
-Ensure you are including composer's `autoload.php` in your source.
+Ensure you are including composer's `autoload.php` in your source, alternatively include `tourcms.php` directly.
 
 ### [Option B] Manual install
 
 1. Download the source zip, extract to your web server
-2. Include `tourcms.php`
+2. Include `tourcms.php` in your source
 
 ## Usage
 
