@@ -1,4 +1,4 @@
-# PHP Wrapper class for the TourCMS Marketplace API
+# PHP Wrapper for the TourCMS API
 
 Currently updating this file, additional documentation available at: http://www.tourcms.com/support/api/mp/code/library_php.php
 
@@ -6,9 +6,11 @@ Currently updating this file, additional documentation available at: http://www.
 
 ### [Option A] Install via Composer (Recommended)
 
-Install [Composer](https://getcomposer.org/), add the following to your `requires`:
+Install [Composer](https://getcomposer.org/), add the following to the `requires` section of your `composer.json`:
 
 "tourcms/tourcms-php": "2.0.*",
+
+Ensure you are including composer's `autoload.php` in your source.
 
 ### [Option B] Manual install
 
@@ -33,7 +35,7 @@ $api_key = "YOUR_KEY_HERE";
 // Channel ID represents the Tour Operator channel to call the API against
 // Tour Operators may have multiple channels, so enter the correct one here
 // Agents can make some calls (e.g. tour_search()) across multiple channels
-// by entering a Channel ID of 0 or omitting it, or they can restrict to a 
+// by entering a Channel ID of 0 or omitting it, or they can restrict to a
 // specific channel by providing the Channel ID
 $channel_id = 0;
 
