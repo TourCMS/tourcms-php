@@ -115,6 +115,12 @@ class TourCMS {
 		return $signature;
 	}
 
+	# Test environment
+
+	public function test_environment($channel = 0) {
+		include('test.php');
+	}
+
 	# API methods (Housekeeping)
 
 	public function api_rate_limit_status($channel = 0) {
