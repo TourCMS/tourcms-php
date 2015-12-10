@@ -78,6 +78,13 @@ class TourCMS {
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_HEADER, true);
 
+		/*
+			Windows users having trouble connecting via SSL?
+			Download the CA bundle from: http://curl.haxx.se/docs/caextract.html
+			Finally uncomment the following line and point it to the downloaded file
+		*/
+		// curl_setopt($ch, CURLOPT_CAINFO, "c:/path/to/ca-bundle.crt");
+
 		if($verb == "POST") {
 			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
 				if(!is_null($post_data))
