@@ -85,7 +85,7 @@
 					</li>
 				<?php
 			}
-			$has_phpversion = strnatcmp(phpversion(),'5.1.2') >= 0;
+			$has_phpversion = strnatcmp(phpversion(),'5.3.0') >= 0;
 			$has_simplexml = function_exists("simplexml_load_file");
 			$has_curl = function_exists("curl_init");
 			$curl_ok = false;
@@ -100,8 +100,8 @@
 		<ul>
 			<?php
 				print_status($has_phpversion, "You have a recent enough version of PHP", "PHP 5.1.2 or newer is required");
-				print_status($has_simplexml, "SimpleXML is loaded ok", "SimpleXML is not loaded <a href='http://www.php.net/manual/en/simplexml.installation.php'>?</a>");
-				print_status($has_curl, "CURL is loaded ok", "CURL is not loaded <a href='http://uk3.php.net/manual/en/curl.installation.php'>?</a>");
+				print_status($has_simplexml, "SimpleXML is available", "SimpleXML is not loaded <a href='http://www.php.net/manual/en/simplexml.installation.php'>?</a>");
+				print_status($has_curl, "CURL is available", "CURL is not loaded <a href='http://uk3.php.net/manual/en/curl.installation.php'>?</a>");
 
 				if($has_curl) {
 					$ch = curl_init("https://live.tourcms.com/favicon.ico");
