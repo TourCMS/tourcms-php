@@ -22,29 +22,30 @@ use \TourCMS\Utils\TourCMS as TourCMS;
 
 // Common configuration parameters
 
-// Marketplace ID will be 0 for Tour Operators, non-zero for Marketplace Agents
-// Agents can find their Marketplace ID in the API page in TourCMS settings
-$marketplace_id = 0;
+  // Marketplace ID will be 0 for Tour Operators, non-zero for Marketplace Agents
+  // Agents can find their Marketplace ID in the API page in TourCMS settings
+    $marketplace_id = 0;
 
-// API key will be a string, find it in the API page in TourCMS settings
-$api_key = "YOUR_KEY_HERE";
+  // API key will be a string, find it in the API page in TourCMS settings
+    $api_key = "YOUR_KEY_HERE";
 
-// Channel ID represents the Tour Operator channel to call the API against
-// Tour Operators may have multiple channels, so enter the correct one here
-// Agents can make some calls (e.g. tour_search()) across multiple channels
-// by entering a Channel ID of 0 or omitting it, or they can restrict to a
-// specific channel by providing the Channel ID
-$channel_id = 0;
+  // Channel ID represents the Tour Operator channel to call the API against
+  // Tour Operators may have multiple channels, so enter the correct one here
+  // Agents can make some calls (e.g. tour_search()) across multiple channels
+  // by entering a Channel ID of 0 or omitting it, or they can restrict to a
+  // specific channel by providing the Channel ID
+    $channel_id = 0;
 
 // Create a new TourCMS instance
-$tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml');
-// 'simplexml' returns as a SimpleXMLObject
-// 'raw' returns the XML as as String
+  $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml');
+  // 'simplexml' returns as a SimpleXMLObject
+  // 'raw' returns the XML as as String
 
 // Call the API
-// Here as a quick example we search for some tours
-$result = $tourcms->search_tours('', $channel_id);
+  // Here as a quick example we search for some tours
+  $result = $tourcms->search_tours('', $channel_id);
 
+// Display the output
 print_r($result);
 ```
 
