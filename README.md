@@ -16,17 +16,17 @@ Currently updating this file, additional documentation available at: http://www.
 
 ## Upgrading from version 1.x
 
-If you are upgrading from version 1.x of the library this should be more or less a straight swap. The major change being that to adhere to modern [PSR-4](http://www.php-fig.org/psr/psr-4/) standards, the class is now namespaced. Broadly speaking there are two different ways to update existing code to account for this:
+If you are upgrading from version 1.x of the library this should be more or less a straight swap. The major change being that to adhere to PHP [PSR-4](http://www.php-fig.org/psr/psr-4/) standards, the class is now namespaced. Broadly speaking there are two different ways to update existing code to account for this:
 
 ### Aliasing the namespace
 
-If you already have a global include file that includes `tourcms.php` you could add this immediately after `tourcms.php` is included and the rest of your code should work as is:
+If you already have a global include file that includes `tourcms.php` you could add the following line immediately after `tourcms.php` is included:
 
 ```php
 use TourCMS\Utils\TourCMS as TourCMS;
 ```
 
-Then when you create a new instance of the TourCMS class, just:
+Your existing code should then work as-is, for example when you create a new instance of the TourCMS class you would have:
 
 ```php
 $tourcms = new TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
@@ -34,12 +34,11 @@ $tourcms = new TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
 
 ### Using the fully qualified name
 
-Alternatively use the fully qualified name:
+Alternatively use the fully qualified name when you create a new instance of the class:
 
 ```php
 $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
 ```
-
 
 ## Usage
 
