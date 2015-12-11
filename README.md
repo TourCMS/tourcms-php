@@ -16,7 +16,7 @@ Currently updating this file, additional documentation available at: http://www.
 
 ### Upgrading from version 1.x
 
-If you are upgrading from version 1.x of the library this should be more or less a straight swap. The major change being that to adhere to PHP [PSR-4](http://www.php-fig.org/psr/psr-4/) standards, the class is now namespaced. Broadly speaking there are two different ways to update existing code to account for this:
+If you are upgrading from version 1.x of the library the latest `tourcms.php` should be more or less a straight swap. The major change being that to adhere to PHP [PSR-4](http://www.php-fig.org/psr/psr-4/) standards, the class is now namespaced. Broadly speaking there are two different ways to update existing code to account for this:
 
 #### Aliasing the namespace
 
