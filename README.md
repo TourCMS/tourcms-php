@@ -74,3 +74,18 @@ use TourCMS\Utils\TourCMS as TourCMS;
 // Display the output
 print_r($result);
 ```
+
+## Further Examples
+
+### API documentation on tourcms.com
+
+Each API method in the [http://www.tourcms.com/support/api/mp/](TourCMS API documentation) includes full PHP sample code.
+
+### Examples in this repository
+
+Additionally there are some examples included in this repository, to run them:
+
+1. Copy the `src/examples` directory to your web root
+2. Rename `examples/config-example.php` to `examples/config.php`
+3. Load your API credentials in the config file and ensure the path to `tourcms.php` is correct
+4. Point your web browser at the examples folder
