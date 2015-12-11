@@ -20,13 +20,32 @@ If you are upgrading from version 1.x of the library this should be more or less
 
 ### Aliasing the namespace
 
+If you already have a global include file that includes `tourcms.php` you could add this immediately after `tourcms.php` is included and the rest of your code should work as is:
+
+```php
+use TourCMS\Utils\TourCMS as TourCMS;
+```
+
+Then when you create a new instance of the TourCMS class, just:
+
+```php
+$tourcms = new TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
+```
+
 ### Using the fully qualified name
+
+Alternatively use the fully qualified name:
+
+```php
+$tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
+```
+
 
 ## Usage
 
 ```php
 // Optionally alias the namespace
-use \TourCMS\Utils\TourCMS as TourCMS;
+use TourCMS\Utils\TourCMS as TourCMS;
 
 // Common configuration parameters
 
