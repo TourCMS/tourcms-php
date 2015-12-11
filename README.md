@@ -79,7 +79,7 @@ print_r($result);
 
 ### API documentation on tourcms.com
 
-Each API method in the [http://www.tourcms.com/support/api/mp/](TourCMS API documentation) includes full PHP sample code.
+Each API method in the [TourCMS API documentation](http://www.tourcms.com/support/api/mp/) includes full PHP sample code.
 
 ### Examples in this repository
 
