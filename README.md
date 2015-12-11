@@ -74,5 +74,3 @@ use TourCMS\Utils\TourCMS as TourCMS;
 // Display the output
 print_r($result);
 ```
-
-Copyright (c) 2011-2015 Travel UCD
