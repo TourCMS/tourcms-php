@@ -1,7 +1,7 @@
 <?php
 
 // Include our API settings and wrapper
-include '../../../config.php';
+include '../../config.php';
 
 // Pagination
 $per_page = 10;
@@ -12,11 +12,11 @@ $parameters = array(
 					"per_page" => $per_page,
 					"page" => $page,
 					);
-					
+
 $querystring = http_build_query($parameters);
 
 // Call the TourCMS API method to search for Tours/Hotels
-$result = $tc->search_tours($querystring, $channel_id); 
+$result = $tc->search_tours($querystring, $channel_id);
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -30,33 +30,33 @@ $result = $tc->search_tours($querystring, $channel_id);
 		<h1>Search and Show Tours</h1>
 		<p>Display a list of tours, click through to a separate page showing further details.</p>
 		<p>
-		<?php 
+		<?php
 		// Check if the result is ok
-		if($result->error=="OK") 
+		if($result->error=="OK")
 		{
 			// Calculate how many pages we have
 			$pages = ceil($result->total_tour_count / $per_page);
-			
+
 			?>
 			<p>Page <strong><?php print $page; ?></strong> of <strong><?php print $pages; ?></strong></p>
 			<?php
-			
+
 			// If so loop through and display our Tours/Hotels
 			foreach ($result->tour as $tour) :
-				
+
 				// We are going to keep the customer on our site to show them the tour details
 				// rather than redirect them to the 'tour_url' configured on the tour
 				// so, we build our own link
 				//
 				// In reality this would likely use a search engine friendly URL
 				$tour_url = "show.php?t=" . $tour->tour_id;
-				
-				// If we have no channel ID configured in our config 
+
+				// If we have no channel ID configured in our config
 				// (i.e. we are an agent) we also need to pass the Channel ID
 				if($channel_id == 0)
 					$tour_url .= "&c=" . $tour->channel_id;
-			
-				
+
+
 				?>
 				<div class="tour">
 					<h4>
@@ -64,11 +64,11 @@ $result = $tc->search_tours($querystring, $channel_id);
 							<?php print $tour->tour_name; ?>
 						</a>
 					</h4>
-					
+
 					<p class="summary"><?php print $tour->summary; ?></p>
-					
+
 					<p><?php print $tour->shortdesc; ?></p>
-					
+
 					<p class="buttons">
 						<a href="<?php print $tour_url; ?>">View full details</a>
 					</p>
@@ -78,7 +78,7 @@ $result = $tc->search_tours($querystring, $channel_id);
 			endforeach;
 
 			// Basic pagination
-			if($page > 1) 
+			if($page > 1)
 			{
 				// First
 				print '<a href="?page=1">&lt;&lt; First page</a>';
@@ -89,15 +89,15 @@ $result = $tc->search_tours($querystring, $channel_id);
 			{
 				// Next
 				print '<a href="?page=' . ($page + 1) . '">Next page &gt;</a>';
-				// Last 
+				// Last
 				print '<a href="?page=' . $pages . '">Last page &gt;&gt;</a>';
-			}	
-			
-			
+			}
+
+
 			?>
 				</p>
 			<?php
-			
+
 //			print "<pre>";
 //			print_r($result);
 //			print "</pre>";

@@ -1,7 +1,7 @@
 <?php
 
 // Include our API settings and wrapper
-include '../../../config.php';
+include '../../config.php';
 
 // Tour info
 $tour_id = isset($_GET['t']) ? (int)$_GET['t'] : 0;
@@ -16,7 +16,7 @@ if($tour_id == 0 || $channel_id == 0)
 	header('location: index.php');
 
 // Call the TourCMS API method to search for Tours/Hotels
-$result = $tc->show_tour($tour_id, $channel_id); 
+$result = $tc->show_tour($tour_id, $channel_id);
 
 // Helper function
 function asterisk2Ul( $text ) {
@@ -36,9 +36,9 @@ function asterisk2Ul( $text ) {
 	<body>
 
 
-		<?php 
+		<?php
 		// Check if the result is ok
-		if($result->error=="OK") 
+		if($result->error=="OK")
 		{
 		?>
 				<h1>
@@ -46,23 +46,23 @@ function asterisk2Ul( $text ) {
 				</h1>
 				<p style="text-align: center;"><em><?php echo $result->tour->summary; ?></em></p>
 				<div class="tour tour-details">
-					
+
 					<!-- Images -->
 					<div class="basic-image-wrapper-wrapper">
 						<div class="basic-image-wrapper">
 						<?php
 						foreach ($result->tour->images->image as $image) {
 							?>
-							<img src="<?php echo $image->url; ?>" 
+							<img src="<?php echo $image->url; ?>"
 							alt="<?php echo $image->image_desc; ?>">
 							<?php
 						}
-						
+
 						?>
 						</div>
 					</div>
 					<!-- End Images -->
-					
+
 					<!-- Long / Short description -->
 					<div style="padding-bottom: 20px;">
 						<?php
@@ -74,19 +74,19 @@ function asterisk2Ul( $text ) {
 						?>
 					</div>
 					<!-- End Long / Short description -->
-					
+
 					<!-- Includes -->
 					<?php if(!empty($result->tour->inc)): ?>
-					
+
 					<div>
 						<h4>Includes</h4>
 						<?php echo asterisk2Ul($result->tour->inc); ?>
 					</div>
 					<?php endif; ?>
 					<!-- End Includes -->
-					
+
 					<!-- Excludes -->
-					
+
 					<?php if(!empty($result->tour->ex)): ?>
 					<div>
 						<h4>Excludes</h4>
@@ -94,16 +94,16 @@ function asterisk2Ul( $text ) {
 					</div>
 					<?php endif; ?>
 					<!-- End Excludes -->
-				
+
 					<p class="buttons">
 						<?php
 							$book_url =  empty($result->tour->book_url) ? $result->tour->tour_url : $result->tour->book_url;
 						?>
 						<a href="<?php print $book_url; ?>">Book online</a>
 					</p>
-					
+
 				</div>
-		<?php	
+		<?php
 		} else {
 			// If not output the error
 			print "There has been an error: ";

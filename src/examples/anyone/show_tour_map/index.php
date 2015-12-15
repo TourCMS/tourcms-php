@@ -1,7 +1,7 @@
 <?php
 
 // Include our API settings and wrapper
-include '../../../config.php';
+include '../../config.php';
 
 // Tour info
 $tour_id = isset($_GET['t']) ? (int)$_GET['t'] : '';
