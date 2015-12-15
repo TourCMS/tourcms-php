@@ -1,10 +1,10 @@
 <?php
 
 // Include our API settings and wrapper
-include '../../../config.php';
+include '../../config.php';
 
 // Call the TourCMS API method to check the API rate limit status
-$result = $tc->api_rate_limit_status($channel_id); 
+$result = $tc->api_rate_limit_status($channel_id);
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -17,7 +17,7 @@ $result = $tc->api_rate_limit_status($channel_id);
 	<body>
 		<h1>API Rate limit status</h1>
 		<p>
-		<?php 
+		<?php
 		// Check if the result is ok
 		if($result->error=="OK") {
 			// If so output current hits and limits
