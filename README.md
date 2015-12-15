@@ -1,6 +1,11 @@
 # PHP Wrapper for the TourCMS API
 
-Currently updating this file, additional documentation available at: http://www.tourcms.com/support/api/mp/code/library_php.php
+* [Installation](#installation)
+  * [Installing via Composer](#installing-via-composer-recommended)
+  * [Installing Manually](#installing-manually)
+  * [Upgrading from v1.x](#upgrading-from-version-1x)
+* [Usage](#usage)
+* [Further examples](#further-examples)
 
 ## Installation
 
@@ -43,9 +48,6 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
 ## Usage
 
 ```php
-// Optionally alias the namespace
-use TourCMS\Utils\TourCMS as TourCMS;
-
 // Common configuration parameters
 
   // Marketplace ID will be 0 for Tour Operators, non-zero for Marketplace Agents
@@ -62,7 +64,10 @@ use TourCMS\Utils\TourCMS as TourCMS;
   // specific channel by providing the Channel ID
     $channel_id = 0;
 
+
 // Create a new TourCMS instance
+  // Optionally alias the namespace
+  use TourCMS\Utils\TourCMS as TourCMS;
   $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml');
   // 'simplexml' returns as a SimpleXMLObject
   // 'raw' returns the XML as as String
