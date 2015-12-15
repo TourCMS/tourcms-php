@@ -15,7 +15,8 @@
 	$result_type = 'simplexml';
 
 	// Include the TourCMS library
-	include '../tourcms.php';
+	// Update this to point to the tourcms.php on your server
+	include $_SERVER['DOCUMENT_ROOT'] . '/vendor/tourcms/tourcms-php/src/tourcms.php';
 
 	Use TourCMS\Utils\TourCMS as TourCMS;
 
