@@ -77,7 +77,7 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
   $result = $tourcms->search_tours('', $channel_id);
 
 // Display the output
-print_r($result);
+  print_r($result);
 ```
 
 ## Further Examples
