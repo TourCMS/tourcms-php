@@ -98,7 +98,7 @@ Additionally there are some examples included in this repository, to run them:
 
 # Environment test
 
-The library can attempt to check your local environment and API credentials, useful if you are having trouble connecting
+The library can attempt to check your local environment and API credentials, useful if you are having trouble connecting. First off make sure you are including `tourcms.php`, either via autoload or explicitly.
 
 ```php
 // Common configuration parameters
