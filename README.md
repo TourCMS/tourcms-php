@@ -6,6 +6,7 @@
   * [Upgrading from v1.x](#upgrading-from-version-1x)
 * [Usage](#usage)
 * [Further examples](#further-examples)
+* [Environment test](#environment-test)
 
 ## Installation
 
@@ -94,3 +95,31 @@ Additionally there are some examples included in this repository, to run them:
 2. Rename `examples/config-example.php` to `examples/config.php`
 3. Load your API credentials in the config file and ensure the path to `tourcms.php` is correct
 4. Point your web browser at the examples folder
+
+# Environment test
+
+The library can attempt to check your local environment and API credentials, useful if you are having trouble connecting
+
+```php
+// Common configuration parameters
+
+  // Marketplace ID will be 0 for Tour Operators, non-zero for Marketplace Agents
+  // Agents can find their Marketplace ID in the API page in TourCMS settings
+    $marketplace_id = 0;
+
+  // API key will be a string, find it in the API page in TourCMS settings
+    $api_key = "YOUR_KEY_HERE";
+
+  // Channel ID represents the Tour Operator channel to call the API against
+  // Tour Operators may have multiple channels, so enter the correct one here
+  // Agents can leave this as 0 for the test
+    $channel_id = 0;
+
+// Create a new TourCMS instance
+  // Optionally alias the namespace
+  use TourCMS\Utils\TourCMS as TourCMS;
+  $tourcms = new TourCMS($marketplace_id, $api_key, "simplexml");
+
+// Call the environment test, the results will be displayed on the screen
+$tourcms->test_environment($channel_id);
+```
