@@ -268,9 +268,9 @@ class TourCMS {
 		Raw departure methods
 	*/
 
-	public function search_raw_departures($tour, $channel)
+	public function search_raw_departures($tour, $channel, $qs)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour, $channel));
+		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour.'&'.$qs, $channel));
 	}
 
 	public function show_departure($departure, $tour, $channel)
