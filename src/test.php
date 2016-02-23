@@ -7,6 +7,11 @@
  * @author Paul Slugocki
  */
 
+ if (str_replace('\\', '/', __FILE__) == $_SERVER['SCRIPT_FILENAME']) {
+	 echo "test.php should not be run directly, see the <a href='https://github.com/TourCMS/tourcms-php#environment-test'>instructions for running the environment_test</a>";
+	 exit();
+ }
+
 ?><!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -125,6 +130,30 @@
 		<h2>Your API credentials</h2>
 		<ul>
 			<?php
+
+					if($this->private_key == "") {
+						?>
+						<li class="fail">You have not provided an API Key</li>
+						<?php
+
+					} else {
+
+						if($channel == 0 && $this->marketp_id == 0) {
+							?>
+							<li class="fail">If you are calling the API as an operator you must pass a Channel ID when calling <strong>test_environment();</strong><br>&nbsp;<br>If you are calling as an agent you must use their Marketplace ID when you initiate the <strong>TourCMS</strong> class (optonally also pass a Channel ID to <strong>test_environment</strong> your API connection to a specific operator).</li>
+							<?php
+						} else {
+							if($this->marketp_id != 0) {
+								?>
+									<li class="ok">Attempting to call the API as Agent <strong><?php echo $this->marketp_id; ?></strong></li>
+								<?php
+							} else {
+								?>
+									<li class="ok">Attempting to call the API as Operator with Channel ID <strong><?php echo $channel; ?></strong></li>
+								<?php
+							}
+						}
+					}
 
 						$api_check = $this->api_rate_limit_status($channel);
 

@@ -30,7 +30,7 @@
 				</span>
 			</li>
 			<li>
-				<a href="anyone/show_tour_map/">Generate a Google Map of a Tour start location</a> 
+				<a href="anyone/show_tour_map/">Generate a Google Map of a Tour start location</a>
 				<span class="ancillary">
 						<a href="http://www.tourcms.com/support/api/mp/tour_search.php" target="_blank">Show Tour</a>
 				</span>
@@ -48,7 +48,7 @@
 		<h4>For Partner/Affiliate accounts only</h4-->
 		<h2>Problems?</h2>
 		<ul>
-			<li>Check the <a href="../test.php">test page</a></li>
+			<li>Run the <a href="anyone/test_environment/">Environment Test</a></li>
 			<li>Ask in the <a href="http://community.tourcms.com/" target="_blank">forums</a> or <a href="http://www.tourcms.com/company/contact.php" target="_blank">contact us</a> - we're happy to help ☺</li>
 			<li>Don't forget <a href="http://www.tourcms.com/support/api/mp/examples.php">more feature complete examples</a> can be found on our website.</li>
 		</ul>
