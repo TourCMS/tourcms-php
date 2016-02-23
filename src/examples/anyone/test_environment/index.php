@@ -4,6 +4,6 @@
 include '../../config.php';
 
 // Call the environment check
-$tc->check_environment($channel_id);
+$tc->test_environment($channel_id);
 
 ?>
