@@ -22,10 +22,12 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 2.0.1
+# Version: 2.0.4
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
+
+use \SimpleXMLElement;
 
 class TourCMS {
 
@@ -179,7 +181,7 @@ class TourCMS {
 	}
 
 	public function update_tour_url($tour, $channel, $tour_url) {
-		// Create a SimpleXMLElement to hold the new url
+
 		$url_data = new SimpleXMLElement('<tour />');
 		$url_data->addChild('tour_id', $tour);
 		$url_data->addChild('tour_url', $tour_url);
