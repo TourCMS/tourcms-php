@@ -13,20 +13,20 @@
 ### Installing via Composer (Recommended)
 
 1. Install [Composer](https://getcomposer.org/), add `"tourcms/tourcms-php": "2.0.*",` to the `requires` section of your `composer.json`:
-2. Ensure you are including composer's `autoload.php`, alternatively include `tourcms.php` directly.
+2. Ensure you are including composer's `autoload.php`, alternatively include `TourCMS.php` directly.
 
 ### Installing Manually
 
 1. Download the source zip, extract to your web server
-2. Include `tourcms.php` in your source
+2. Include `TourCMS.php` in your source
 
 ### Upgrading from version 1.x
 
-If you are upgrading from version 1.x of the library the latest `tourcms.php` should be more or less a straight swap. The major change being that to adhere to PHP [PSR-4](http://www.php-fig.org/psr/psr-4/) standards, the class is now namespaced. Broadly speaking there are two different ways to update existing code to account for this:
+If you are upgrading from version 1.x of the library the latest `TourCMS.php` should be more or less a straight swap. The major change being that to adhere to PHP [PSR-4](http://www.php-fig.org/psr/psr-4/) standards, the class is now namespaced. Broadly speaking there are two different ways to update existing code to account for this:
 
 #### Aliasing the namespace
 
-If you already have a global include file that includes `tourcms.php` you could add the following line immediately after `tourcms.php` is included:
+If you already have a global include file that includes `TourCMS.php` you could add the following line immediately after `TourCMS.php` is included:
 
 ```php
 use TourCMS\Utils\TourCMS as TourCMS;
@@ -93,12 +93,12 @@ Additionally there are some examples included in this repository, to run them:
 
 1. Copy the `src/examples` directory to your web root
 2. Rename `examples/config-example.php` to `examples/config.php`
-3. Load your API credentials in the config file and ensure the path to `tourcms.php` is correct
+3. Load your API credentials in the config file and ensure the path to `TourCMS.php` is correct
 4. Point your web browser at the examples folder
 
 # Environment test
 
-The library can attempt to check your local environment and API credentials, useful if you are having trouble connecting. First off make sure you are including `tourcms.php`, either via autoload or explicitly.
+The library can attempt to check your local environment and API credentials, useful if you are having trouble connecting. First off make sure you are including `TourCMS.php`, either via autoload or explicitly.
 
 ```php
 // Common configuration parameters
