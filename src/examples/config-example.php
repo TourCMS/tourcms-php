@@ -16,7 +16,7 @@
 
 	// Include the TourCMS library
 	// Update this to point to the tourcms.php on your server
-	include $_SERVER['DOCUMENT_ROOT'] . '/vendor/tourcms/tourcms-php/src/tourcms.php';
+	include $_SERVER['DOCUMENT_ROOT'] . '/vendor/tourcms/tourcms-php/src/TourCMS.php';
 
 	Use TourCMS\Utils\TourCMS as TourCMS;
 
