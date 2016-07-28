@@ -176,6 +176,10 @@ class TourCMS {
 			return($this->request('/c/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour, $channel));
 	}
 
+	public function list_product_filters($channel = 0) {
+			return($this->request('/c/tours/filters.xml', $channel));
+	}
+
 	public function update_tour($tour_data, $channel) {
 		return($this->request('/c/tour/update.xml', $channel, "POST", $tour_data));
 	}
