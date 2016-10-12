@@ -394,15 +394,15 @@ class TourCMS {
 	}
 
 	public function check_option_availability($booking, $tour_component_id, $channel){
-      return ($this->request('/c/booking/options/checkavail.xml?booking_id='.$booking.'&tour_component_id='.$tour_component_id, $channel));
+		return ($this->request('/c/booking/options/checkavail.xml?booking_id='.$booking.'&tour_component_id='.$tour_component_id, $channel));
   }
 
 	public function booking_add_component($component_data, $channel){
-			return($this->request('/c/booking/component/new.xml', $channel, "POST", $component_data));
+		return($this->request('/c/booking/component/new.xml', $channel, "POST", $component_data));
 	}
 
 	public function booking_remove_component($component_data, $channel){
-			return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_data));
+		return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_data));
 	}
 
 	public function add_note_to_booking($booking, $channel, $text, $note_type) {
