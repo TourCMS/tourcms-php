@@ -359,7 +359,6 @@ class TourCMS {
 		}
 	}
 
-
 	/*
 		Updating bookings
 	*/
@@ -394,6 +393,18 @@ class TourCMS {
 		return($this->request('/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
 	}
 
+	public function check_option_availability($booking, $tour_component_id, $channel){
+      return ($this->request('/c/booking/options/checkavail.xml?booking_id='.$booking.'&tour_component_id='.$tour_component_id, $channel));
+  }
+
+	public function booking_add_component($component_data, $channel){
+			return($this->request('/c/booking/component/new.xml', $channel, "POST", $component_data));
+	}
+
+	public function booking_remove_component($component_data, $channel){
+			return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_data));
+	}
+
 	public function add_note_to_booking($booking, $channel, $text, $note_type) {
 
 		$booking_data = new SimpleXMLElement('<booking />');
@@ -403,6 +414,10 @@ class TourCMS {
 		$note->addChild('type', $note_type);
 
 		return($this->request('/c/booking/note/new.xml', $channel, 'POST', $booking_data));
+	}
+
+	public function send_booking_email($booking_data, $channel){
+			return($this->request('/c/booking/email/send.xml', $channel, "POST", $booking_data));
 	}
 
 	public function redeem_voucher($voucher_data, $channel = 0) {
@@ -452,23 +467,6 @@ class TourCMS {
 		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
 	}
 
-	# zaida: start
-	public function booking_remove_component($component_id, $channel){
-      return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_id));
-  }
-
-  public function booking_add_component($component_data, $channel){
-      return($this->request('/c/booking/component/new.xml', $channel, "POST", $component_data));
-  }
-
-  public function send_booking_email($booking_data, $channel){
-      return($this->request('/c/booking/email/send.xml', $channel, "POST", $booking_data));
-  }
-
-  public function check_option_availability($booking, $tour_component_id, $channel){
-      return ($this->request('/c/booking/options/checkavail.xml?booking_id='.$booking.'&component_id='.$tour_component_id, $channel));
-  }
-	# zaida: end
 }
 
 ?>
