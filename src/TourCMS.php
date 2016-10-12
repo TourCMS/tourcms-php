@@ -395,7 +395,7 @@ class TourCMS {
 
 	public function check_option_availability($booking, $tour_component_id, $channel){
 		return ($this->request('/c/booking/options/checkavail.xml?booking_id='.$booking.'&tour_component_id='.$tour_component_id, $channel));
-  }
+	}
 
 	public function booking_add_component($component_data, $channel){
 		return($this->request('/c/booking/component/new.xml', $channel, "POST", $component_data));
