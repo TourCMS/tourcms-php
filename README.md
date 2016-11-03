@@ -72,7 +72,7 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
 // Create a new TourCMS instance
   // Optionally alias the namespace
   use TourCMS\Utils\TourCMS as TourCMS;
-  $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml');
+  $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml', $timeout);
   // 'simplexml' returns as a SimpleXMLObject
   // 'raw' returns the XML as as String
 
