@@ -36,6 +36,7 @@ class TourCMS {
 	protected $marketp_id = 0;
 	protected $private_key = "";
 	protected $result_type = "";
+	protected $timeout = 0;
 
 	/**
 	 * __construct
@@ -44,11 +45,13 @@ class TourCMS {
 	 * @param $mp Marketplace ID
 	 * @param $k API Private Key
 	 * @param $res Result type, defaults to raw
+	 * @param $to Timeout, default 0
 	 */
-	public function __construct($mp, $k, $res = "raw") {
+	public function __construct($mp, $k, $res = "raw", $to = 0) {
 		$this->marketp_id = $mp;
 		$this->private_key = $k;
 		$this->result_type = $res;
+		$this->timeout = $to;
 	}
 
 	/**
@@ -76,7 +79,7 @@ class TourCMS {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 0 );
+		curl_setopt($ch, CURLOPT_TIMEOUT, (is_int($this->timeout) && $this->timeout > 0) ? $this->timeout : 0 );
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_HEADER, true);
 
@@ -403,6 +406,10 @@ class TourCMS {
 
 	public function booking_remove_component($component_data, $channel){
 		return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_data));
+	}
+
+	public function booking_update_component($component_data, $channel){
+		return($this->request('/c/booking/component/update.xml', $channel, "POST", $component_data));
 	}
 
 	public function add_note_to_booking($booking, $channel, $text, $note_type) {
