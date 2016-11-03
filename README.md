@@ -58,6 +58,9 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
   // API key will be a string, find it in the API page in TourCMS settings
     $api_key = "YOUR_KEY_HERE";
 
+  // Timeout will set the maximum execution time, in seconds. If set to zero, no time limit is imposed.
+    $timeout = 0;
+
   // Channel ID represents the Tour Operator channel to call the API against
   // Tour Operators may have multiple channels, so enter the correct one here
   // Agents can make some calls (e.g. tour_search()) across multiple channels
