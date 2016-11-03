@@ -32,6 +32,7 @@ use \SimpleXMLElement;
 class TourCMS {
 
 	// General settings
+	public $timeOut = 0;
 	protected $base_url = "https://api.tourcms.com";
 	protected $marketp_id = 0;
 	protected $private_key = "";
@@ -76,7 +77,7 @@ class TourCMS {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 0 );
+		curl_setopt($ch, CURLOPT_TIMEOUT, (is_int($this->timeOut) && $this->timeOut > 0) ? $this->timeOut : 0 );
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 		curl_setopt($ch, CURLOPT_HEADER, true);
 
@@ -403,6 +404,10 @@ class TourCMS {
 
 	public function booking_remove_component($component_data, $channel){
 		return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_data));
+	}
+
+	public function booking_update_component($component_data, $channel){
+		return($this->request('/c/booking/component/update.xml', $channel, "POST", $component_data));
 	}
 
 	public function add_note_to_booking($booking, $channel, $text, $note_type) {
