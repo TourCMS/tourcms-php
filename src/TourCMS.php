@@ -75,38 +75,49 @@ class TourCMS {
 		$headers = array("Content-type: text/xml;charset=\"utf-8\"",
 				 "Date: ".gmdate('D, d M Y H:i:s \G\M\T', $outbound_time),
 				 "Authorization: TourCMS $channel:$this->marketp_id:$signature");
+		try{
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_TIMEOUT, (is_int($this->timeout) && $this->timeout > 0) ? $this->timeout : 0 );
+			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+			curl_setopt($ch, CURLOPT_HEADER, true);
 
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_TIMEOUT, (is_int($this->timeout) && $this->timeout > 0) ? $this->timeout : 0 );
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($ch, CURLOPT_HEADER, true);
+			/*
+				Windows users having trouble connecting via SSL?
+				Download the CA bundle from: http://curl.haxx.se/docs/caextract.html
+				Finally uncomment the following line and point it to the downloaded file
+			*/
+			// curl_setopt($ch, CURLOPT_CAINFO, "c:/path/to/ca-bundle.crt");
 
-		/*
-			Windows users having trouble connecting via SSL?
-			Download the CA bundle from: http://curl.haxx.se/docs/caextract.html
-			Finally uncomment the following line and point it to the downloaded file
-		*/
-		// curl_setopt($ch, CURLOPT_CAINFO, "c:/path/to/ca-bundle.crt");
+			if($verb == "POST") {
+				curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
+					if(!is_null($post_data))
+						curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
+			}
 
-		if($verb == "POST") {
-			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
-				if(!is_null($post_data))
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
+			$response = curl_exec($ch);
+			// Throw exception
+			if (FALSE === $response)
+				throw new \Exception(curl_error($ch), curl_errno($ch));
+			
+			$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
+			$result = substr( $response, $header_size );
+
+			// Check whether we need to return raw XML or
+			// convert to SimpleXML first
+			if($this->result_type == "simplexml")
+				$result = simplexml_load_string($result);
+
+			return($result);
+		} catch(\Exception $e) {
+
+			trigger_error(sprintf(
+				'Curl failed with error #%d: %s',
+				$e->getCode(), $e->getMessage()),
+				E_USER_ERROR);
+
 		}
-
-		$response = curl_exec($ch);
-
-		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
-		$result = substr( $response, $header_size );
-
-		// Check whether we need to return raw XML or
-		// convert to SimpleXML first
-		if($this->result_type == "simplexml")
-			$result = simplexml_load_string($result);
-
-		return($result);
 	}
 
 	/**
