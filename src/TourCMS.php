@@ -465,15 +465,21 @@ class TourCMS {
 	}
 
 	# Agents
-	public function search_agents($params, $channel) {
+	public function search_agents($params, $channel)
+	{
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
 
-	# Internal supplier methods
-	public function show_supplier($supplier, $channel) {
-		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
+	public function start_new_agent_login($params, $channel)
+	{
+		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
 	}
 
+	# Internal supplier methods
+	public function show_supplier($supplier, $channel)
+	{
+		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
+	}
 }
 
 ?>
