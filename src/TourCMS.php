@@ -469,11 +469,16 @@ class TourCMS {
 	{
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
+  
+  public function start_new_agent_login($params, $channel)
+	{
+		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
+	}
 
 	public function retrieve_agent_booking_key($private_token, $channel)
 	{
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
-	}
+  }
 
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
