@@ -158,12 +158,6 @@ class TourCMS {
 	public function test_environment($channel = 0) {
 		include('test.php');
 	}
-	
-	# Get last response headers
-
-	public function get_last_response_headers() {
-		return $this->last_response_headers;
-	}
 
 	# API methods (Housekeeping)
 
