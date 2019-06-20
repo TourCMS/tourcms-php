@@ -505,16 +505,18 @@ class TourCMS {
 	{
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
   	}
-
+	
+	# Payments
   	public function list_payments($params, $channel) 
   	{
         return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
-    }
-
-    public function list_staff_members($channel) 
-    {
+  	}
+	
+	# Staff members
+  	public function list_staff_members($channel) 
+  	{
         return($this->request('/c/staff/list.xml', $channel));
-    }
+  	}
 
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
