@@ -37,6 +37,7 @@ class TourCMS {
 	protected $private_key = "";
 	protected $result_type = "";
 	protected $timeout = 0;
+	protected $last_response_headers = array();
 
 	/**
 	 * __construct
@@ -95,8 +96,27 @@ class TourCMS {
 				if(!is_null($post_data))
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 		}
+		
+		// Set up a function to populate the response headers on curl_exec
+		$api_response_headers = array();
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
+			function($ch, $header) use (&$api_response_headers)
+			{
+				$len = strlen($header);
+				$header = explode(':', $header, 2);
+				if (count($header) < 2) // ignore invalid headers
+					return $len;
+
+				$name = strtolower(trim($header[0]));
+				$api_response_headers[$name] = trim($header[1]);
+
+				return $len;
+			}
+		);
 
 		$response = curl_exec($ch);
+		
+		$this->last_response_headers = $api_response_headers;
 
 		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
 		$result = substr( $response, $header_size );
@@ -107,6 +127,12 @@ class TourCMS {
 			$result = simplexml_load_string($result);
 
 		return($result);
+	}
+	
+	# Get last response headers
+
+	public function get_last_response_headers() {
+		return $this->last_response_headers;
 	}
 
 	/**
@@ -131,6 +157,12 @@ class TourCMS {
 
 	public function test_environment($channel = 0) {
 		include('test.php');
+	}
+	
+	# Get last response headers
+
+	public function get_last_response_headers() {
+		return $this->last_response_headers;
 	}
 
 	# API methods (Housekeeping)
