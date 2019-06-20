@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2010-2016 Travel UCD
+Copyright (c) 2010-2019 Travel UCD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.1.0
+# Version: 3.2.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -37,6 +37,7 @@ class TourCMS {
 	protected $private_key = "";
 	protected $result_type = "";
 	protected $timeout = 0;
+	protected $last_response_headers = array();
 
 	/**
 	 * __construct
@@ -95,8 +96,27 @@ class TourCMS {
 				if(!is_null($post_data))
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 		}
+		
+		// Callback function to populate the response headers on curl_exec
+		$api_response_headers = array();
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
+			function($ch, $header) use (&$api_response_headers)
+			{
+				$len = strlen($header);
+				$header = explode(':', $header, 2);
+				if (count($header) < 2) // ignore invalid headers
+					return $len;
+
+				$name = strtolower(trim($header[0]));
+				$api_response_headers[$name] = trim($header[1]);
+
+				return $len;
+			}
+		);
 
 		$response = curl_exec($ch);
+		
+		$this->last_response_headers = $api_response_headers;
 
 		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
 		$result = substr( $response, $header_size );
@@ -107,6 +127,12 @@ class TourCMS {
 			$result = simplexml_load_string($result);
 
 		return($result);
+	}
+	
+	# Get last response headers
+
+	public function get_last_response_headers() {
+		return $this->last_response_headers;
 	}
 
 	/**
@@ -470,7 +496,7 @@ class TourCMS {
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
   
-  public function start_new_agent_login($params, $channel)
+  	public function start_new_agent_login($params, $channel)
 	{
 		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
 	}
@@ -478,7 +504,19 @@ class TourCMS {
 	public function retrieve_agent_booking_key($private_token, $channel)
 	{
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
-  }
+  	}
+	
+	# Payments
+  	public function list_payments($params, $channel) 
+  	{
+        return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
+  	}
+	
+	# Staff members
+  	public function list_staff_members($channel) 
+  	{
+        return($this->request('/c/staff/list.xml', $channel));
+  	}
 
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
