@@ -97,7 +97,7 @@ class TourCMS {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 		}
 		
-		// Set up a function to populate the response headers on curl_exec
+		// Callback function to populate the response headers on curl_exec
 		$api_response_headers = array();
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
 			function($ch, $header) use (&$api_response_headers)
