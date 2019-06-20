@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2010-2016 Travel UCD
+Copyright (c) 2010-2019 Travel UCD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.1.0
+# Version: 3.2.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
