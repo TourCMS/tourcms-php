@@ -128,6 +128,28 @@ class TourCMS {
 
 		return($result);
 	}
+
+	/**
+	 * get_base_url
+	 *
+	 * @author Paul Slugocki
+	 * @return String
+	 */
+	public function get_base_url() {
+		return $this->base_url;
+	}
+
+	/**
+	 * set_base_url
+	 *
+	 * @author Paul Slugocki
+	 * @param $url New base url
+	 * @return Boolean
+	 */
+	public function set_base_url($url) {
+		$this->base_url = $url;
+		return true;
+	}
 	
 	# Get last response headers
 
