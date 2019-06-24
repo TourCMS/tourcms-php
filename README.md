@@ -129,9 +129,17 @@ $tourcms->test_environment($channel_id);
 
 # Response headers
 
-TourCMS responds with some useful information in the response headers. As of release 3.2.0 there is a method to retrieve the last set of response headers via the PHP wrapper.
+TourCMS responds with some useful information in the response headers. There is a method to retrieve the last set of response headers via the PHP wrapper.
 
 ```php
 $headers = $tourcms->get_last_response_headers();
 $remaining_limit = $headers["x-ratelimit-remaining"];
+```
+
+# Override base URL
+
+By default the base URL will point to TourCMS main production environment. There is a method to override this to point at another base URL, intended for testing purposes.
+
+```php
+$tourcms->set_base_url("https://api.example.com");
 ```
