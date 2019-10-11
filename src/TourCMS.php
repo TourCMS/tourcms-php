@@ -549,11 +549,11 @@ class TourCMS {
 	# Used for validating webhook signatures
 	public function validate_xml_hash($xml) {
 
-		return $this->generate_xml_hash($xml, $this->private_key) == $xml->signed->hash;
+		return $this->generate_xml_hash($xml) == $xml->signed->hash;
 
 	}
 
-	public function generate_xml_hash($xml, $private_key) {
+	public function generate_xml_hash($xml) {
 
 		$algorithm = $xml->signed->algorithm;
 
@@ -570,7 +570,7 @@ class TourCMS {
 
 		$string_to_hash = implode("|", $values);
 
-		$hash = hash_hmac($algorithm, $string_to_hash, $private_key, FALSE);
+		$hash = hash_hmac($algorithm, $string_to_hash, $this->private_key, FALSE);
 
 		return $hash;
 
