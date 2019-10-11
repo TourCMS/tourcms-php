@@ -549,11 +549,11 @@ class TourCMS {
 	# Used for validating webhook signatures
 	public function validate_xml_hash($xml) {
 
-		return $this->generate_booking_hash($xml, $this->private_key) == $xml->signed->hash;
+		return $this->generate_xml_hash($xml, $this->private_key) == $xml->signed->hash;
 
 	}
 
-	public function generate_booking_hash($xml, $private_key) {
+	public function generate_xml_hash($xml, $private_key) {
 
 		$algorithm = $xml->signed->algorithm;
 
