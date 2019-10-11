@@ -545,6 +545,36 @@ class TourCMS {
 	{
 		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
 	}
+	
+	# Used for validating webhook signatures
+	public function validate_xml_hash($xml) {
+
+		return $this->generate_booking_hash($xml, $this->private_key) == $xml->signed->hash;
+
+	}
+
+	public function generate_booking_hash($xml, $private_key) {
+
+		$algorithm = $xml->signed->algorithm;
+
+		$fields = explode(" ", $xml->signed->hash_fields);
+
+		foreach($fields as $field) {
+
+			$xpath_result = $xml->xpath($field);
+
+			foreach($xpath_result as $result) {
+				$values[] = (string)$result[0];
+			}
+		}
+
+		$string_to_hash = implode("|", $values);
+
+		$hash = hash_hmac($algorithm, $string_to_hash, $private_key, FALSE);
+
+		return $hash;
+
+	}
 }
 
 ?>
