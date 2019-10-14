@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.3.0
+# Version: 3.4.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -544,6 +544,36 @@ class TourCMS {
 	public function show_supplier($supplier, $channel)
 	{
 		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
+	}
+	
+	# Used for validating webhook signatures
+	public function validate_xml_hash($xml) {
+
+		return $this->generate_xml_hash($xml) == $xml->signed->hash;
+
+	}
+
+	public function generate_xml_hash($xml) {
+
+		$algorithm = $xml->signed->algorithm;
+
+		$fields = explode(" ", $xml->signed->hash_fields);
+
+		foreach($fields as $field) {
+
+			$xpath_result = $xml->xpath($field);
+
+			foreach($xpath_result as $result) {
+				$values[] = (string)$result[0];
+			}
+		}
+
+		$string_to_hash = implode("|", $values);
+
+		$hash = hash_hmac($algorithm, $string_to_hash, $this->private_key, FALSE);
+
+		return $hash;
+
 	}
 }
 
