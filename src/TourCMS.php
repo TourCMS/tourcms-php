@@ -433,6 +433,11 @@ class TourCMS {
 	{
 		return($this->request('/c/booking/payment/spreedly/new.xml', $channel, "POST", $payment_data));
 	}
+	
+	public function spreedly_complete_payment($transaction_id, $channel)
+	{
+		return($this->request('/c/booking/gatewaytransaction/spreedlycomplete.xml?id=' . $transaction_id, $channel, 'POST'));
+	}
 
 	public function cancel_booking($booking_data, $channel)
 	{
