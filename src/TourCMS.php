@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.4.0
+# Version: 3.5.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -432,6 +432,11 @@ class TourCMS {
 	public function spreedly_create_payment($payment_data, $channel)
 	{
 		return($this->request('/c/booking/payment/spreedly/new.xml', $channel, "POST", $payment_data));
+	}
+	
+	public function spreedly_complete_payment($transaction_id, $channel)
+	{
+		return($this->request('/c/booking/gatewaytransaction/spreedlycomplete.xml?id=' . $transaction_id, $channel, 'POST'));
 	}
 
 	public function cancel_booking($booking_data, $channel)
