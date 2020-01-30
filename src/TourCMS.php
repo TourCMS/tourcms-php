@@ -96,7 +96,7 @@ class TourCMS {
 				if(!is_null($post_data))
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 		}
-		
+
 		// Callback function to populate the response headers on curl_exec
 		$api_response_headers = array();
 		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
@@ -115,7 +115,7 @@ class TourCMS {
 		);
 
 		$response = curl_exec($ch);
-		
+
 		$this->last_response_headers = $api_response_headers;
 
 		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
@@ -150,7 +150,7 @@ class TourCMS {
 		$this->base_url = $url;
 		return true;
 	}
-	
+
 	# Get last response headers
 
 	public function get_last_response_headers() {
@@ -433,7 +433,7 @@ class TourCMS {
 	{
 		return($this->request('/c/booking/payment/spreedly/new.xml', $channel, "POST", $payment_data));
 	}
-	
+
 	public function spreedly_complete_payment($transaction_id, $channel)
 	{
 		return($this->request('/c/booking/gatewaytransaction/spreedlycomplete.xml?id=' . $transaction_id, $channel, 'POST'));
@@ -522,7 +522,7 @@ class TourCMS {
 	{
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
-  
+
   	public function start_new_agent_login($params, $channel)
 	{
 		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
@@ -532,15 +532,15 @@ class TourCMS {
 	{
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
   	}
-	
+
 	# Payments
-  	public function list_payments($params, $channel) 
+  	public function list_payments($params, $channel)
   	{
         return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
   	}
-	
+
 	# Staff members
-  	public function list_staff_members($channel) 
+  	public function list_staff_members($channel)
   	{
         return($this->request('/c/staff/list.xml', $channel));
   	}
@@ -550,7 +550,7 @@ class TourCMS {
 	{
 		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
 	}
-	
+
 	# Used for validating webhook signatures
 	public function validate_xml_hash($xml) {
 
@@ -580,6 +580,28 @@ class TourCMS {
 		return $hash;
 
 	}
+
+	# CRUD Pickup points
+	public function list_pickups($query_string, $channel)
+	{
+		return ($this->request('/c/pickups/list.xml' . $query_string, $channel));
+	}
+
+	public function create_pickup($pickup_data, $channel)
+	{
+		return ($this->request('/c/pickups/new.xml', $channel, "POST", $pickup_data));
+	}
+
+	public function update_pickup($pickup_data, $channel)
+	{
+		return ($this->request('/c/pickups/update.xml', $channel, "POST", $pickup_data));
+	}
+
+	public function delete_pickup($pickup_data, $channel)
+	{
+		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
+	}
+
 }
 
 ?>
