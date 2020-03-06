@@ -584,6 +584,7 @@ class TourCMS {
 	# CRUD Pickup points
 	public function list_pickups($query_string, $channel)
 	{
+		if (substr($query_string, 0,1) !== '?') $query_string = '?' . $query_string;
 		return ($this->request('/c/pickups/list.xml' . $query_string, $channel));
 	}
 
