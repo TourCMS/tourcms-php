@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.6.0
+# Version: 3.6.1
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -584,6 +584,7 @@ class TourCMS {
 	# CRUD Pickup points
 	public function list_pickups($query_string, $channel)
 	{
+		if (substr($query_string, 0,1) !== '?') $query_string = '?' . $query_string;
 		return ($this->request('/c/pickups/list.xml' . $query_string, $channel));
 	}
 
