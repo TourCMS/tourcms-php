@@ -1,3 +1,5 @@
 config.php
 src/config.php
 src/examples/config.php
+.idea
+vendor
