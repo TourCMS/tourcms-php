@@ -5,6 +5,7 @@
   * [Installing Manually](#installing-manually)
   * [Upgrading from v1.x](#upgrading-from-version-1x)
 * [Usage](#usage)
+* [Caching (PSR-16)](#caching-psr-16)
 * [Further examples](#further-examples)
 * [Environment test](#environment-test)
 
