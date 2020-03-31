@@ -71,6 +71,11 @@ class TourCMS {
 		$this->request_from_remote($path, $channel, $verb, $post_data);
 	}
 
+	public function request_from_cache($path)
+	{
+
+	}
+
 	public function request_from_remote($path, $channel = 0, $verb = 'GET', $post_data = null)
 	{
 		// Prepare the URL we are sending to
