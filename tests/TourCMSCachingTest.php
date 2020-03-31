@@ -138,6 +138,16 @@ class TourCMSCachingTest extends TestCase
         $this->assertIsFromRemote($response2);
     }
 
+    /** @test */
+    public function it_returns_proper_response_when_tourcms_is_instantiated_with_raw_flag()
+    {
+        $tourcms = $this->getMockedTourCMS('raw', false);
+
+        $response = $tourcms->search_tours();
+
+        $this->assertIsString($response);
+    }
+
 
 
     public function getStandardTimeouts()
@@ -161,7 +171,7 @@ class TourCMSCachingTest extends TestCase
      */
     public function getMockedTourCMS($format = "simplexml", $cache = true, $timeouts = null, $callCount = 100)
     {
-        $response = $this->getRemoteResponse();
+        $response = $format === "simplexml" ? $this->getRemoteResponse() : $this->getRemoteResponse()->asXML();
         $cache = $cache ? $this->cache : null;
         $timeouts = $timeouts ? $timeouts : null;
 
