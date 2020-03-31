@@ -102,13 +102,22 @@ class TourCMS {
 	public function request($method, $path, $channel = 0, $verb = 'GET', $post_data = null) {
 		$replaced = $this->convert_path_to_cache_key($path);
 
-		if (!$this->cache) {
+		if (!$this->is_cachable($method)) {
 			return $this->request_from_remote($path, $channel, $verb, $post_data);
 		}
 	}
 
 	public function request_from_cache($path)
 	{
+
+	}
+
+	protected function is_cachable($method)
+	{
+		return (
+			array_key_exists($method, $this->cache_timeouts) &&
+			$this->cache_timeouts[$method]["time"] > 0
+		);
 
 	}
 
