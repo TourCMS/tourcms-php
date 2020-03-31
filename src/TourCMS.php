@@ -118,7 +118,11 @@ class TourCMS {
 		$response = $this->request_from_remote($path, $channel, $verb, $post_data);
 
 		if ($this->is_cachable($method)) {
-			$this->cache->set($cache_key, $response->asXML(), $this->get_ttl_for_method($method));
+			$this->cache->set(
+				$cache_key,
+				$response->asXML(),
+				$this->get_ttl_for_method($method)
+			);
 		}
 
 		return $response;
@@ -146,6 +150,8 @@ class TourCMS {
 	protected function is_cachable($method)
 	{
 		return (
+			!is_null($this->cache) &&
+			!is_null($this->cache_timeouts) &&
 			array_key_exists($method, $this->cache_timeouts) &&
 			$this->cache_timeouts[$method]["time"] > 0
 		);

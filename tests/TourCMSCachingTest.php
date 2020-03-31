@@ -43,6 +43,16 @@ class TourCMSCachingTest extends TestCase
     }
 
     /** @test */
+    public function it_can_retrieve_results_without_a_cache_driver()
+    {
+        $tourcms = $this->getMockedTourCMS("simplexml", false);
+
+        $response = $tourcms->search_tours();
+
+        $this->assertIsFromRemote($response);
+    }
+
+    /** @test */
     public function it_can_receive_a_psr16_instance_as_constructor_argument(){
         $tourcms = new TourCMS(0, "key", "simplexml", 0, $this->cache);
 
@@ -121,6 +131,8 @@ class TourCMSCachingTest extends TestCase
         sleep(2);
 
         $response2 = $tourcms->search_tours();
+
+        //the actual assertion is done by mockery by ensuring that request_from_remote is called twice
 
         $this->assertIsFromRemote($response1);
         $this->assertIsFromRemote($response2);
