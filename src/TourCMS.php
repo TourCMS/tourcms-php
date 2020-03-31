@@ -68,6 +68,11 @@ class TourCMS {
 	 * @return String or SimpleXML
 	 */
 	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
+		$this->request($path, $channel, $verb, $post_data);
+	}
+
+	public function request_from_remote($path, $channel = 0, $verb = 'GET', $post_data = null)
+	{
 		// Prepare the URL we are sending to
 		$url = $this->base_url.$path;
 		// We need a signature for the header
@@ -77,8 +82,8 @@ class TourCMS {
 
 		// Build headers
 		$headers = array("Content-type: text/xml;charset=\"utf-8\"",
-				 "Date: ".gmdate('D, d M Y H:i:s \G\M\T', $outbound_time),
-				 "Authorization: TourCMS $channel:$this->marketp_id:$signature");
+			"Date: ".gmdate('D, d M Y H:i:s \G\M\T', $outbound_time),
+			"Authorization: TourCMS $channel:$this->marketp_id:$signature");
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -96,8 +101,8 @@ class TourCMS {
 
 		if($verb == "POST") {
 			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
-				if(!is_null($post_data))
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
+			if(!is_null($post_data))
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 		}
 
 		// Callback function to populate the response headers on curl_exec
