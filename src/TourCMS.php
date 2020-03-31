@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 namespace TourCMS\Utils;
 
+use Psr\SimpleCache\CacheInterface;
 use \SimpleXMLElement;
 
 class TourCMS {
@@ -38,6 +39,7 @@ class TourCMS {
 	protected $result_type = "";
 	protected $timeout = 0;
 	protected $last_response_headers = array();
+	protected $cache = null;
 
 	/**
 	 * __construct
@@ -48,11 +50,12 @@ class TourCMS {
 	 * @param $res Result type, defaults to raw
 	 * @param $to Timeout, default 0
 	 */
-	public function __construct($mp, $k, $res = "raw", $to = 0) {
+	public function __construct($mp, $k, $res = "raw", $to = 0, CacheInterface $cache = null) {
 		$this->marketp_id = $mp;
 		$this->private_key = $k;
 		$this->result_type = $res;
 		$this->timeout = $to;
+		$this->cache = $cache;
 	}
 
 	/**
