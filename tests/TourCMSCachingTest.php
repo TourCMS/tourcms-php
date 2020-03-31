@@ -30,6 +30,14 @@ class TourCMSCachingTest extends TestCase
     }
 
     /** @test */
+    public function it_can_instantiate_tourcms_without_a_cache_driver()
+    {
+        $tourcms = new TourCMS(0, "key", "simplexml", 0);
+
+        $this->assertInstanceOf(TourCMS::class, $tourcms);
+    }
+    
+    /** @test */
     public function it_can_receive_a_psr16_instance_as_constructor_argument(){
         $tourcms = new TourCMS(0, "key", "simplexml", 0, $this->cache);
 
@@ -43,6 +51,7 @@ class TourCMSCachingTest extends TestCase
 
         $this->assertInstanceOf(TourCMS::class, $tourcms);
     }
+
 
     function getStandardTimeouts()
     {
