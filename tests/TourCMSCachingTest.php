@@ -54,7 +54,7 @@ class TourCMSCachingTest extends TestCase
         $this->assertInstanceOf(TourCMS::class, $tourcms);
     }
 
-    /** @test */
+    /** @tes */
     public function it_can_call_remote_methods_and_returns_mocked_response()
     {
         $tourcms = $this->getMockedTourCMS();
@@ -77,11 +77,7 @@ class TourCMSCachingTest extends TestCase
 
     function getMockedTourCMS()
     {
-        $response = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
-            <response>
-                <request>POST /c/some/url.xml</request>
-                <error>OK</error>
-            </response>");
+        $response = $this->getCachedResponse();
 
         $tourcms = Mockery::mock(
             TourCMS::class . "[request_from_remote]",
@@ -92,5 +88,25 @@ class TourCMSCachingTest extends TestCase
             ->andReturn($response);
 
         return $tourcms;
+    }
+
+    function getCachedResponse()
+    {
+        return new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
+            <response>
+                <request>POST /c/some/url.xml</request>
+                <error>OK</error>
+                <cached>1</cached>
+            </response>");
+    }
+
+    function getRemoteResponse()
+    {
+        return new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
+            <response>
+                <request>POST /c/some/url.xml</request>
+                <error>OK</error>
+                <remote>1</remote>
+            </response>");
     }
 }
