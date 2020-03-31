@@ -77,14 +77,26 @@ class TourCMSCachingTest extends TestCase
     }
 
     /** @test */
-    public function is_returns_remote_result_for_cacheable_method_that_hasnt_been_cached_before()
+    public function it_returns_remote_result_for_cacheable_method_that_hasnt_been_cached_before()
     {
         $tourcms = $this->getMockedTourCMS();
 
-        $response = $tourcms->show_tour_datesanddeals(1, 1);
+        $response = $tourcms->search_tours();
 
         $this->assertIsFromRemote($response);
     }
+
+    /** @test */
+    public function it_persists_response_in_cache_when_returning_remote_response_for_method_that_should_be_cached()
+    {
+        $tourcms = $this->getMockedTourCMS();
+
+        $response = $tourcms->search_tours();
+
+        $this->assertTrue($this->cache->has('p_tours_search.xml'));
+        $this->assertIsFromRemote(new SimpleXMLElement($this->cache->get('p_tours_search.xml')));
+    }
+
 
 
     public function getStandardTimeouts()
@@ -98,13 +110,13 @@ class TourCMSCachingTest extends TestCase
         ];
     }
 
-    public function getMockedTourCMS()
+    public function getMockedTourCMS($format = "simplexml")
     {
         $response = $this->getRemoteResponse();
 
         $tourcms = Mockery::mock(
             TourCMS::class . "[request_from_remote]",
-            [0, "key", "simplexml", 0, $this->cache]
+            [0, "key", $format, 0, $this->cache]
         )->shouldAllowMockingProtectedMethods();
 
         $tourcms->shouldReceive('request_from_remote')

@@ -104,10 +104,16 @@ class TourCMS {
 
 		$cache_key = $this->convert_path_to_cache_key($path);
 
-		if ($this->can_be_retrieved_from_cache($method, $cache_key)) {
+		if ($this->cache->has($cache_key)) {
 			return false;
 		}
-		return $this->request_from_remote($path, $channel, $verb, $post_data);
+		$response = $this->request_from_remote($path, $channel, $verb, $post_data);
+
+		if ($this->is_cachable($method)) {
+			$this->cache->set($cache_key, $response->asXML());
+		}
+
+		return $response;
 	}
 
 	public function request_from_cache($path)
@@ -126,17 +132,6 @@ class TourCMS {
 			array_key_exists($method, $this->cache_timeouts) &&
 			$this->cache_timeouts[$method]["time"] > 0
 		);
-	}
-
-	/**
-	 * @author Cornelius Carstens
-	 * @param $method string api method name corresponding to key in cache_timeouts
-	 * @param $key string cache key based on request path
-	 * @return bool
-	 */
-	protected function can_be_retrieved_from_cache($method, $key)
-	{
-		return $this->is_cachable($method) && $this->cache->has($key);
 	}
 
 
