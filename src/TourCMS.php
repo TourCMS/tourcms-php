@@ -104,7 +104,7 @@ class TourCMS {
 
 		$cache_key = $this->convert_path_to_cache_key($path);
 
-		if ($this->cache->has($cache_key)) {
+		if (!is_null($this->cache) && $this->cache->has($cache_key)) {
 			return $this->request_from_cache($cache_key);
 		}
 		$response = $this->request_from_remote($path, $channel, $verb, $post_data);
