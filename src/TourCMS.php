@@ -42,7 +42,8 @@ class TourCMS {
 	protected $last_response_headers = array();
 	protected $cache = null;
 	protected $cache_timeouts = null;
-	protected $default_cache_timeouts = [
+
+	public static $default_cache_timeouts = [
 		"search_tours" => ["time" => 1800],
 		"show_tour" => ["time" => 3600],
 		"show_tour_datesanddeals" => ["time" => 900],
@@ -196,23 +197,12 @@ class TourCMS {
 	protected function setup_cache(CacheInterface $cache, array $cache_timeouts = null)
 	{
 		if(is_null($cache_timeouts)){
-			$cache_timeouts = $this->default_cache_timeouts;
+			$cache_timeouts = TourCMS::$default_cache_timeouts;
 		}
 
 		$this->cache = $cache;
 		$this->cache_timeouts = $cache_timeouts;
 	}
-
-
-	/**
-	 * @author Cornelius Carstens
-	 * @return array
-	 */
-	public function get_default_cache_timeouts()
-	{
-		return $this->default_cache_timeouts;
-	}
-
 
 	/**
 	 * @author Cornelius Carstens
