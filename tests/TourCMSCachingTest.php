@@ -153,12 +153,13 @@ class TourCMSCachingTest extends TestCase
     {
         $tourmcs = $this->getMockedTourCMS('raw');
 
-        //call request_from_remote in order to cache the response
-        $tourmcs->search_tours();
+        $this->cache->set('p_tours_search.xml', $this->getCachedResponse()->asXML(), 1000);
 
         $result = $tourmcs->search_tours();
-        
+        $resultObject = new SimpleXMLElement($result);
+
         $this->assertIsString($result);
+        $this->assertIsFromCache($resultObject);
     }
 
 
