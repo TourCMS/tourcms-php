@@ -162,8 +162,6 @@ class TourCMSCachingTest extends TestCase
         $this->assertIsFromCache($resultObject);
     }
 
-
-
     public function getStandardTimeouts()
     {
         return [
