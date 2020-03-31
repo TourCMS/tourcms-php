@@ -112,7 +112,8 @@ class TourCMSCachingTest extends TestCase
     public function it_returns_the_response_from_cache_when_there_is_one_persisted()
     {
         $tourcms = $this->getMockedTourCMS();
-        $this->cache->set('p_tours_search.xml', $this->getCachedResponse()->asXML());
+
+        $tourcms->search_tours();
 
         $response = $tourcms->search_tours();
 
@@ -207,7 +208,7 @@ class TourCMSCachingTest extends TestCase
             <response>
                 <request>POST /c/some/url.xml</request>
                 <error>OK</error>
-                <cached>1</cached>
+                <source>cache</source>
             </response>");
     }
 
@@ -217,7 +218,7 @@ class TourCMSCachingTest extends TestCase
             <response>
                 <request>POST /c/some/url.xml</request>
                 <error>OK</error>
-                <remote>1</remote>
+                <source>remote</source>
             </response>");
     }
 
@@ -231,14 +232,14 @@ class TourCMSCachingTest extends TestCase
 
     public function assertIsFromRemote(SimpleXMLElement $response)
     {
-        $remote = (integer) $response->remote;
-        $this->assertEquals(1, $remote);
+        $source = (string) $response->source;
+        $this->assertEquals("remote", $source);
     }
 
     public function assertIsFromCache(SimpleXMLElement $response)
     {
-        $cached = (integer) $response->cached;
-        $this->assertEquals(1, $cached);
+        $source = (string) $response->source;
+        $this->assertEquals("cache", $source);
     }
 
 

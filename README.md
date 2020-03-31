@@ -115,7 +115,9 @@ $cacheDriver = new SimpleCache($flysystem);
 
 $tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", $cacheDriver);
 
-$tours = $tourcms->search_tours();
+$params = "lat=56.82127&long=-6.09139&k=walking";
+$channel = 3;
+$tours = $tourcms->search_tours($params, $channel);
 ```
 
 Then in another request or just later

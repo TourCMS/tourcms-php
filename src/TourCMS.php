@@ -179,8 +179,10 @@ class TourCMS {
 
 		// Check whether we need to return raw XML or
 		// convert to SimpleXML first
-		if($this->result_type == "simplexml")
+		if($this->result_type == "simplexml"){
 			$result = simplexml_load_string($result);
+			$result->source = "remote";
+		}
 
 		return($result);
 	}
@@ -214,6 +216,7 @@ class TourCMS {
 		$response = $this->cache->get($key);
 		if($this->result_type === "simplexml"){
 			$response = new SimpleXMLElement($response);
+			$response->source = "cache";
 		}
 		return $response;
 	}
