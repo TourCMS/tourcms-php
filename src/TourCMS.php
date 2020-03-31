@@ -68,15 +68,17 @@ class TourCMS {
 	 * @return String or SimpleXML
 	 */
 	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
-		$this->request_from_remote($path, $channel, $verb, $post_data);
+		if (!$this->cache) {
+			return $this->request_from_remote($path, $channel, $verb, $post_data);
+		}
 	}
 
-	public function request_from_cache($path)
+	protected function request_from_cache($path)
 	{
 
 	}
 
-	public function request_from_remote($path, $channel = 0, $verb = 'GET', $post_data = null)
+	protected function request_from_remote($path, $channel = 0, $verb = 'GET', $post_data = null)
 	{
 		// Prepare the URL we are sending to
 		$url = $this->base_url.$path;
