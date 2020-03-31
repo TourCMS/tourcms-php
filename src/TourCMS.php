@@ -85,7 +85,7 @@ class TourCMS {
 	 * @author Cornelius Carstens
 	 * @return array
 	 */
-	public function get_default_cache_timeouts(): array
+	public function get_default_cache_timeouts()
 	{
 		return $this->default_cache_timeouts;
 	}

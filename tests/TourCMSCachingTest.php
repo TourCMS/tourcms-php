@@ -20,7 +20,8 @@ class TourCMSCachingTest extends TestCase
 
     protected function setUp() : void
     {
-        $adapter = new Local(sys_get_temp_dir());
+        $tmpdir = dirname(__DIR__) . "/.tmp";
+        $adapter = new Local($tmpdir);
         $filesystem = new Filesystem($adapter);
         $flysystem = new Flysystem($filesystem);
         $this->cache = new SimpleCache($flysystem);
@@ -28,6 +29,7 @@ class TourCMSCachingTest extends TestCase
 
     protected function tearDown() : void
     {
+        $this->cache->clear();
         unset($this->cache);
     }
 
