@@ -105,7 +105,7 @@ class TourCMS {
 		$cache_key = $this->convert_path_to_cache_key($path);
 
 		if ($this->cache->has($cache_key)) {
-			return false;
+			return $this->request_from_cache($cache_key);
 		}
 		$response = $this->request_from_remote($path, $channel, $verb, $post_data);
 
@@ -116,9 +116,13 @@ class TourCMS {
 		return $response;
 	}
 
-	public function request_from_cache($path)
+	public function request_from_cache($key)
 	{
-
+		$response = $this->cache->get($key);
+		if($this->result_type === "simplexml"){
+			$response = new SimpleXMLElement($response);
+		}
+		return $response;
 	}
 
 	/**

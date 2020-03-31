@@ -97,6 +97,17 @@ class TourCMSCachingTest extends TestCase
         $this->assertIsFromRemote(new SimpleXMLElement($this->cache->get('p_tours_search.xml')));
     }
 
+    /** @test */
+    public function it_returns_the_response_from_cache_when_there_is_one_persisted()
+    {
+        $tourcms = $this->getMockedTourCMS();
+        $this->cache->set('p_tours_search.xml', $this->getCachedResponse()->asXML());
+
+        $response = $tourcms->search_tours();
+
+        $this->assertIsFromCache($response);
+    }
+
 
 
     public function getStandardTimeouts()
@@ -157,6 +168,12 @@ class TourCMSCachingTest extends TestCase
     {
         $remote = (integer) $response->remote;
         $this->assertEquals(1, $remote);
+    }
+
+    public function assertIsFromCache(SimpleXMLElement $response)
+    {
+        $cached = (integer) $response->cached;
+        $this->assertEquals(1, $cached);
     }
 
 
