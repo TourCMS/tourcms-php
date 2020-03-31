@@ -91,6 +91,14 @@ class TourCMS {
 	}
 
 	/**
+	 * @return null
+	 */
+	public function getCacheTimeouts()
+	{
+		return $this->cache_timeouts;
+	}
+
+	/**
 	 * request
 	 *
 	 * @author Cornelius Carstens
@@ -110,7 +118,7 @@ class TourCMS {
 		$response = $this->request_from_remote($path, $channel, $verb, $post_data);
 
 		if ($this->is_cachable($method)) {
-			$this->cache->set($cache_key, $response->asXML());
+			$this->cache->set($cache_key, $response->asXML(), $this->get_ttl_for_method($method));
 		}
 
 		return $response;
@@ -123,6 +131,11 @@ class TourCMS {
 			$response = new SimpleXMLElement($response);
 		}
 		return $response;
+	}
+
+	protected function get_ttl_for_method($method)
+	{
+		return $this->cache_timeouts[$method]["time"];
 	}
 
 	/**

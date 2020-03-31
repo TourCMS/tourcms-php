@@ -31,6 +31,7 @@ class TourCMSCachingTest extends TestCase
     {
         $this->cache->clear();
         unset($this->cache);
+        Mockery::close();
     }
 
     /** @test */
@@ -108,11 +109,29 @@ class TourCMSCachingTest extends TestCase
         $this->assertIsFromCache($response);
     }
 
+    /** @test */
+    public function it_assigns_the_time_to_live_to_the_cache_objects_and_therefore_returns_remote_response_when_the_ttl_expired()
+    {
+        $timeouts = $this->getStandardTimeouts();
+        $timeouts["search_tours"] = ["time" => 1];
+        $tourcms = $this->getMockedTourCMS("simplexml", true, $timeouts, 2);
+
+        $response1 = $tourcms->search_tours();
+
+        sleep(2);
+
+        $response2 = $tourcms->search_tours();
+
+        $this->assertIsFromRemote($response1);
+        $this->assertIsFromRemote($response2);
+    }
+
 
 
     public function getStandardTimeouts()
     {
-        return ["search_tours" => ["time" => 1800],
+        return [
+            "search_tours" => ["time" => 1800],
             "show_tour" => ["time" => 3600],
             "show_tour_datesanddeals" => ["time" => 900],
             "list_channels" => ["time" => 3600],
@@ -121,17 +140,29 @@ class TourCMSCachingTest extends TestCase
         ];
     }
 
-    public function getMockedTourCMS($format = "simplexml")
+    /**
+     * @param string $format
+     * @param bool $cache
+     * @param null $timeouts
+     * @param int $callCount an expectation to how often request_from_remote should be called
+     * @return Mockery\Mock
+     */
+    public function getMockedTourCMS($format = "simplexml", $cache = true, $timeouts = null, $callCount = 100)
     {
         $response = $this->getRemoteResponse();
+        $cache = $cache ? $this->cache : null;
+        $timeouts = $timeouts ? $timeouts : null;
+
+        $callCountFrom = $callCount === 100 ? 0 : $callCount;
 
         $tourcms = Mockery::mock(
             TourCMS::class . "[request_from_remote]",
-            [0, "key", $format, 0, $this->cache]
+            [0, "key", $format, 0, $cache, $timeouts]
         )->shouldAllowMockingProtectedMethods();
 
         $tourcms->shouldReceive('request_from_remote')
-            ->andReturn($response);
+            ->andReturn($response)
+            ->between($callCountFrom, $callCount);
 
         return $tourcms;
     }
