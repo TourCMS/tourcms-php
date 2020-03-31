@@ -84,6 +84,73 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
   print_r($result);
 ```
 
+## Caching (PSR-16)
+The TourCMS object can receive a PSR-16 SimpleCache object in its constructor as the fourth argument that is treated as the cache driver when set.
+### PSR-16
+[PSR-16](https://www.php-fig.org/psr/psr-16/) is a commonly used Interface for cache drivers. Most established cache libraries implement the interface or offer adapters.
+
+- [PhpFastCache](https://www.phpfastcache.com)
+- [Scrapbook](https://www.scrapbook.cash)
+
+### Caching Example
+In order to enable API caching add a cache driver that implements the interface `Psr\SimpleCache\CacheInterface` to the
+constructor of the TourCMS object:
+
+Example using Scrapbook's Simple-Cache adapter
+```php
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use MatthiasMullie\Scrapbook\Adapters\Flysystem;
+use MatthiasMullie\Scrapbook\Psr16\SimpleCache;
+use TourCMS\Utils\TourCMS;
+
+
+
+$tmpdir = dirname(__DIR__) . "/.tmp";
+$adapter = new Local($tmpdir);
+$filesystem = new Filesystem($adapter);
+$flysystem = new Flysystem($filesystem);
+$cacheDriver = new SimpleCache($flysystem);
+
+$tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", $cacheDriver);
+
+$tours = $tourcms->search_tours();
+```
+
+Then in another request or just later
+
+```php
+//the value of $tours came from the cache and not from the live TourCMS server
+$tours = $tourcms->search_tours();
+```
+
+### Cache Timeouts
+TourCMS uses a configuration array to determine how long the response for a specific request should be cached.
+The default configuration is stored in a static property `TourCMS::$default_cache_timeouts`.
+
+This array contains the API methods with their timeout values that are recommended by TourCMS.
+
+If you wish to make changes to these default values simply take the above mentioned default array,
+adjust the values and provide the newly formed configuration array as a fifth argument to the constructor
+of `TourCMS`
+
+```php
+
+use TourCMS\Utils\TourCMS;
+
+// setup cache driver as seen above
+...
+$cacheDriver = new SimpleCache($flysystem);
+
+$config = TourCMS::$default_cache_timeouts;
+unset($config['show_supplier']);
+$config["show_tour"] = ["time" => 60 * 30];
+
+$tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", $cacheDriver, $config);
+
+```  
+
+
 ## Further Examples
 
 ### API documentation on tourcms.com
