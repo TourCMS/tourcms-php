@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 namespace TourCMS\Utils;
 
+use Psr\Log\InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
 use \SimpleXMLElement;
 
@@ -92,7 +93,7 @@ class TourCMS {
 	/**
 	 * request
 	 *
-	 * @author Paul Slugocki
+	 * @author Cornelius Carstens
 	 * @param $method string name of api method that is being requested
 	 * @param $path API path to call
 	 * @param $channel Channel ID, defaults to zero
@@ -100,11 +101,13 @@ class TourCMS {
 	 * @return String or SimpleXML
 	 */
 	public function request($method, $path, $channel = 0, $verb = 'GET', $post_data = null) {
-		$replaced = $this->convert_path_to_cache_key($path);
 
-		if (!$this->is_cachable($method)) {
-			return $this->request_from_remote($path, $channel, $verb, $post_data);
+		$cache_key = $this->convert_path_to_cache_key($path);
+
+		if ($this->can_be_retrieved_from_cache($method, $cache_key)) {
+			return false;
 		}
+		return $this->request_from_remote($path, $channel, $verb, $post_data);
 	}
 
 	public function request_from_cache($path)
@@ -112,13 +115,28 @@ class TourCMS {
 
 	}
 
+	/**
+	 * @author Cornelius Carstens
+	 * @param $method string api method name corresponding to key in cache_timeouts
+	 * @return bool
+	 */
 	protected function is_cachable($method)
 	{
 		return (
 			array_key_exists($method, $this->cache_timeouts) &&
 			$this->cache_timeouts[$method]["time"] > 0
 		);
+	}
 
+	/**
+	 * @author Cornelius Carstens
+	 * @param $method string api method name corresponding to key in cache_timeouts
+	 * @param $key string cache key based on request path
+	 * @return bool
+	 */
+	protected function can_be_retrieved_from_cache($method, $key)
+	{
+		return $this->is_cachable($method) && $this->cache->has($key);
 	}
 
 
@@ -129,6 +147,15 @@ class TourCMS {
 			"_");
 	}
 
+	/**
+	 * request_from_remote
+	 *
+	 * @author Paul Slugocki
+	 * @param $path API path to call
+	 * @param $channel Channel ID, defaults to zero
+	 * @param $verb HTTP Verb, defaults to GET
+	 * @return String or SimpleXML
+	 */
 	protected function request_from_remote($path, $channel = 0, $verb = 'GET', $post_data = null)
 	{
 		// Prepare the URL we are sending to

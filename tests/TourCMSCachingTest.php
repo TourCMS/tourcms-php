@@ -74,6 +74,16 @@ class TourCMSCachingTest extends TestCase
         $this->assertIsFromRemote($response);
     }
 
+    /** @test */
+    public function is_returns_remote_result_for_cacheable_method_that_hasnt_been_cached_before()
+    {
+        $tourcms = $this->getMockedTourCMS();
+
+        $response = $tourcms->show_tour_datesanddeals(1, 1);
+
+        $this->assertIsFromRemote($response);
+    }
+
 
     public function getStandardTimeouts()
     {
