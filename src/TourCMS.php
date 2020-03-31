@@ -72,38 +72,6 @@ class TourCMS {
 	}
 
 	/**
-	 * @author Cornelius Carstens
-	 * @param CacheInterface $cache
-	 * @param array|null $cache_timeouts
-	 */
-	protected function setup_cache(CacheInterface $cache, array $cache_timeouts = null)
-	{
-		if(is_null($cache_timeouts)){
-			$cache_timeouts = $this->default_cache_timeouts;
-		}
-
-		$this->cache = $cache;
-		$this->cache_timeouts = $cache_timeouts;
-	}
-
-	/**
-	 * @author Cornelius Carstens
-	 * @return array
-	 */
-	public function get_default_cache_timeouts()
-	{
-		return $this->default_cache_timeouts;
-	}
-
-	/**
-	 * @return null
-	 */
-	public function getCacheTimeouts()
-	{
-		return $this->cache_timeouts;
-	}
-
-	/**
 	 * request
 	 *
 	 * @author Cornelius Carstens
@@ -139,59 +107,6 @@ class TourCMS {
 		}
 
 		return $response;
-	}
-
-	/**
-	 * @author Cornelius Carstens
-	 * @param $key
-	 * @return String | SimpleXMLElement
-	 */
-	public function request_from_cache($key)
-	{
-		$response = $this->cache->get($key);
-		if($this->result_type === "simplexml"){
-			$response = new SimpleXMLElement($response);
-		}
-		return $response;
-	}
-
-	/**
-	 * @author Cornelius Carstens
-	 * @param $method string api method name corresponding to key in cache_timeouts
-	 * @return integer
-	 */
-	protected function get_ttl_for_method($method)
-	{
-		return $this->cache_timeouts[$method]["time"];
-	}
-
-	/**
-	 * @author Cornelius Carstens
-	 * @param $method string api method name corresponding to key in cache_timeouts
-	 * @return bool
-	 */
-	protected function is_cachable($method)
-	{
-		return (
-			!is_null($this->cache) &&
-			!is_null($this->cache_timeouts) &&
-			array_key_exists($method, $this->cache_timeouts) &&
-			$this->cache_timeouts[$method]["time"] > 0
-		);
-	}
-
-
-	/**
-	 * converts a TourCMS api path to a psr-16 compliant cache key
-	 * @author Cornelius Carstens
-	 * @param $path string
-	 * @return string
-	 */
-	protected function convert_path_to_cache_key($path)
-	{
-		return trim(
-				str_replace(["/", "?", "=", "&"], "_", $path),
-			"_");
 	}
 
 	/**
@@ -268,6 +183,95 @@ class TourCMS {
 
 		return($result);
 	}
+
+	/********
+	 * 	PSR-16 Caching Methods
+	 *******/
+
+	/**
+	 * @author Cornelius Carstens
+	 * @param CacheInterface $cache
+	 * @param array|null $cache_timeouts
+	 */
+	protected function setup_cache(CacheInterface $cache, array $cache_timeouts = null)
+	{
+		if(is_null($cache_timeouts)){
+			$cache_timeouts = $this->default_cache_timeouts;
+		}
+
+		$this->cache = $cache;
+		$this->cache_timeouts = $cache_timeouts;
+	}
+
+
+	/**
+	 * @author Cornelius Carstens
+	 * @return array
+	 */
+	public function get_default_cache_timeouts()
+	{
+		return $this->default_cache_timeouts;
+	}
+
+
+	/**
+	 * @author Cornelius Carstens
+	 * @param $key
+	 * @return String | SimpleXMLElement
+	 */
+	public function request_from_cache($key)
+	{
+		$response = $this->cache->get($key);
+		if($this->result_type === "simplexml"){
+			$response = new SimpleXMLElement($response);
+		}
+		return $response;
+	}
+
+	/**
+	 * @author Cornelius Carstens
+	 * @param $method string api method name corresponding to key in cache_timeouts
+	 * @return integer
+	 */
+	protected function get_ttl_for_method($method)
+	{
+		return $this->cache_timeouts[$method]["time"];
+	}
+
+
+	/**
+	 * @author Cornelius Carstens
+	 * @param $method string api method name corresponding to key in cache_timeouts
+	 * @return bool
+	 */
+	protected function is_cachable($method)
+	{
+		return (
+			!is_null($this->cache) &&
+			!is_null($this->cache_timeouts) &&
+			array_key_exists($method, $this->cache_timeouts) &&
+			$this->cache_timeouts[$method]["time"] > 0
+		);
+	}
+
+
+	/**
+	 * converts a TourCMS api path to a psr-16 compliant cache key
+	 * @author Cornelius Carstens
+	 * @param $path string
+	 * @return string
+	 */
+	protected function convert_path_to_cache_key($path)
+	{
+		return trim(
+			str_replace(["/", "?", "=", "&"], "_", $path),
+			"_");
+	}
+
+	/********
+	 * 	END PSR-16 Caching Methods
+	 *******/
+
 
 	/**
 	 * get_base_url
