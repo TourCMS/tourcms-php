@@ -148,6 +148,19 @@ class TourCMSCachingTest extends TestCase
         $this->assertIsString($response);
     }
 
+    /** @test */
+    public function it_returns_string_for_cached_response_with_result_type_raw()
+    {
+        $tourmcs = $this->getMockedTourCMS('raw');
+
+        //call request_from_remote in order to cache the response
+        $tourmcs->search_tours();
+
+        $result = $tourmcs->search_tours();
+        
+        $this->assertIsString($result);
+    }
+
 
 
     public function getStandardTimeouts()

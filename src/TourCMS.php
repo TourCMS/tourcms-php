@@ -118,9 +118,17 @@ class TourCMS {
 		$response = $this->request_from_remote($path, $channel, $verb, $post_data);
 
 		if ($this->is_cachable($method)) {
+
+			$data_to_persist = null;
+			if($this->result_type === 'simplexml'){
+				$data_to_persist = $response->asXML();
+			}else{
+				$data_to_persist = $response;
+			}
+
 			$this->cache->set(
 				$cache_key,
-				$response->asXML(),
+				$data_to_persist,
 				$this->get_ttl_for_method($method)
 			);
 		}
@@ -158,6 +166,11 @@ class TourCMS {
 	}
 
 
+	/**
+	 * @author Cornelius Carstens
+	 * @param $path string
+	 * @return string
+	 */
 	protected function convert_path_to_cache_key($path)
 	{
 		return trim(
