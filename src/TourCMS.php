@@ -93,12 +93,13 @@ class TourCMS {
 	 * request
 	 *
 	 * @author Paul Slugocki
+	 * @param $method string name of api method that is being requested
 	 * @param $path API path to call
 	 * @param $channel Channel ID, defaults to zero
 	 * @param $verb HTTP Verb, defaults to GET
 	 * @return String or SimpleXML
 	 */
-	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
+	public function request($method, $path, $channel = 0, $verb = 'GET', $post_data = null) {
 		$replaced = $this->convert_path_to_cache_key($path);
 
 		if (!$this->cache) {
@@ -240,55 +241,55 @@ class TourCMS {
 	# API methods (Housekeeping)
 
 	public function api_rate_limit_status($channel = 0) {
-		return($this->request('/api/rate_limit_status.xml', $channel));
+		return($this->request(__FUNCTION__, '/api/rate_limit_status.xml', $channel));
 	}
 
 	# Channel methods
 
 	public function list_channels() {
-		return($this->request('/p/channels/list.xml'));
+		return($this->request(__FUNCTION__, '/p/channels/list.xml'));
 	}
 
 	public function show_channel($channel) {
-		return($this->request('/c/channel/show.xml', $channel));
+		return($this->request(__FUNCTION__, '/c/channel/show.xml', $channel));
 	}
 
 	public function channel_performance($channel = 0) {
 		if($channel==0)
-			return($this->request('/p/channels/performance.xml'));
+			return($this->request(__FUNCTION__, '/p/channels/performance.xml'));
 		else
-			return($this->request('/c/channel/performance.xml', $channel));
+			return($this->request(__FUNCTION__, '/c/channel/performance.xml', $channel));
 	}
 
 	# Tour/Hotel methods
 
 	public function search_tours($params = "", $channel = 0) {
 		if($channel==0)
-			return($this->request('/p/tours/search.xml?'.$params));
+			return($this->request(__FUNCTION__, '/p/tours/search.xml?'.$params));
 		else
-			return($this->request('/c/tours/search.xml?'.$params, $channel));
+			return($this->request(__FUNCTION__, '/c/tours/search.xml?'.$params, $channel));
 	}
 
 	public function search_hotels_range($params = "", $tour = "", $channel = 0) {
 		if($channel==0)
-			return($this->request('/p/hotels/search_range.xml?'.$params."&single_tour_id=".$tour));
+			return($this->request(__FUNCTION__, '/p/hotels/search_range.xml?'.$params."&single_tour_id=".$tour));
 		else
-			return($this->request('/c/hotels/search_range.xml?'.$params."&single_tour_id=".$tour, $channel));
+			return($this->request(__FUNCTION__, '/c/hotels/search_range.xml?'.$params."&single_tour_id=".$tour, $channel));
 	}
 
 	public function search_hotels_specific($params = "", $tour = "", $channel = 0) {
 		if($channel==0)
-			return($this->request('/p/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour));
+			return($this->request(__FUNCTION__, '/p/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour));
 		else
-			return($this->request('/c/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour, $channel));
+			return($this->request(__FUNCTION__, '/c/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour, $channel));
 	}
 
 	public function list_product_filters($channel = 0) {
-			return($this->request('/c/tours/filters.xml', $channel));
+			return($this->request(__FUNCTION__, '/c/tours/filters.xml', $channel));
 	}
 
 	public function update_tour($tour_data, $channel) {
-		return($this->request('/c/tour/update.xml', $channel, "POST", $tour_data));
+		return($this->request(__FUNCTION__, '/c/tour/update.xml', $channel, "POST", $tour_data));
 	}
 
 	public function update_tour_url($tour, $channel, $tour_url) {
@@ -302,25 +303,25 @@ class TourCMS {
 
 	public function list_tours($channel = 0, $params = "") {
 		if($channel==0)
-			return($this->request('/p/tours/list.xml?'.$params));
+			return($this->request(__FUNCTION__, '/p/tours/list.xml?'.$params));
 		else
-			return($this->request('/c/tours/list.xml?'.$params, $channel));
+			return($this->request(__FUNCTION__, '/c/tours/list.xml?'.$params, $channel));
 	}
 
 	public function list_tour_images($channel = 0, $params = "")
 	{
 		if($channel==0)
-			return($this->request('/p/tours/images/list.xml?'.$params));
+			return($this->request(__FUNCTION__, '/p/tours/images/list.xml?'.$params));
 		else
-			return($this->request('/c/tours/images/list.xml?'.$params, $channel));
+			return($this->request(__FUNCTION__, '/c/tours/images/list.xml?'.$params, $channel));
 	}
 
 	public function list_tour_locations($channel = 0, $params = "")
 	{
 		if($channel==0)
-			return($this->request('/p/tours/locations.xml?'.$params));
+			return($this->request(__FUNCTION__, '/p/tours/locations.xml?'.$params));
 		else
-			return($this->request('/c/tours/locations.xml?'.$params, $channel));
+			return($this->request(__FUNCTION__, '/c/tours/locations.xml?'.$params, $channel));
 	}
 
 
@@ -351,30 +352,30 @@ class TourCMS {
 			}
 
 		if((int)$tour > 0) {
-			return($this->request($url, $channel));
+			return($this->request(__FUNCTION__, $url, $channel));
 		}
 	}
 
 
 	public function check_tour_availability($params, $tour, $channel)
 	{
-		return ($this->request('/c/tour/datesprices/checkavail.xml?id='.$tour."&".$params, $channel));
+		return ($this->request(__FUNCTION__, '/c/tour/datesprices/checkavail.xml?id='.$tour."&".$params, $channel));
 	}
 
 	public function show_tour_datesanddeals($tour, $channel, $qs = "")
 	{
-		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour.'&'.$qs, $channel));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/datesndeals/search.xml?id='.$tour.'&'.$qs, $channel));
 	}
 
 
 	public function show_tour_departures($tour, $channel, $qs = "")
 	{
-		return($this->request('/c/tour/datesprices/dep/show.xml?id='.$tour.'&'.$qs, $channel));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/dep/show.xml?id='.$tour.'&'.$qs, $channel));
 	}
 
 	public function show_tour_freesale($tour, $channel)
 	{
-		return($this->request('/c/tour/datesprices/freesale/show.xml?id='.$tour, $channel));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/freesale/show.xml?id='.$tour, $channel));
 	}
 
 	/*
@@ -383,27 +384,27 @@ class TourCMS {
 
 	public function search_raw_departures($tour, $channel, $qs)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour.'&'.$qs, $channel));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/dep/manage/search.xml?id='.$tour.'&'.$qs, $channel));
 	}
 
 	public function show_departure($departure, $tour, $channel)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/show.xml?id='.$tour.'&departure_id='.$departure, $channel));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/dep/manage/show.xml?id='.$tour.'&departure_id='.$departure, $channel));
 	}
 
 	public function create_departure($departure_data, $channel)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/new.xml', $channel, "POST", $departure_data));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/dep/manage/new.xml', $channel, "POST", $departure_data));
 	}
 
 	public function update_departure($departure_data, $channel)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/update.xml', $channel, "POST", $departure_data));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/dep/manage/update.xml', $channel, "POST", $departure_data));
 	}
 
 	public function delete_departure($departure, $tour, $channel)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/delete.xml?id='.$tour.'&departure_id='.$departure, $channel, "POST"));
+		return($this->request(__FUNCTION__, '/c/tour/datesprices/dep/manage/delete.xml?id='.$tour.'&departure_id='.$departure, $channel, "POST"));
 	}
 
 	/*
@@ -412,7 +413,7 @@ class TourCMS {
 
 	public function show_promo($promo, $channel)
 	{
-		return($this->request('/c/promo/show.xml?promo_code='.$promo, $channel));
+		return($this->request(__FUNCTION__, '/c/promo/show.xml?promo_code='.$promo, $channel));
 	}
 
 	# Booking methods
@@ -423,17 +424,17 @@ class TourCMS {
 
 	public function get_booking_redirect_url($url_data, $channel)
 	{
-		return($this->request('/c/booking/new/get_redirect_url.xml', $channel, "POST", $url_data));
+		return($this->request(__FUNCTION__, '/c/booking/new/get_redirect_url.xml', $channel, "POST", $url_data));
 	}
 
 	public function start_new_booking($booking_data, $channel)
 	{
-		return($this->request('/c/booking/new/start.xml', $channel, "POST", $booking_data));
+		return($this->request(__FUNCTION__, '/c/booking/new/start.xml', $channel, "POST", $booking_data));
 	}
 
 	public function commit_new_booking($booking_data, $channel)
 	{
-		return($this->request('/c/booking/new/commit.xml', $channel, "POST", $booking_data));
+		return($this->request(__FUNCTION__, '/c/booking/new/commit.xml', $channel, "POST", $booking_data));
 	}
 
 	/*
@@ -443,13 +444,13 @@ class TourCMS {
 	public function search_bookings($params = "", $channel = 0)
 	{
 		if($channel==0)
-			return($this->request('/p/bookings/search.xml?'.$params));
+			return($this->request(__FUNCTION__, '/p/bookings/search.xml?'.$params));
 		else
-			return($this->request('/c/bookings/search.xml?'.$params, $channel));
+			return($this->request(__FUNCTION__, '/c/bookings/search.xml?'.$params, $channel));
 	}
 
 	public function show_booking($booking, $channel) {
-		return($this->request('/c/booking/show.xml?booking_id='.$booking, $channel));
+		return($this->request(__FUNCTION__, '/c/booking/show.xml?booking_id='.$booking, $channel));
 	}
 
 	public function search_voucher($voucher_data = null, $channel = 0) {
@@ -460,9 +461,9 @@ class TourCMS {
 		}
 
 		if($channel == 0) {
-			return($this->request('/p/voucher/search.xml', $channel, 'POST', $voucher_data));
+			return($this->request(__FUNCTION__, '/p/voucher/search.xml', $channel, 'POST', $voucher_data));
 		} else {
-			return($this->request('/c/voucher/search.xml', $channel, 'POST', $voucher_data));
+			return($this->request(__FUNCTION__, '/c/voucher/search.xml', $channel, 'POST', $voucher_data));
 		}
 	}
 
@@ -472,53 +473,53 @@ class TourCMS {
 
 	public function update_booking($booking_data, $channel)
 	{
-		return($this->request('/c/booking/update.xml', $channel, "POST", $booking_data));
+		return($this->request(__FUNCTION__, '/c/booking/update.xml', $channel, "POST", $booking_data));
 	}
 
 	public function create_payment($payment_data, $channel)
 	{
-		return($this->request('/c/booking/payment/new.xml', $channel, "POST", $payment_data));
+		return($this->request(__FUNCTION__, '/c/booking/payment/new.xml', $channel, "POST", $payment_data));
 	}
 
 	public function log_failed_payment($payment_data, $channel)
 	{
-		return($this->request('/c/booking/payment/fail.xml', $channel, "POST", $payment_data));
+		return($this->request(__FUNCTION__, '/c/booking/payment/fail.xml', $channel, "POST", $payment_data));
 	}
 
 	public function spreedly_create_payment($payment_data, $channel)
 	{
-		return($this->request('/c/booking/payment/spreedly/new.xml', $channel, "POST", $payment_data));
+		return($this->request(__FUNCTION__, '/c/booking/payment/spreedly/new.xml', $channel, "POST", $payment_data));
 	}
 
 	public function spreedly_complete_payment($transaction_id, $channel)
 	{
-		return($this->request('/c/booking/gatewaytransaction/spreedlycomplete.xml?id=' . $transaction_id, $channel, 'POST'));
+		return($this->request(__FUNCTION__, '/c/booking/gatewaytransaction/spreedlycomplete.xml?id=' . $transaction_id, $channel, 'POST'));
 	}
 
 	public function cancel_booking($booking_data, $channel)
 	{
-		return($this->request('/c/booking/cancel.xml', $channel, "POST", $booking_data));
+		return($this->request(__FUNCTION__, '/c/booking/cancel.xml', $channel, "POST", $booking_data));
 	}
 
 	public function delete_booking($booking, $channel)
 	{
-		return($this->request('/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
+		return($this->request(__FUNCTION__, '/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
 	}
 
 	public function check_option_availability($booking, $tour_component_id, $channel){
-		return ($this->request('/c/booking/options/checkavail.xml?booking_id='.$booking.'&tour_component_id='.$tour_component_id, $channel));
+		return ($this->request(__FUNCTION__, '/c/booking/options/checkavail.xml?booking_id='.$booking.'&tour_component_id='.$tour_component_id, $channel));
 	}
 
 	public function booking_add_component($component_data, $channel){
-		return($this->request('/c/booking/component/new.xml', $channel, "POST", $component_data));
+		return($this->request(__FUNCTION__, '/c/booking/component/new.xml', $channel, "POST", $component_data));
 	}
 
 	public function booking_remove_component($component_data, $channel){
-		return($this->request('/c/booking/component/delete.xml', $channel, "POST", $component_data));
+		return($this->request(__FUNCTION__, '/c/booking/component/delete.xml', $channel, "POST", $component_data));
 	}
 
 	public function booking_update_component($component_data, $channel){
-		return($this->request('/c/booking/component/update.xml', $channel, "POST", $component_data));
+		return($this->request(__FUNCTION__, '/c/booking/component/update.xml', $channel, "POST", $component_data));
 	}
 
 	public function add_note_to_booking($booking, $channel, $text, $note_type) {
@@ -529,82 +530,82 @@ class TourCMS {
 		$note->addChild('text', $text);
 		$note->addChild('type', $note_type);
 
-		return($this->request('/c/booking/note/new.xml', $channel, 'POST', $booking_data));
+		return($this->request(__FUNCTION__, '/c/booking/note/new.xml', $channel, 'POST', $booking_data));
 	}
 
 	public function send_booking_email($booking_data, $channel){
-			return($this->request('/c/booking/email/send.xml', $channel, "POST", $booking_data));
+			return($this->request(__FUNCTION__, '/c/booking/email/send.xml', $channel, "POST", $booking_data));
 	}
 
 	public function redeem_voucher($voucher_data, $channel = 0) {
-		return($this->request('/c/voucher/redeem.xml', $channel, 'POST', $voucher_data));
+		return($this->request(__FUNCTION__, '/c/voucher/redeem.xml', $channel, 'POST', $voucher_data));
 	}
 
 	# Enquiry and customer methods
 
 	public function create_enquiry($enquiry_data, $channel)
 	{
-		return($this->request('/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
+		return($this->request(__FUNCTION__, '/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
 	}
 
 	public function update_customer($customer_data, $channel)
 	{
-		return($this->request('/c/customer/update.xml', $channel, "POST", $customer_data));
+		return($this->request(__FUNCTION__, '/c/customer/update.xml', $channel, "POST", $customer_data));
 	}
 
 	public function search_enquiries($params = "", $channel = 0) {
 		if($channel==0)
-			return($this->request('/p/enquiries/search.xml?'.$params));
+			return($this->request(__FUNCTION__, '/p/enquiries/search.xml?'.$params));
 		else
-			return($this->request('/c/enquiries/search.xml?'.$params, $channel));
+			return($this->request(__FUNCTION__, '/c/enquiries/search.xml?'.$params, $channel));
 	}
 
 	public function show_enquiry($enquiry, $channel)
 	{
-		return($this->request('/c/enquiry/show.xml?enquiry_id='.$enquiry, $channel));
+		return($this->request(__FUNCTION__, '/c/enquiry/show.xml?enquiry_id='.$enquiry, $channel));
 	}
 
 	public function show_customer($customer, $channel)
 	{
-		return($this->request('/c/customer/show.xml?customer_id='.$customer, $channel));
+		return($this->request(__FUNCTION__, '/c/customer/show.xml?customer_id='.$customer, $channel));
 	}
 
 	public function check_customer_login($customer, $password, $channel) {
-		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
+		return($this->request(__FUNCTION__, '/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
 	}
 
 	# Agents
 	public function search_agents($params, $channel)
 	{
-		return($this->request('/c/agents/search.xml?'.$params, $channel));
+		return($this->request(__FUNCTION__, '/c/agents/search.xml?'.$params, $channel));
 	}
 
   	public function start_new_agent_login($params, $channel)
 	{
-		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
+		return($this->request(__FUNCTION__, '/c/start_agent_login.xml', $channel, "POST", $params));
 	}
 
 	public function retrieve_agent_booking_key($private_token, $channel)
 	{
-		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
+		return($this->request(__FUNCTION__, '/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
   	}
 
 	# Payments
   	public function list_payments($params, $channel)
   	{
-        return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
+        return($this->request(__FUNCTION__, '/c/booking/payment/list.xml?'.$params, $channel));
   	}
 
 	# Staff members
   	public function list_staff_members($channel)
   	{
-        return($this->request('/c/staff/list.xml', $channel));
+        return($this->request(__FUNCTION__, '/c/staff/list.xml', $channel));
   	}
 
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
 	{
-		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
+		return($this->request(__FUNCTION__, '/c/supplier/show.xml?supplier_id='.$supplier, $channel));
 	}
 
 	# Used for validating webhook signatures
@@ -641,22 +642,22 @@ class TourCMS {
 	public function list_pickups($query_string, $channel)
 	{
 		if (substr($query_string, 0,1) !== '?') $query_string = '?' . $query_string;
-		return ($this->request('/c/pickups/list.xml' . $query_string, $channel));
+		return ($this->request(__FUNCTION__, '/c/pickups/list.xml' . $query_string, $channel));
 	}
 
 	public function create_pickup($pickup_data, $channel)
 	{
-		return ($this->request('/c/pickups/new.xml', $channel, "POST", $pickup_data));
+		return ($this->request(__FUNCTION__, '/c/pickups/new.xml', $channel, "POST", $pickup_data));
 	}
 
 	public function update_pickup($pickup_data, $channel)
 	{
-		return ($this->request('/c/pickups/update.xml', $channel, "POST", $pickup_data));
+		return ($this->request(__FUNCTION__, '/c/pickups/update.xml', $channel, "POST", $pickup_data));
 	}
 
 	public function delete_pickup($pickup_data, $channel)
 	{
-		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
+		return ($this->request(__FUNCTION__, '/c/pickups/delete.xml', $channel, "POST", $pickup_data));
 	}
 
 }
