@@ -63,8 +63,19 @@ class TourCMSCachingTest extends TestCase
 
     }
 
+    /** @test */
+    public function it_returns_remote_result_for_methods_that_arent_in_the_cache_timeouts_config_array()
+    {
+        $tourcms = $this->getMockedTourCMS();
 
-    function getStandardTimeouts()
+        $response = $tourcms->start_new_booking($this->getSampleXmlPayload(), 1);
+
+        $this->assertInstanceOf(SimpleXMLElement::class, $response);
+        $this->assertIsFromRemote($response);
+    }
+
+
+    public function getStandardTimeouts()
     {
         return ["search_tours" => ["time" => 1800],
             "show_tour" => ["time" => 3600],
@@ -75,9 +86,9 @@ class TourCMSCachingTest extends TestCase
         ];
     }
 
-    function getMockedTourCMS()
+    public function getMockedTourCMS()
     {
-        $response = $this->getCachedResponse();
+        $response = $this->getRemoteResponse();
 
         $tourcms = Mockery::mock(
             TourCMS::class . "[request_from_remote]",
@@ -90,7 +101,7 @@ class TourCMSCachingTest extends TestCase
         return $tourcms;
     }
 
-    function getCachedResponse()
+    public function getCachedResponse()
     {
         return new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
             <response>
@@ -100,7 +111,7 @@ class TourCMSCachingTest extends TestCase
             </response>");
     }
 
-    function getRemoteResponse()
+    public function getRemoteResponse()
     {
         return new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
             <response>
@@ -109,4 +120,20 @@ class TourCMSCachingTest extends TestCase
                 <remote>1</remote>
             </response>");
     }
+
+    public function getSampleXmlPayload()
+    {
+        return new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
+            <booking>
+                
+            </booking>");
+    }
+
+    public function assertIsFromRemote(SimpleXMLElement $response)
+    {
+        $remote = (integer) $response->remote;
+        $this->assertEquals(1, $remote);
+    }
+
+
 }

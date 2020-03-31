@@ -100,7 +100,7 @@ class TourCMS {
 	 */
 	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
 		$replaced = $this->convert_path_to_cache_key($path);
-		dump($replaced);
+
 		if (!$this->cache) {
 			return $this->request_from_remote($path, $channel, $verb, $post_data);
 		}

@@ -22,7 +22,8 @@
     "require": {
         "php": ">=7.1",
         "psr/simple-cache": "^1.0",
-        "phpunit/phpunit": "^9.0"
+        "phpunit/phpunit": "^9.0",
+        "ext-simplexml": "*"
     },
     "autoload": {
         "psr-4": {"TourCMS\\Utils\\": "src/"}
