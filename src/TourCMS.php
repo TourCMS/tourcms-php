@@ -40,6 +40,7 @@ class TourCMS {
 	protected $timeout = 0;
 	protected $last_response_headers = array();
 	protected $cache = null;
+	protected $cache_timeouts = null;
 
 	/**
 	 * __construct
@@ -50,12 +51,32 @@ class TourCMS {
 	 * @param $res Result type, defaults to raw
 	 * @param $to Timeout, default 0
 	 */
-	public function __construct($mp, $k, $res = "raw", $to = 0, CacheInterface $cache = null) {
+	public function __construct($mp, $k, $res = "raw", $to = 0, CacheInterface $cache = null, $cache_timeouts = null) {
 		$this->marketp_id = $mp;
 		$this->private_key = $k;
 		$this->result_type = $res;
 		$this->timeout = $to;
+
+		if($cache){
+			$this->setup_cache($cache, $cache_timeouts);
+		}
+	}
+
+	protected function setup_cache(CacheInterface $cache, array $cache_timeouts = null)
+	{
+		if(is_null($cache_timeouts)){
+			$cache_timeouts = [
+				"search_tours" => ["time" => 1800],
+				"show_tour" => ["time" => 3600],
+				"show_tour_datesanddeals" => ["time" => 900],
+				"list_channels" => ["time" => 3600],
+				"show_channel" => ["time" => 3600],
+				"show_supplier" => ["time" => 360]
+			];
+		}
+
 		$this->cache = $cache;
+		$this->cache_timeouts = $cache_timeouts;
 	}
 
 	/**
