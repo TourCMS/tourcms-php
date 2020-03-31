@@ -12,6 +12,13 @@
             "homepage": "http://www.tourcms.com"
         }
     ],
+    "scripts": {
+        "test": "phpunit",
+        "test:watch": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit-watcher watch"
+        ]
+    },
     "require": {
         "php": ">=5.5",
         "psr/simple-cache": "^1.0",
@@ -32,6 +39,8 @@
             }
         },
     "require-dev": {
-        "phpfastcache/phpfastcache": "^8.0"
+        "spatie/phpunit-watcher": "^1.22",
+        "matthiasmullie/scrapbook": "^1.4",
+        "league/flysystem": "^1.0"
     }
 }
