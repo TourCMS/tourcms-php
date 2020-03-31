@@ -81,6 +81,15 @@ class TourCMS {
 	}
 
 	/**
+	 * @author Cornelius Carstens
+	 * @return array
+	 */
+	public function getDefaultCacheTimeouts(): array
+	{
+		return $this->default_cache_timeouts;
+	}
+
+	/**
 	 * request
 	 *
 	 * @author Paul Slugocki
