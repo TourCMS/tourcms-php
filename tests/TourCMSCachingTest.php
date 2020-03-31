@@ -8,7 +8,9 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use MatthiasMullie\Scrapbook\Adapters\Flysystem;
 use MatthiasMullie\Scrapbook\Psr16\SimpleCache;
+use Mockery;
 use PHPUnit\Framework\TestCase;
+use SimpleXMLElement;
 use TourCMS\Utils\TourCMS;
 
 class TourCMSCachingTest extends TestCase
@@ -36,7 +38,7 @@ class TourCMSCachingTest extends TestCase
 
         $this->assertInstanceOf(TourCMS::class, $tourcms);
     }
-    
+
     /** @test */
     public function it_can_receive_a_psr16_instance_as_constructor_argument(){
         $tourcms = new TourCMS(0, "key", "simplexml", 0, $this->cache);
@@ -52,6 +54,15 @@ class TourCMSCachingTest extends TestCase
         $this->assertInstanceOf(TourCMS::class, $tourcms);
     }
 
+    /** @test */
+    public function it_can_call_remote_methods_and_returns_mocked_response()
+    {
+        $tourcms = $this->getMockedTourCMS();
+        $result = $tourcms->show_tour_datesanddeals(1, 1);
+        $this->assertInstanceOf(SimpleXMLElement::class, $result);
+
+    }
+
 
     function getStandardTimeouts()
     {
@@ -62,5 +73,24 @@ class TourCMSCachingTest extends TestCase
             "show_channel" => ["time" => 3600],
             "show_supplier" => ["time" => 360]
         ];
+    }
+
+    function getMockedTourCMS()
+    {
+        $response = new SimpleXMLElement("<?xml version=\"1.0\" encoding=\"utf-8\"?>
+            <response>
+                <request>POST /c/some/url.xml</request>
+                <error>OK</error>
+            </response>");
+
+        $tourcms = Mockery::mock(
+            TourCMS::class . "[request_from_remote]",
+            [0, "key", "simplexml", 0, $this->cache]
+        )->shouldAllowMockingProtectedMethods();
+
+        $tourcms->shouldReceive('request_from_remote')
+            ->andReturn($response);
+
+        return $tourcms;
     }
 }

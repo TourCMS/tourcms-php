@@ -95,7 +95,7 @@ class TourCMS {
 		}
 	}
 
-	protected function request_from_cache($path)
+	public function request_from_cache($path)
 	{
 
 	}
