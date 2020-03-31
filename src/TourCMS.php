@@ -84,7 +84,7 @@ class TourCMS {
 	 * @author Cornelius Carstens
 	 * @return array
 	 */
-	public function getDefaultCacheTimeouts(): array
+	public function get_default_cache_timeouts(): array
 	{
 		return $this->default_cache_timeouts;
 	}
@@ -99,6 +99,8 @@ class TourCMS {
 	 * @return String or SimpleXML
 	 */
 	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
+		$replaced = $this->convert_path_to_cache_key($path);
+		dump($replaced);
 		if (!$this->cache) {
 			return $this->request_from_remote($path, $channel, $verb, $post_data);
 		}
@@ -107,6 +109,14 @@ class TourCMS {
 	public function request_from_cache($path)
 	{
 
+	}
+
+
+	protected function convert_path_to_cache_key($path)
+	{
+		return trim(
+				str_replace(["/", "?", "=", "&"], "_", $path),
+			"_");
 	}
 
 	protected function request_from_remote($path, $channel = 0, $verb = 'GET', $post_data = null)
