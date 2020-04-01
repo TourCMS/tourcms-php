@@ -86,7 +86,7 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
 ```
 
 ## Caching (PSR-16)
-The TourCMS object can receive a PSR-16 SimpleCache object in its constructor as the fourth argument that is treated as the cache driver when set.
+The TourCMS object can receive a PSR-16 SimpleCache object in its constructor as the fifth argument that is treated as the cache driver when set.
 ### PSR-16
 [PSR-16](https://www.php-fig.org/psr/psr-16/) is a commonly used Interface for cache drivers. Most established cache libraries implement the interface or offer adapters.
 
@@ -134,7 +134,7 @@ The default configuration is stored in a static property `TourCMS::$default_cach
 This array contains the API methods with their timeout values that are recommended by TourCMS.
 
 If you wish to make changes to these default values simply take the above mentioned default array,
-adjust the values and provide the newly formed configuration array as a fifth argument to the constructor
+adjust the values and provide the newly formed configuration array as a sixth argument to the constructor
 of `TourCMS`
 
 ```php
