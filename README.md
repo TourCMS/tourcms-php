@@ -113,7 +113,7 @@ $filesystem = new Filesystem($adapter);
 $flysystem = new Flysystem($filesystem);
 $cacheDriver = new SimpleCache($flysystem);
 
-$tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", $cacheDriver);
+$tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", 0, $cacheDriver);
 
 $params = "lat=56.82127&long=-6.09139&k=walking";
 $channel = 3;
@@ -149,7 +149,7 @@ $config = TourCMS::$default_cache_timeouts;
 unset($config['show_supplier']);
 $config["show_tour"] = ["time" => 60 * 30];
 
-$tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", $cacheDriver, $config);
+$tourcms = new TourCMS(1, "YOUR_KEY", "simplexml", 0, $cacheDriver, $config);
 
 ```  
 
