@@ -541,7 +541,7 @@ class TourCMS {
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
   	}
 	
-	public function agent_update($update_data, $channel)
+	public function update_agent($update_data, $channel)
 	{
 		return ($this->request('/c/agents/update.xml', $channel, "POST", $update_data));
 	}
