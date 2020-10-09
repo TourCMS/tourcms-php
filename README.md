@@ -12,7 +12,7 @@
 
 ### Installing via Composer (Recommended)
 
-1. Install [Composer](https://getcomposer.org/), add `"tourcms/tourcms-php": "3.1.*",` to the `requires` section of your `composer.json`:
+1. Install [Composer](https://getcomposer.org/), add `"tourcms/tourcms-php": "3.5.*",` to the `requires` section of your `composer.json`:
 2. Ensure you are including composer's `autoload.php`, alternatively include `TourCMS.php` directly.
 
 ### Installing Manually
@@ -125,4 +125,21 @@ The library can attempt to check your local environment and API credentials, use
 
 // Call the environment test, the results will be displayed on the screen
 $tourcms->test_environment($channel_id);
+```
+
+# Response headers
+
+TourCMS responds with some useful information in the response headers. There is a method to retrieve the last set of response headers via the PHP wrapper.
+
+```php
+$headers = $tourcms->get_last_response_headers();
+$remaining_limit = $headers["x-ratelimit-remaining"];
+```
+
+# Override base URL
+
+By default the base URL will point to TourCMS main production environment. There is a method to override this to point at another base URL, intended for testing purposes.
+
+```php
+$tourcms->set_base_url("https://api.example.com");
 ```

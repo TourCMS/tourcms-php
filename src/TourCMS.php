@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright (c) 2010-2016 Travel UCD
+Copyright (c) 2010-2019 Travel UCD
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.1.0
+# Version: 3.7.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -37,6 +37,7 @@ class TourCMS {
 	protected $private_key = "";
 	protected $result_type = "";
 	protected $timeout = 0;
+	protected $last_response_headers = array();
 
 	/**
 	 * __construct
@@ -96,7 +97,26 @@ class TourCMS {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 		}
 
+		// Callback function to populate the response headers on curl_exec
+		$api_response_headers = array();
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION,
+			function($ch, $header) use (&$api_response_headers)
+			{
+				$len = strlen($header);
+				$header = explode(':', $header, 2);
+				if (count($header) < 2) // ignore invalid headers
+					return $len;
+
+				$name = strtolower(trim($header[0]));
+				$api_response_headers[$name] = trim($header[1]);
+
+				return $len;
+			}
+		);
+
 		$response = curl_exec($ch);
+
+		$this->last_response_headers = $api_response_headers;
 
 		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
 		$result = substr( $response, $header_size );
@@ -107,6 +127,34 @@ class TourCMS {
 			$result = simplexml_load_string($result);
 
 		return($result);
+	}
+
+	/**
+	 * get_base_url
+	 *
+	 * @author Paul Slugocki
+	 * @return String
+	 */
+	public function get_base_url() {
+		return $this->base_url;
+	}
+
+	/**
+	 * set_base_url
+	 *
+	 * @author Paul Slugocki
+	 * @param $url New base url
+	 * @return Boolean
+	 */
+	public function set_base_url($url) {
+		$this->base_url = $url;
+		return true;
+	}
+
+	# Get last response headers
+
+	public function get_last_response_headers() {
+		return $this->last_response_headers;
 	}
 
 	/**
@@ -344,6 +392,14 @@ class TourCMS {
 			return($this->request('/c/bookings/search.xml?'.$params, $channel));
 	}
 
+	public function list_bookings($params = "", $channel = 0)
+	{
+        if($channel==0)
+            return($this->request('/p/bookings/list.xml?'.$params));
+        else
+            return($this->request('/c/bookings/list.xml?'.$params, $channel));
+	}
+
 	public function show_booking($booking, $channel) {
 		return($this->request('/c/booking/show.xml?booking_id='.$booking, $channel));
 	}
@@ -384,6 +440,11 @@ class TourCMS {
 	public function spreedly_create_payment($payment_data, $channel)
 	{
 		return($this->request('/c/booking/payment/spreedly/new.xml', $channel, "POST", $payment_data));
+	}
+
+	public function spreedly_complete_payment($transaction_id, $channel)
+	{
+		return($this->request('/c/booking/gatewaytransaction/spreedlycomplete.xml?id=' . $transaction_id, $channel, 'POST'));
 	}
 
 	public function cancel_booking($booking_data, $channel)
@@ -470,7 +531,7 @@ class TourCMS {
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
 
-  	public function start_new_agent_login($params, $channel)
+	public function start_new_agent_login($params, $channel)
 	{
 		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
 	}
@@ -480,17 +541,82 @@ class TourCMS {
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
   	}
 
-  	# Payworks
+	# Payments
+		public function list_payments($params, $channel)
+		{
+				return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
+		}
+  
+  # Payworks
   	public function payworks_booking_payment_new($payment, $channel)
   	{
   		return ($this->request('/c/booking/payment/payworks/new.xml', $channel, "POST", $payment));
   	}
 
+	# Staff members
+		public function list_staff_members($channel)
+		{
+				return($this->request('/c/staff/list.xml', $channel));
+		}
+  
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
 	{
 		return($this->request('/c/supplier/show.xml?supplier_id='.$supplier, $channel));
 	}
+
+	# Used for validating webhook signatures
+	public function validate_xml_hash($xml) {
+
+		return $this->generate_xml_hash($xml) == $xml->signed->hash;
+
+	}
+
+	public function generate_xml_hash($xml) {
+
+		$algorithm = $xml->signed->algorithm;
+
+		$fields = explode(" ", $xml->signed->hash_fields);
+
+		foreach($fields as $field) {
+
+			$xpath_result = $xml->xpath($field);
+
+			foreach($xpath_result as $result) {
+				$values[] = (string)$result[0];
+			}
+		}
+
+		$string_to_hash = implode("|", $values);
+
+		$hash = hash_hmac($algorithm, $string_to_hash, $this->private_key, FALSE);
+
+		return $hash;
+
+	}
+
+	# CRUD Pickup points
+	public function list_pickups($query_string, $channel)
+	{
+		if (substr($query_string, 0,1) !== '?') $query_string = '?' . $query_string;
+		return ($this->request('/c/pickups/list.xml' . $query_string, $channel));
+	}
+
+	public function create_pickup($pickup_data, $channel)
+	{
+		return ($this->request('/c/pickups/new.xml', $channel, "POST", $pickup_data));
+	}
+
+	public function update_pickup($pickup_data, $channel)
+	{
+		return ($this->request('/c/pickups/update.xml', $channel, "POST", $pickup_data));
+	}
+
+	public function delete_pickup($pickup_data, $channel)
+	{
+		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
+	}
+
 }
 
 ?>
