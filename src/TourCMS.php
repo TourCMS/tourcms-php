@@ -531,7 +531,7 @@ class TourCMS {
 		return($this->request('/c/agents/search.xml?'.$params, $channel));
 	}
 
-		public function start_new_agent_login($params, $channel)
+	public function start_new_agent_login($params, $channel)
 	{
 		return($this->request('/c/start_agent_login.xml', $channel, "POST", $params));
 	}
@@ -539,20 +539,26 @@ class TourCMS {
 	public function retrieve_agent_booking_key($private_token, $channel)
 	{
 		return($this->request('/c/retrieve_agent_booking_key.xml?k='.$private_token, $channel));
-		}
+  	}
 
 	# Payments
 		public function list_payments($params, $channel)
 		{
 				return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
 		}
+  
+  # Payworks
+  	public function payworks_booking_payment_new($payment, $channel)
+  	{
+  		return ($this->request('/c/booking/payment/payworks/new.xml', $channel, "POST", $payment));
+  	}
 
 	# Staff members
 		public function list_staff_members($channel)
 		{
 				return($this->request('/c/staff/list.xml', $channel));
 		}
-
+  
 	# Internal supplier methods
 	public function show_supplier($supplier, $channel)
 	{
