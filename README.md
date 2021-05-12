@@ -12,7 +12,7 @@
 
 ### Installing via Composer (Recommended)
 
-1. Install [Composer](https://getcomposer.org/), add `"tourcms/tourcms-php": "3.5.*",` to the `requires` section of your `composer.json`:
+1. Install [Composer](https://getcomposer.org/), add `"tourcms/tourcms-php": "3.8.*",` to the `requires` section of your `composer.json`:
 2. Ensure you are including composer's `autoload.php`, alternatively include `TourCMS.php` directly.
 
 ### Installing Manually
