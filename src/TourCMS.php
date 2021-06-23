@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.8.0
+# Version: 3.9.0
 # Author: Paul Slugocki
 
 namespace TourCMS\Utils;
@@ -207,24 +207,42 @@ class TourCMS {
 	# Tour/Hotel methods
 
 	public function search_tours($params = "", $channel = 0) {
+
+		$params = $this->validateParams($params);
+
 		if($channel==0)
-			return($this->request('/p/tours/search.xml?'.$params));
+			return($this->request('/p/tours/search.xml'.$params));
 		else
-			return($this->request('/c/tours/search.xml?'.$params, $channel));
+			return($this->request('/c/tours/search.xml'.$params, $channel));
 	}
 
 	public function search_hotels_range($params = "", $tour = "", $channel = 0) {
+
+		$params = $this->validateParams($params);
+		if (!empty($tour)) {
+			if (empty($params)) $params = '?single_tour_id=';
+			else $params .= "&single_tour_id="
+			$params .= $tour;
+		}
+
 		if($channel==0)
-			return($this->request('/p/hotels/search_range.xml?'.$params."&single_tour_id=".$tour));
+			return($this->request('/p/hotels/search_range.xml'.$params));
 		else
-			return($this->request('/c/hotels/search_range.xml?'.$params."&single_tour_id=".$tour, $channel));
+			return($this->request('/c/hotels/search_range.xml'.$params, $channel));
 	}
 
 	public function search_hotels_specific($params = "", $tour = "", $channel = 0) {
+		$params = $this->validateParams($params);
+		if (!empty($tour)) {
+			if (empty($params)) $params = '?single_tour_id=';
+			else $params .= "&single_tour_id="
+			$params .= $tour;
+		}
+
 		if($channel==0)
-			return($this->request('/p/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour));
+			return($this->request('/p/hotels/search_avail.xml'.$params));
 		else
-			return($this->request('/c/hotels/search_avail.xml?'.$params."&single_tour_id=".$tour, $channel));
+			return($this->request('/c/hotels/search_avail.xml'.$params, $channel));
 	}
 
 	public function list_product_filters($channel = 0) {
@@ -245,26 +263,29 @@ class TourCMS {
 	}
 
 	public function list_tours($channel = 0, $params = "") {
+		$params = $this->validateParams($params);
 		if($channel==0)
-			return($this->request('/p/tours/list.xml?'.$params));
+			return($this->request('/p/tours/list.xml'.$params));
 		else
-			return($this->request('/c/tours/list.xml?'.$params, $channel));
+			return($this->request('/c/tours/list.xml'.$params, $channel));
 	}
 
 	public function list_tour_images($channel = 0, $params = "")
 	{
+		$params = $this->validateParams($params);
 		if($channel==0)
-			return($this->request('/p/tours/images/list.xml?'.$params));
+			return($this->request('/p/tours/images/list.xml'.$params));
 		else
-			return($this->request('/c/tours/images/list.xml?'.$params, $channel));
+			return($this->request('/c/tours/images/list.xml'.$params, $channel));
 	}
 
 	public function list_tour_locations($channel = 0, $params = "")
 	{
+		$params = $this->validateParams($params);
 		if($channel==0)
-			return($this->request('/p/tours/locations.xml?'.$params));
+			return($this->request('/p/tours/locations.xml'.$params));
 		else
-			return($this->request('/c/tours/locations.xml?'.$params, $channel));
+			return($this->request('/c/tours/locations.xml'.$params, $channel));
 	}
 
 
@@ -302,18 +323,21 @@ class TourCMS {
 
 	public function check_tour_availability($params, $tour, $channel)
 	{
-		return ($this->request('/c/tour/datesprices/checkavail.xml?id='.$tour."&".$params, $channel));
+		if (!empty($params)) $params = "&" . $params;
+		return ($this->request('/c/tour/datesprices/checkavail.xml?id='.$tour.$params, $channel));
 	}
 
 	public function show_tour_datesanddeals($tour, $channel, $qs = "")
 	{
-		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour.'&'.$qs, $channel));
+		if (!empty($qs)) $qs = "&" . $qs;
+		return($this->request('/c/tour/datesprices/datesndeals/search.xml?id='.$tour.$qs, $channel));
 	}
 
 
 	public function show_tour_departures($tour, $channel, $qs = "")
 	{
-		return($this->request('/c/tour/datesprices/dep/show.xml?id='.$tour.'&'.$qs, $channel));
+		if (!empty($qs)) $qs = "&" . $qs;
+		return($this->request('/c/tour/datesprices/dep/show.xml?id='.$tour.$qs, $channel));
 	}
 
 	public function show_tour_freesale($tour, $channel)
@@ -327,7 +351,8 @@ class TourCMS {
 
 	public function search_raw_departures($tour, $channel, $qs)
 	{
-		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour.'&'.$qs, $channel));
+		if (!empty($qs)) $qs = "&" . $qs;
+		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour.$qs, $channel));
 	}
 
 	public function show_departure($departure, $tour, $channel)
@@ -386,18 +411,20 @@ class TourCMS {
 
 	public function search_bookings($params = "", $channel = 0)
 	{
+		$params = $this->validateParams($params);
 		if($channel==0)
-			return($this->request('/p/bookings/search.xml?'.$params));
+			return($this->request('/p/bookings/search.xml'.$params));
 		else
-			return($this->request('/c/bookings/search.xml?'.$params, $channel));
+			return($this->request('/c/bookings/search.xml'.$params, $channel));
 	}
 
 	public function list_bookings($params = "", $channel = 0)
 	{
+		$params = $this->validateParams($params);
         if($channel==0)
-            return($this->request('/p/bookings/list.xml?'.$params));
+            return($this->request('/p/bookings/list.xml'.$params));
         else
-            return($this->request('/c/bookings/list.xml?'.$params, $channel));
+            return($this->request('/c/bookings/list.xml'.$params, $channel));
 	}
 
 	public function show_booking($booking, $channel) {
@@ -505,10 +532,11 @@ class TourCMS {
 	}
 
 	public function search_enquiries($params = "", $channel = 0) {
+		$params = $this->validateParams($params);
 		if($channel==0)
-			return($this->request('/p/enquiries/search.xml?'.$params));
+			return($this->request('/p/enquiries/search.xml'.$params));
 		else
-			return($this->request('/c/enquiries/search.xml?'.$params, $channel));
+			return($this->request('/c/enquiries/search.xml'.$params, $channel));
 	}
 
 	public function show_enquiry($enquiry, $channel)
@@ -528,7 +556,8 @@ class TourCMS {
 	# Agents
 	public function search_agents($params, $channel)
 	{
-		return($this->request('/c/agents/search.xml?'.$params, $channel));
+		$params = $this->validateParams($params);
+		return($this->request('/c/agents/search.xml'.$params, $channel));
 	}
 
 	public function start_new_agent_login($params, $channel)
@@ -549,7 +578,8 @@ class TourCMS {
 	# Payments
 	public function list_payments($params, $channel)
 	{
-		return($this->request('/c/booking/payment/list.xml?'.$params, $channel));
+		$params = $this->validateParams($params);
+		return($this->request('/c/booking/payment/list.xml'.$params, $channel));
 	}
   
   	public function payworks_booking_payment_new($payment, $channel)
@@ -602,7 +632,7 @@ class TourCMS {
 	# CRUD Pickup points
 	public function list_pickups($query_string, $channel)
 	{
-		if (substr($query_string, 0,1) !== '?') $query_string = '?' . $query_string;
+		$query_string = $this->validateParams($query_string);
 		return ($this->request('/c/pickups/list.xml' . $query_string, $channel));
 	}
 
@@ -619,6 +649,19 @@ class TourCMS {
 	public function delete_pickup($pickup_data, $channel)
 	{
 		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
+	}
+
+	protected function validateParams($params)
+	{
+		if (empty($params) || !is_string($params)) {
+			return '';
+		}
+
+		if (!empty($params) && substr($params, 0, 1) !== '?') {
+			$params = '?'.$params;
+		}
+
+		return $params;
 	}
 
 }
