@@ -220,8 +220,11 @@ class TourCMS {
 
 		$params = $this->validateParams($params);
 		if (!empty($tour)) {
-			if (empty($params)) $params = '?single_tour_id=';
-			else $params .= "&single_tour_id="
+            if (empty($params)) {
+                $params = '?single_tour_id=';
+            } else {
+                $params .= "&single_tour_id=";
+            }
 			$params .= $tour;
 		}
 
@@ -234,8 +237,11 @@ class TourCMS {
 	public function search_hotels_specific($params = "", $tour = "", $channel = 0) {
 		$params = $this->validateParams($params);
 		if (!empty($tour)) {
-			if (empty($params)) $params = '?single_tour_id=';
-			else $params .= "&single_tour_id="
+            if (empty($params)) {
+                $params = '?single_tour_id=';
+            } else { 
+				$params .= "&single_tour_id=";
+			}
 			$params .= $tour;
 		}
 
