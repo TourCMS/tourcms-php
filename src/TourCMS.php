@@ -22,8 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.9.0
-# Author: Paul Slugocki
+# Version: 3.9.1
 
 namespace TourCMS\Utils;
 
@@ -219,10 +218,17 @@ class TourCMS {
 	public function search_hotels_range($params = "", $tour = "", $channel = 0) {
 
 		$params = $this->validateParams($params);
+		
 		if (!empty($tour)) {
-			if (empty($params)) $params = '?single_tour_id=';
-			else $params .= "&single_tour_id="
+			
+			if (empty($params)) {
+                		$params = '?single_tour_id=';
+            		} else {
+		                $params .= "&single_tour_id=";
+            		}
+			
 			$params .= $tour;
+			
 		}
 
 		if($channel==0)
@@ -233,10 +239,17 @@ class TourCMS {
 
 	public function search_hotels_specific($params = "", $tour = "", $channel = 0) {
 		$params = $this->validateParams($params);
+
 		if (!empty($tour)) {
-			if (empty($params)) $params = '?single_tour_id=';
-			else $params .= "&single_tour_id="
+            		
+			if (empty($params)) {
+                		$params = '?single_tour_id=';
+            		} else { 
+				$params .= "&single_tour_id=";
+			}
+			
 			$params .= $tour;
+			
 		}
 
 		if($channel==0)
