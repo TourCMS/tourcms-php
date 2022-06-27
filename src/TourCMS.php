@@ -362,7 +362,7 @@ class TourCMS {
 		Raw departure methods
 	*/
 
-	public function search_raw_departures($tour, $channel, $qs)
+	public function search_raw_departures($tour, $channel, $qs = "")
 	{
 		if (!empty($qs)) $qs = "&" . $qs;
 		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour.$qs, $channel));
