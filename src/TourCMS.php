@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.9.1
+# Version: 3.9.2
 
 namespace TourCMS\Utils;
 
@@ -362,7 +362,7 @@ class TourCMS {
 		Raw departure methods
 	*/
 
-	public function search_raw_departures($tour, $channel, $qs)
+	public function search_raw_departures($tour, $channel, $qs = "")
 	{
 		if (!empty($qs)) $qs = "&" . $qs;
 		return($this->request('/c/tour/datesprices/dep/manage/search.xml?id='.$tour.$qs, $channel));
