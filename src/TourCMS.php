@@ -30,6 +30,8 @@ use \SimpleXMLElement;
 
 class TourCMS {
 
+	const HTTP_VERB_POST = 'POST';
+
 	// General settings
 	protected $base_url = "https://api.tourcms.com";
 	protected $marketp_id = 0;
@@ -301,7 +303,11 @@ class TourCMS {
 			return($this->request('/c/tours/locations.xml'.$params, $channel));
 	}
 
-
+	public function delete_tour($tour, $channel)
+	{
+		$url = '/c/tour/delete.xml?id='.$tour;
+		return($this->request($url, $channel, self::HTTP_VERB_POST));
+	}
 
 	public function show_tour($tour, $channel, $params = false)
 	{
