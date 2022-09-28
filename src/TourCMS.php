@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.9.2
+# Version: 3.10.0
 
 namespace TourCMS\Utils;
 
