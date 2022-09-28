@@ -22,13 +22,15 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.9.2
+# Version: 3.10.0
 
 namespace TourCMS\Utils;
 
 use \SimpleXMLElement;
 
 class TourCMS {
+
+	const HTTP_VERB_POST = 'POST';
 
 	// General settings
 	protected $base_url = "https://api.tourcms.com";
@@ -301,7 +303,11 @@ class TourCMS {
 			return($this->request('/c/tours/locations.xml'.$params, $channel));
 	}
 
-
+	public function delete_tour($tour, $channel)
+	{
+		$url = '/c/tour/delete.xml?id='.$tour;
+		return($this->request($url, $channel, self::HTTP_VERB_POST));
+	}
 
 	public function show_tour($tour, $channel, $params = false)
 	{
