@@ -340,7 +340,7 @@ class TourCMS {
 		}
 	}
 
-	public function tour_upload_file_get_url($channel, $tour, $file_type, $file_id)
+	public function tour_upload_file_get_url($tour, $channel, $file_type, $file_id)
 	{
 		$url = "/c/tours/files/upload/url.xml?id=$tour&file_type=$file_type&file_id=$file_id";
 		return($this->request($url, $channel, self::HTTP_VERB_GET));
