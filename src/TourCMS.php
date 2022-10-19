@@ -352,6 +352,12 @@ class TourCMS {
 		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
 	}
 
+	public function delete_tour_image($channel, $image_info)
+	{
+		$url = "/c/tour/images/delete.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $image_info));
+	}
+
 
 	public function check_tour_availability($params, $tour, $channel)
 	{
