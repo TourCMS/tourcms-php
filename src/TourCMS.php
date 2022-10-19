@@ -340,16 +340,16 @@ class TourCMS {
 		}
 	}
 
-	public function tour_upload_file_get_url($channel, $tour, $fileType, $fileId)
+	public function tour_upload_file_get_url($channel, $tour, $file_type, $file_id)
 	{
-		$url = "/c/tours/files/upload/url.xml?id=$tour&filetype=$fileType&fileid=$fileId";
+		$url = "/c/tours/files/upload/url.xml?id=$tour&file_type=$file_type&file_id=$file_id";
 		return($this->request($url, $channel, self::HTTP_VERB_GET));
 	}
 
-	public function tour_upload_file_process($channel, $fileUploadInfo)
+	public function tour_upload_file_process($channel, $upload_info)
 	{
 		$url = "/c/tours/files/upload/process.xml";
-		return($this->request($url, $channel, self::HTTP_VERB_POST, $fileUploadInfo));
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
 	}
 
 
