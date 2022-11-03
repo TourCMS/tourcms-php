@@ -31,6 +31,7 @@ use \SimpleXMLElement;
 class TourCMS {
 
 	const HTTP_VERB_POST = 'POST';
+	const HTTP_VERB_GET  = 'GET';
 
 	// General settings
 	protected $base_url = "https://api.tourcms.com";
@@ -337,6 +338,30 @@ class TourCMS {
 		if((int)$tour > 0) {
 			return($this->request($url, $channel));
 		}
+	}
+
+	public function tour_upload_file_get_url($tour, $channel, $file_type, $file_id)
+	{
+		$url = "/c/tours/files/upload/url.xml?id=$tour&file_type=$file_type&file_id=$file_id";
+		return($this->request($url, $channel, self::HTTP_VERB_GET));
+	}
+
+	public function tour_upload_file_process($channel, $upload_info)
+	{
+		$url = "/c/tours/files/upload/process.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
+	}
+
+	public function delete_tour_image($channel, $image_info)
+	{
+		$url = "/c/tour/images/delete.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $image_info));
+	}
+
+	public function delete_tour_document($channel, $document_xml)
+	{
+		$url = "/c/tour/document/delete.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $document_xml));
 	}
 
 
