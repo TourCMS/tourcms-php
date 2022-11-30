@@ -195,6 +195,12 @@ class TourCMS {
 		return($this->request('/p/channels/list.xml'));
 	}
 
+	public function channel_upload_logo_get_url($channel)
+	{
+		$url = "/c/channel/logo/upload/url.xml";
+		return($this->request($url, $channel));
+	}
+
 	public function show_channel($channel) {
 		return($this->request('/c/channel/show.xml', $channel));
 	}
