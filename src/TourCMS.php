@@ -701,6 +701,12 @@ class TourCMS {
 		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
 	}
 
+	# Account
+	public function create_account($upload_info) {
+		$url = "/p/account/create.xml";
+		return($this->request($url, 0, self::HTTP_VERB_POST, $upload_info));
+	}
+
 	protected function validateParams($params)
 	{
 		if (empty($params) || !is_string($params)) {
