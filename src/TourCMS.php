@@ -201,6 +201,12 @@ class TourCMS {
 		return($this->request($url, $channel));
 	}
 
+	public function channel_upload_logo_process($channel, $upload_info)
+	{
+		$url = "/c/channel/logo/upload/process.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
+	}
+
 	public function show_channel($channel) {
 		return($this->request('/c/channel/show.xml', $channel));
 	}
