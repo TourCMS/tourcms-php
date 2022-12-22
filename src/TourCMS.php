@@ -713,6 +713,11 @@ class TourCMS {
 		return($this->request($url, 0, self::HTTP_VERB_POST, $upload_info));
 	}
 
+	public function update_account($upload_info) {
+		$url = "/p/account/update.xml";
+		return($this->request($url, 0, self::HTTP_VERB_POST, $upload_info));
+	}
+
 	public function show_account($account_id) {
 		$url = "/p/account/show.xml?account_id=".$account_id;
 		return($this->request($url, 0));
