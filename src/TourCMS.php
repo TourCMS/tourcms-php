@@ -723,6 +723,11 @@ class TourCMS {
 		return($this->request($url, 0));
 	}
 
+	public function create_channel($upload_info, $channel) {
+		$url = "/p/channel/create.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
+	}
+
 	protected function validateParams($params)
 	{
 		if (empty($params) || !is_string($params)) {
