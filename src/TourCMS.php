@@ -713,9 +713,9 @@ class TourCMS {
 		return($this->request($url, 0, self::HTTP_VERB_POST, $upload_info));
 	}
 
-	public function update_account($upload_info) {
+	public function update_account($upload_info, $channel) {
 		$url = "/p/account/update.xml";
-		return($this->request($url, 0, self::HTTP_VERB_POST, $upload_info));
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
 	}
 
 	public function show_account($account_id) {
