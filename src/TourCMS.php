@@ -723,9 +723,9 @@ class TourCMS {
 		return($this->request($url, 0));
 	}
 
-	public function create_channel($upload_info, $channel) {
+	public function create_channel($channel_info, $channel) {
 		$url = "/p/channel/create.xml";
-		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
 	}
 
 	protected function validateParams($params)
