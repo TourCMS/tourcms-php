@@ -728,6 +728,11 @@ class TourCMS {
 		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
 	}
 
+	public function update_channel($channel_info, $channel) {
+		$url = "/p/channel/update.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
+	}
+
 	protected function validateParams($params)
 	{
 		if (empty($params) || !is_string($params)) {
