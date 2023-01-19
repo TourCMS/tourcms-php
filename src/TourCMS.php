@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.11.0
+# Version: 3.12.0
 
 namespace TourCMS\Utils;
 
@@ -193,6 +193,18 @@ class TourCMS {
 
 	public function list_channels() {
 		return($this->request('/p/channels/list.xml'));
+	}
+
+	public function channel_upload_logo_get_url($channel)
+	{
+		$url = "/c/channel/logo/upload/url.xml";
+		return($this->request($url, $channel));
+	}
+
+	public function channel_upload_logo_process($channel, $upload_info)
+	{
+		$url = "/c/channel/logo/upload/process.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
 	}
 
 	public function show_channel($channel) {
@@ -693,6 +705,32 @@ class TourCMS {
 	public function delete_pickup($pickup_data, $channel)
 	{
 		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
+	}
+
+	# Account
+	public function create_account($upload_info) {
+		$url = "/p/account/create.xml";
+		return($this->request($url, 0, self::HTTP_VERB_POST, $upload_info));
+	}
+
+	public function update_account($upload_info, $channel) {
+		$url = "/p/account/update.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $upload_info));
+	}
+
+	public function show_account($account_id) {
+		$url = "/p/account/show.xml?account_id=".$account_id;
+		return($this->request($url, 0));
+	}
+
+	public function create_channel($channel_info, $channel) {
+		$url = "/p/channel/create.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
+	}
+
+	public function update_channel($channel_info, $channel) {
+		$url = "/p/channel/update.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
 	}
 
 	protected function validateParams($params)
