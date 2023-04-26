@@ -733,6 +733,11 @@ class TourCMS {
 		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
 	}
 
+	public function show_markup_scheme($channel) {
+		$url = "/c/markups/show.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_GET));
+	}
+
 	protected function validateParams($params)
 	{
 		if (empty($params) || !is_string($params)) {
