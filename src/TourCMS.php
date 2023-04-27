@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.12.0
+# Version: 3.13.0
 
 namespace TourCMS\Utils;
 
@@ -731,6 +731,11 @@ class TourCMS {
 	public function update_channel($channel_info, $channel) {
 		$url = "/p/channel/update.xml";
 		return($this->request($url, $channel, self::HTTP_VERB_POST, $channel_info));
+	}
+
+	public function show_markup_scheme($channel) {
+		$url = "/c/markups/show.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_GET));
 	}
 
 	protected function validateParams($params)
