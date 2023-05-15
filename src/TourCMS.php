@@ -256,10 +256,10 @@ class TourCMS {
 		if (!empty($tour)) {
 			
 			if (empty($params)) {
-						$params = '?single_tour_id=';
-					} else {
-						$params .= "&single_tour_id=";
-					}
+                		$params = '?single_tour_id=';
+            		} else {
+		                $params .= "&single_tour_id=";
+            		}
 			
 			$params .= $tour;
 			
@@ -275,10 +275,10 @@ class TourCMS {
 		$params = $this->validateParams($params);
 
 		if (!empty($tour)) {
-					
+            		
 			if (empty($params)) {
-						$params = '?single_tour_id=';
-					} else { 
+                		$params = '?single_tour_id=';
+            		} else { 
 				$params .= "&single_tour_id=";
 			}
 			
@@ -496,10 +496,10 @@ class TourCMS {
 	public function list_bookings($params = "", $channel = 0)
 	{
 		$params = $this->validateParams($params);
-		if($channel==0)
-			return($this->request('/p/bookings/list.xml'.$params));
-		else
-			return($this->request('/c/bookings/list.xml'.$params, $channel));
+        if($channel==0)
+            return($this->request('/p/bookings/list.xml'.$params));
+        else
+            return($this->request('/c/bookings/list.xml'.$params, $channel));
 	}
 
 	public function show_booking($booking, $channel) {
