@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.13.0
+# Version: 3.14.0
 
 namespace TourCMS\Utils;
 
@@ -40,6 +40,8 @@ class TourCMS {
 	protected $result_type = "";
 	protected $timeout = 0;
 	protected $last_response_headers = array();
+    protected $user_agent = "";
+    protected $prepend_caller_to_user_agent = true;
 
 	/**
 	 * __construct
@@ -78,6 +80,11 @@ class TourCMS {
 		$headers = array("Content-type: text/xml;charset=\"utf-8\"",
 				 "Date: ".gmdate('D, d M Y H:i:s \G\M\T', $outbound_time),
 				 "Authorization: TourCMS $channel:$this->marketp_id:$signature");
+        // Add user-agent to headers array
+        if (!empty($this->user_agent)) {
+            $finalUserAgent = $this->prepend_caller_to_user_agent ? $this->user_agent." (".$this->marketp_id."_".$channel.")" : $this->user_agent;
+            array_push($headers, "User-Agent: $finalUserAgent");
+        }
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -152,6 +159,18 @@ class TourCMS {
 		$this->base_url = $url;
 		return true;
 	}
+
+    /**
+    * set_user_agent
+    *
+    * @author Francisco Martinez Ramos
+    * @return bool
+    */
+    public function set_user_agent(string $user_agent, bool $prepend = true) {
+        $this->prepend_caller_to_user_agent = $prepend;
+        $this->user_agent = $user_agent;
+        return true;
+    }
 
 	# Get last response headers
 
