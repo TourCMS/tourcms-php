@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 3.14.0
+# Version: 4.0.0
 
 namespace TourCMS\Utils;
 
@@ -40,7 +40,7 @@ class TourCMS {
 	protected $result_type = "";
 	protected $timeout = 0;
 	protected $last_response_headers = array();
-	protected $user_agent = "";
+	protected $user_agent = "TourCMS PHP Wrapper v4.0.0";
 	protected $prepend_caller_to_user_agent = true;
 
 	/**
