@@ -40,7 +40,7 @@ class TourCMS {
 	protected $result_type = "";
 	protected $timeout = 0;
 	protected $last_response_headers = array();
-    protected $user_agent = "TourCMS PHP Wrapper v4.0.0";
+  protected $user_agent = "TourCMS PHP Wrapper v4.0.0";
 	protected $prepend_caller_to_user_agent = true;
 
 	/**
