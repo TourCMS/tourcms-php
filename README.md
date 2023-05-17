@@ -75,6 +75,9 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
   $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml', $timeout);
   // 'simplexml' returns as a SimpleXMLObject
   // 'raw' returns the XML as as String
+ 
+// Set a User-Agent
+  $tourcms->set_user_agent('Example Tours Website');
 
 // Call the API
   // Here as a quick example we search for some tours
@@ -134,6 +137,14 @@ TourCMS responds with some useful information in the response headers. There is 
 ```php
 $headers = $tourcms->get_last_response_headers();
 $remaining_limit = $headers["x-ratelimit-remaining"];
+```
+
+# Set User-Agent
+
+Set a User-Agent header. Useful when trying to determine which application or process is making API calls.
+
+```php
+$tourcms->set_user_agent("Example Tours Website");
 ```
 
 # Override base URL
