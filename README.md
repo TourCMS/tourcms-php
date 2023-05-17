@@ -139,6 +139,14 @@ $headers = $tourcms->get_last_response_headers();
 $remaining_limit = $headers["x-ratelimit-remaining"];
 ```
 
+# Set User-Agent
+
+Set a User-Agent header. Useful when trying to determine which application or process is making API calls.
+
+```php
+$tourcms->set_user_agent("Example Tours Website");
+```
+
 # Override base URL
 
 By default the base URL will point to TourCMS main production environment. There is a method to override this to point at another base URL, intended for testing purposes.
