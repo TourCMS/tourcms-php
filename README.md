@@ -75,6 +75,9 @@ $tourcms = new TourCMS\Utils\TourCMS(0, 'YOUR_PASSWORD', 'simplexml');
   $tourcms = new TourCMS($marketplace_id, $api_key, 'simplexml', $timeout);
   // 'simplexml' returns as a SimpleXMLObject
   // 'raw' returns the XML as as String
+ 
+// Set a User-Agent
+  $tourcms->set_user_agent('Example Tours Website');
 
 // Call the API
   // Here as a quick example we search for some tours
