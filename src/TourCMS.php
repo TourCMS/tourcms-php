@@ -197,7 +197,7 @@ class TourCMS {
 	 */
 	public function set_request_identifier(string $value): bool
 	{
-		return $this->add_header('X-Request-Identifier', $value);
+		return $this->add_header('X-Request-Id', $value);
 	}
 
 	# Get last response headers
