@@ -149,10 +149,10 @@ $tourcms->set_user_agent("Example Tours Website");
 
 # Set X-Request-Identifier
 
-Set a uuid or other id to the request. Useful for tracking/logging.
+Set a uuid or other id to the request. Useful for tracking/logging. Should be pseudo random / unique, e.g. UUID.
 
 ```php
-$tourcms->set_request_identifier("Example Request Identifier");
+$tourcms->set_request_identifier("98b41172-4db9-464e-9db8-f31ae92ffbab");
 ```
 
 # Override base URL
