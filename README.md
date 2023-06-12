@@ -147,6 +147,14 @@ Set a User-Agent header. Useful when trying to determine which application or pr
 $tourcms->set_user_agent("Example Tours Website");
 ```
 
+# Set X-Request-Identifier
+
+Set a uuid or other id to the request. Useful for tracking/logging.
+
+```php
+$tourcms->set_request_identifier("Example Request Identifier");
+```
+
 # Override base URL
 
 By default the base URL will point to TourCMS main production environment. There is a method to override this to point at another base URL, intended for testing purposes.

@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 4.0.0
+# Version: 4.1.0
 
 namespace TourCMS\Utils;
 
@@ -40,8 +40,9 @@ class TourCMS {
 	protected $result_type = "";
 	protected $timeout = 0;
 	protected $last_response_headers = array();
-	protected $user_agent = "TourCMS PHP Wrapper v4.0.0";
+	protected $user_agent = "TourCMS PHP Wrapper v4.1.0";
 	protected $prepend_caller_to_user_agent = true;
+	protected array $headers = [];
 
 	/**
 	 * __construct
@@ -77,20 +78,20 @@ class TourCMS {
 		$signature = $this->generate_signature($path, $verb, $channel, $outbound_time);
 
 		// Build headers
-		$headers = array("Content-type: text/xml;charset=\"utf-8\"",
-				 "Date: ".gmdate('D, d M Y H:i:s \G\M\T', $outbound_time),
-				 "Authorization: TourCMS $channel:$this->marketp_id:$signature");
+		$this->add_header("Content-type", "text/xml;charset=\"utf-8\"");
+		$this->add_header("Date", gmdate('D, d M Y H:i:s \G\M\T', $outbound_time));
+		$this->add_header("Authorization", "TourCMS $channel:$this->marketp_id:$signature");
 		// Add user-agent to headers array
 		if (!empty($this->user_agent)) {
 			$finalUserAgent = $this->prepend_caller_to_user_agent ? $this->user_agent." (".$this->marketp_id."_".$channel.")" : $this->user_agent;
-			array_push($headers, "User-Agent: $finalUserAgent");
+			$this->add_header("User-Agent", $finalUserAgent);
 		}
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($ch, CURLOPT_TIMEOUT, (is_int($this->timeout) && $this->timeout > 0) ? $this->timeout : 0 );
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
 		curl_setopt($ch, CURLOPT_HEADER, true);
 
 		/*
@@ -170,6 +171,33 @@ class TourCMS {
 		$this->prepend_caller_to_user_agent = $prepend;
 		$this->user_agent = $user_agent;
 		return true;
+	}
+
+	/**
+	 * add_header
+	 *
+	 * @author Francisco Martínez Ramos
+	 * @param string $header Key of the header
+	 * @param string $value Value of the header
+	 * @return bool
+	 */
+	public function add_header(string $header, string $value): bool
+	{
+		$new_header = "$header: $value";
+		array_push($this->headers, $new_header);
+		return true;
+	}
+   
+	/**
+	 * set_request_identifier
+	 *
+	 * @author Francisco Martínez Ramos
+	 * @param string $value Value of the request identifier header
+	 * @return bool
+	 */
+	public function set_request_identifier(string $value): bool
+	{
+		return $this->add_header('X-Request-Id', $value);
 	}
 
 	# Get last response headers
