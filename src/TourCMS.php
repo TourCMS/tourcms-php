@@ -46,7 +46,6 @@ class TourCMS {
 	protected $user_agent = "TourCMS PHP Wrapper v4.1.0";
 	protected $prepend_caller_to_user_agent = true;
 	protected array $headers = [];
-	protected string $x_correlation_id = '';
 
 	/**
 	 * __construct
@@ -91,9 +90,6 @@ class TourCMS {
 		if (!empty($this->user_agent)) {
 			$finalUserAgent = $this->prepend_caller_to_user_agent ? $this->user_agent." (".$this->marketp_id."_".$channel.")" : $this->user_agent;
 			$this->add_header(self::HEADER_USER_AGENT, $finalUserAgent);
-		}
-		if (!empty($this->x_correlation_id)) {
-			$this->add_header(self::HEADER_X_CORRELATION_ID, $this->x_correlation_id);
 		}
 
 		$ch = curl_init();
@@ -213,15 +209,6 @@ class TourCMS {
 
 	public function get_last_response_headers() {
 		return $this->last_response_headers;
-	}
-
-	/**
-	 * Function to set the X-Correlation-Id var, if filled will be added to headers in the API requests.
-	 * @param string 	$correlationId 		X-Correlation-Id header value.
-	 */
-	public function set_x_correlation_id(string $correlationId)
-	{
-		$this->x_correlation_id = $correlationId;
 	}
 
 	/**
