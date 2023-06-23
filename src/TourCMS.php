@@ -785,6 +785,12 @@ class TourCMS {
 		return($this->request($url, $channel, self::HTTP_VERB_GET));
 	}
 
+	public function queue_tour($tour_data, $channel)
+	{
+		$url = "/c/tour_importer/queue_tour.xml";
+		return($this->request($url, $channel, self::HTTP_VERB_POST, $tour_data));
+	}
+
 	protected function validateParams($params)
 	{
 		if (empty($params) || !is_string($params)) {
