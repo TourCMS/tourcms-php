@@ -726,10 +726,15 @@ class TourCMS {
 
 		$string_to_hash = implode("|", $values);
 
-		$hash = hash_hmac($algorithm, $string_to_hash, $this->private_key, FALSE);
+		$hash = $this->get_hash($algorithm, $string_to_hash);
 
 		return $hash;
 
+	}
+
+	public function get_hash($algorithm, $string_to_hash) :string 
+	{
+		return hash_hmac($algorithm, $string_to_hash, $this->private_key, FALSE);
 	}
 
 	# CRUD Pickup points
