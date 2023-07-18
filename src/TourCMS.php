@@ -39,10 +39,12 @@ class TourCMS {
 	protected $private_key = "";
 	protected $result_type = "";
 	protected $timeout = 0;
+	protected $last_request_headers = array();
 	protected $last_response_headers = array();
-	protected $user_agent = "TourCMS PHP Wrapper v4.1.0";
+	protected $user_agent = "TourCMS PHP Wrapper v4.1.1";
 	protected $prepend_caller_to_user_agent = true;
 	protected array $headers = [];
+	protected array $permanent_headers = [];
 
 	/**
 	 * __construct
@@ -86,6 +88,8 @@ class TourCMS {
 			$finalUserAgent = $this->prepend_caller_to_user_agent ? $this->user_agent." (".$this->marketp_id."_".$channel.")" : $this->user_agent;
 			$this->add_header("User-Agent", $finalUserAgent);
 		}
+
+		$this->headers = array_merge($this->permanent_headers, $this->headers);
 
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -136,6 +140,9 @@ class TourCMS {
 		if($this->result_type == "simplexml")
 			$result = simplexml_load_string($result);
 
+		$this->last_request_headers = $this->headers;
+		$this->headers = [];
+
 		return($result);
 	}
 
@@ -181,10 +188,16 @@ class TourCMS {
 	 * @param string $value Value of the header
 	 * @return bool
 	 */
-	public function add_header(string $header, string $value): bool
+	public function add_header(string $header, string $value, bool $permanent = false): bool
 	{
 		$new_header = "$header: $value";
-		array_push($this->headers, $new_header);
+
+		if($permanent) {
+			array_push($this->permanent_headers, $new_header);
+		} else {
+			array_push($this->headers, $new_header);
+		}
+
 		return true;
 	}
    
@@ -200,11 +213,18 @@ class TourCMS {
 		return $this->add_header('X-Request-Id', $value);
 	}
 
+	# Get last request headers
+
+	public function get_last_request_headers() {
+		return $this->last_request_headers;
+	}
+
 	# Get last response headers
 
 	public function get_last_response_headers() {
 		return $this->last_response_headers;
 	}
+
 
 	/**
 	 * generate_signature
