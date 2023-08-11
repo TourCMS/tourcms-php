@@ -30,6 +30,12 @@ use \SimpleXMLElement;
 
 class TourCMS {
 
+	// ENDPOINTS CONST
+	const PATH_API_TOUR_GEOS_CREATE = "/api/tours/geos/create.xml";
+	const PATH_API_TOUR_GEOS_UPDATE = "/api/tours/geos/update.xml";
+	const PATH_API_TOUR_GEOS_DELETE = "/api/tours/geos/delete.xml";
+
+	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
 	const HTTP_VERB_GET  = 'GET';
 
@@ -223,25 +229,6 @@ class TourCMS {
 
 	public function get_last_response_headers() {
 		return $this->last_response_headers;
-	}
-
-
-	/**
-	 * generate_signature
-	 *
-	 * @author Paul Slugocki
-	 * @param $path API Path
-	 * @param $verb HTTP Verb
-	 * @param $channel Channel ID
-	 * @return String
-	 */
-	protected function generate_signature($path, $verb, $channel, $outbound_time) {
-
-		$string_to_sign = trim($channel."/".$this->marketp_id."/".$verb."/".$outbound_time.$path);
-
-		$signature = rawurlencode(base64_encode((hash_hmac("sha256", utf8_encode($string_to_sign), $this->private_key, TRUE ))));
-
-		return $signature;
 	}
 
 	# Test environment
@@ -810,6 +797,23 @@ class TourCMS {
 		return($this->request($url, $channel, self::HTTP_VERB_GET));
 	}
 
+	public function create_tour_geopoint($geopoint, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_GEOS_CREATE, $channel, self::HTTP_VERB_POST, $geopoint);
+	}
+
+	public function update_tour_geopoint($geopoint, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_GEOS_UPDATE, $channel, self::HTTP_VERB_POST, $geopoint);
+	}
+
+	public function delete_tour_geopoint($geopoint, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_GEOS_DELETE, $channel, self::HTTP_VERB_POST, $geopoint);
+	}
+
+// Internal Functions
+
 	protected function validateParams($params)
 	{
 		if (empty($params) || !is_string($params)) {
@@ -821,6 +825,24 @@ class TourCMS {
 		}
 
 		return $params;
+	}
+
+	/**
+	* generate_signature
+	*
+	* @author Paul Slugocki
+	* @param $path API Path
+	* @param $verb HTTP Verb
+	* @param $channel Channel ID
+	* @return String
+	*/
+	protected function generate_signature($path, $verb, $channel, $outbound_time) {
+
+		$string_to_sign = trim($channel."/".$this->marketp_id."/".$verb."/".$outbound_time.$path);
+
+		$signature = rawurlencode(base64_encode((hash_hmac("sha256", utf8_encode($string_to_sign), $this->private_key, TRUE ))));
+
+		return $signature;
 	}
 
 }
