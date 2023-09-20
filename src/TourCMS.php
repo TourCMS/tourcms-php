@@ -210,8 +210,9 @@ class TourCMS {
 
 	# Channel methods
 
-	public function list_channels() {
-		return($this->request('/p/channels/list.xml'));
+	public function list_channels($params = "") {
+		$params = $this->validateParams($params);
+		return($this->request('/p/channels/list.xml'.$params));
 	}
 
 	public function channel_upload_logo_get_url($channel)
