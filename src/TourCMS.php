@@ -37,6 +37,7 @@ class TourCMS {
 	const PATH_API_TOUR_PICKUP_ROUTES_SHOW = "/api/tours/pickup/routes/show.xml";
 	const PATH_API_TOUR_PICKUP_ROUTES_UPDATE = "/api/tours/pickup/routes/update.xml";
 	const PATH_API_TOUR_PICKUP_ROUTES_ADD_PICKUP = "/api/tours/pickup/routes/pickup_add.xml";
+	const PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP = "/api/tours/pickup/routes/pickup_update.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -783,6 +784,11 @@ class TourCMS {
 	public function tours_pickup_routes_add_pickup($data, $channel)
 	{
 		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_ADD_PICKUP, $channel, self::HTTP_VERB_POST, $data);
+	}
+
+	public function tours_pickup_routes_update_pickup($data, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP, $channel, self::HTTP_VERB_POST, $data);
 	}
 
 	# Account
