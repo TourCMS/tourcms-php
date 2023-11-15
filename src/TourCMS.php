@@ -39,6 +39,7 @@ class TourCMS {
 	const PATH_API_TOUR_PICKUP_ROUTES_ADD_PICKUP = "/api/tours/pickup/routes/pickup_add.xml";
 	const PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP = "/api/tours/pickup/routes/pickup_update.xml";
 	const PATH_API_TOUR_PICKUP_ROUTES_DELETE_PICKUP = "/api/tours/pickup/routes/pickup_delete.xml";
+	const PATH_API_ACCOUNT_CUSTOM_FIELDS_GET = "/api/account/custom_fields/get.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -841,6 +842,11 @@ class TourCMS {
 	public function delete_tour_geopoint($geopoint, $channel)
 	{
 		return $this->request(self::PATH_API_TOUR_GEOS_DELETE, $channel, self::HTTP_VERB_POST, $geopoint);
+	}
+
+	public function get_custom_fields($channel)
+	{
+		return $this->request(self::PATH_API_ACCOUNT_CUSTOM_FIELDS_GET, $channel, self::HTTP_VERB_GET);
 	}
 
 // Internal Functions
