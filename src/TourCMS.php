@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 4.4.0
+# Version: 4.5.0
 
 namespace TourCMS\Utils;
 
@@ -34,6 +34,12 @@ class TourCMS {
 	const PATH_API_TOUR_GEOS_CREATE = "/api/tours/geos/create.xml";
 	const PATH_API_TOUR_GEOS_UPDATE = "/api/tours/geos/update.xml";
 	const PATH_API_TOUR_GEOS_DELETE = "/api/tours/geos/delete.xml";
+	const PATH_API_TOUR_PICKUP_ROUTES_SHOW = "/api/tours/pickup/routes/show.xml";
+	const PATH_API_TOUR_PICKUP_ROUTES_UPDATE = "/api/tours/pickup/routes/update.xml";
+	const PATH_API_TOUR_PICKUP_ROUTES_ADD_PICKUP = "/api/tours/pickup/routes/pickup_add.xml";
+	const PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP = "/api/tours/pickup/routes/pickup_update.xml";
+	const PATH_API_TOUR_PICKUP_ROUTES_DELETE_PICKUP = "/api/tours/pickup/routes/pickup_delete.xml";
+	const PATH_API_ACCOUNT_CUSTOM_FIELDS_GET = "/api/account/custom_fields/get.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -767,6 +773,31 @@ class TourCMS {
 		return ($this->request('/c/pickups/delete.xml', $channel, "POST", $pickup_data));
 	}
 
+	public function show_tours_pickup_routes($tour, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_SHOW."?id=$tour", $channel);
+	}
+
+	public function update_tours_pickup_routes($data, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_UPDATE, $channel, self::HTTP_VERB_POST, $data);
+	}
+
+	public function tours_pickup_routes_add_pickup($data, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_ADD_PICKUP, $channel, self::HTTP_VERB_POST, $data);
+	}
+
+	public function tours_pickup_routes_update_pickup($data, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP, $channel, self::HTTP_VERB_POST, $data);
+	}
+
+	public function tours_pickup_routes_delete_pickup($data, $channel)
+	{
+		return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_DELETE_PICKUP, $channel, self::HTTP_VERB_POST, $data);
+	}
+
 	# Account
 	public function create_account($upload_info) {
 		$url = "/p/account/create.xml";
@@ -811,6 +842,11 @@ class TourCMS {
 	public function delete_tour_geopoint($geopoint, $channel)
 	{
 		return $this->request(self::PATH_API_TOUR_GEOS_DELETE, $channel, self::HTTP_VERB_POST, $geopoint);
+	}
+
+	public function get_custom_fields($channel)
+	{
+		return $this->request(self::PATH_API_ACCOUNT_CUSTOM_FIELDS_GET, $channel, self::HTTP_VERB_GET);
 	}
 
 // Internal Functions
