@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 4.5.0
+# Version: 4.6.0
 
 namespace TourCMS\Utils;
 
@@ -40,6 +40,9 @@ class TourCMS {
 	const PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP = "/api/tours/pickup/routes/pickup_update.xml";
 	const PATH_API_TOUR_PICKUP_ROUTES_DELETE_PICKUP = "/api/tours/pickup/routes/pickup_delete.xml";
 	const PATH_API_ACCOUNT_CUSTOM_FIELDS_GET = "/api/account/custom_fields/get.xml";
+	const PATH_API_TOUR_FACETS_GET = "/api/tours/importer/get_tour_facets.xml";
+	const PATH_API_LIST_TOURS_GET = "/api/tours/importer/get_tour_list.xml";
+	const PATH_API_IMPORT_TOURS_STATUS = "/api/tours/importer/get_import_tours_status.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -847,6 +850,22 @@ class TourCMS {
 	public function get_custom_fields($channel)
 	{
 		return $this->request(self::PATH_API_ACCOUNT_CUSTOM_FIELDS_GET, $channel, self::HTTP_VERB_GET);
+	}
+
+	public function get_tour_facets($channel)
+	{
+		return $this->request(self::PATH_API_TOUR_FACETS_GET, $channel, self::HTTP_VERB_GET);
+	}
+
+	public function get_list_tours($channel, $query_string)
+	{
+		$query_string = $this->validateParams($query_string);
+		return $this->request(self::PATH_API_LIST_TOURS_GET.$query_string, $channel, self::HTTP_VERB_GET);
+	}
+
+	public function get_import_tours_status($channel, $codes)
+	{
+		return $this->request(self::PATH_API_IMPORT_TOURS_STATUS, $channel, self::HTTP_VERB_POST, $codes);
 	}
 
 // Internal Functions
