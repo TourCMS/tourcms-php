@@ -59,8 +59,8 @@ class TourCMS {
 	protected $last_response_headers = array();
 	protected $user_agent = "TourCMS PHP Wrapper v4.1.1";
 	protected $prepend_caller_to_user_agent = true;
-	protected array $headers = [];
-	protected array $permanent_headers = [];
+	protected $headers = [];
+	protected $permanent_headers = [];
 
 	/**
 	 * __construct
