@@ -109,22 +109,22 @@ The library can attempt to check your local environment and API credentials, use
 ```php
 // Common configuration parameters
 
-  // Marketplace ID will be 0 for Tour Operators, non-zero for Marketplace Agents
-  // Agents can find their Marketplace ID in the API page in TourCMS settings
-    $marketplace_id = 0;
+// Marketplace ID will be 0 for Tour Operators, non-zero for Marketplace Agents
+// Agents can find their Marketplace ID in the API page in TourCMS settings
+$marketplace_id = 0;
 
-  // API key will be a string, find it in the API page in TourCMS settings
-    $api_key = "YOUR_KEY_HERE";
+// API key will be a string, find it in the API page in TourCMS settings
+$api_key = "YOUR_KEY_HERE";
 
-  // Channel ID represents the Tour Operator channel to call the API against
-  // Tour Operators may have multiple channels, so enter the correct one here
-  // Agents can leave this as 0 for the test
-    $channel_id = 0;
+// Channel ID represents the Tour Operator channel to call the API against
+// Tour Operators may have multiple channels, so enter the correct one here
+// Agents can leave this as 0 for the test
+$channel_id = 0;
 
 // Create a new TourCMS instance
-  // Optionally alias the namespace
-  use TourCMS\Utils\TourCMS as TourCMS;
-  $tourcms = new TourCMS($marketplace_id, $api_key, "simplexml");
+// Optionally alias the namespace
+use TourCMS\Utils\TourCMS as TourCMS;
+$tourcms = new TourCMS($marketplace_id, $api_key, "simplexml");
 
 // Call the environment test, the results will be displayed on the screen
 $tourcms->test_environment($channel_id);
