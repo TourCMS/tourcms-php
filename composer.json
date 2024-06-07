@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3"
+        "php": ">=8.1"
     },
     "autoload": {
         "psr-4": {"TourCMS\\Utils\\": "src/"}
