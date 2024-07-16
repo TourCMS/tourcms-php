@@ -44,6 +44,7 @@ class TourCMS {
 	const PATH_API_LIST_TOURS_GET = "/api/tours/importer/get_tour_list.xml";
 	const PATH_API_IMPORT_TOURS_STATUS = "/api/tours/importer/get_import_tours_status.xml";
 	const PATH_API_LIST_TOUR_BOOKINGS_RESTRICTIONS = "/api/tours/restrictions/list_tour_bookings_restrictions.xml";
+	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
 	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
 
 	// HTTP VERBS CONST
@@ -695,6 +696,11 @@ class TourCMS {
 	public function update_agent($update_data, $channel)
 	{
 		return ($this->request('/c/agents/update.xml', $channel, "POST", $update_data));
+	}
+
+	public function show_agent_profile($agent, $channel = 0)
+	{
+		return($this->request(self::PATH_API_AGENT_PROFILE_GET."?id=$agent", $channel));
 	}
 
 	public function update_agent_profile($update_data)
