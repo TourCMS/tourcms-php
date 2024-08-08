@@ -46,7 +46,7 @@ class TourCMS {
 	const PATH_API_LIST_TOUR_BOOKINGS_RESTRICTIONS = "/api/tours/restrictions/list_tour_bookings_restrictions.xml";
 	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
 	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
-	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/searchcriteria/get.xml";
+	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/search_criteria/get.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
