@@ -739,33 +739,27 @@ class TourCMS {
 	}
 
 	# Used for validating webhook signatures
-	public function validate_xml_hash($xml) {
-
+	public function validate_xml_hash($xml) 
+	{
 		return $this->generate_xml_hash($xml) == $xml->signed->hash;
-
 	}
 
-	public function generate_xml_hash($xml) {
-
+	public function generate_xml_hash($xml) 
+	{
 		$algorithm = $xml->signed->algorithm;
-
 		$fields = explode(" ", $xml->signed->hash_fields);
 
+		$values = [];
 		foreach($fields as $field) {
-
 			$xpath_result = $xml->xpath($field);
-
 			foreach($xpath_result as $result) {
 				$values[] = (string)$result[0];
 			}
 		}
 
 		$string_to_hash = implode("|", $values);
-
 		$hash = $this->get_hash($algorithm, $string_to_hash);
-
 		return $hash;
-
 	}
 
 	public function get_hash($algorithm, $string_to_hash) :string 
