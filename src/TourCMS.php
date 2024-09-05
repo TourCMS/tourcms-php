@@ -911,12 +911,10 @@ class TourCMS {
 	* @param $channel Channel ID
 	* @return String
 	*/
-	protected function generate_signature($path, $verb, $channel, $outbound_time) {
-
+	protected function generate_signature($path, $verb, $channel, $outbound_time) 
+	{
 		$string_to_sign = trim($channel."/".$this->marketp_id."/".$verb."/".$outbound_time.$path);
-
-		$signature = rawurlencode(base64_encode((hash_hmac("sha256", utf8_encode($string_to_sign), $this->private_key, TRUE ))));
-
+		$signature = rawurlencode(base64_encode((hash_hmac("sha256", mb_convert_encoding($string_to_sign, 'UTF-8', 'ISO-8859-1'), $this->private_key, TRUE ))));
 		return $signature;
 	}
 
