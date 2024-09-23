@@ -22,7 +22,7 @@ THE SOFTWARE.
 */
 
 # TourCMS: PHP wrapper class for TourCMS Rest API
-# Version: 4.8.0
+# Version: 4.9.0
 
 namespace TourCMS\Utils;
 
@@ -44,6 +44,9 @@ class TourCMS {
 	const PATH_API_LIST_TOURS_GET = "/api/tours/importer/get_tour_list.xml";
 	const PATH_API_IMPORT_TOURS_STATUS = "/api/tours/importer/get_import_tours_status.xml";
 	const PATH_API_LIST_TOUR_BOOKINGS_RESTRICTIONS = "/api/tours/restrictions/list_tour_bookings_restrictions.xml";
+	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
+	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
+	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/search_criteria/get.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -466,6 +469,11 @@ class TourCMS {
 		return($this->request('/c/tour/datesprices/freesale/show.xml?id='.$tour, $channel));
 	}
 
+	public function tours_search_criteria($channel)
+	{
+		return($this->request(self::PATH_API_TOURS_SEARCH_CRITERIA_GET, $channel));
+	}
+
 	/*
 		Raw departure methods
 	*/
@@ -696,6 +704,16 @@ class TourCMS {
 		return ($this->request('/c/agents/update.xml', $channel, "POST", $update_data));
 	}
 
+	public function show_agent_profile($agent, $channel = 0)
+	{
+		return($this->request(self::PATH_API_AGENT_PROFILE_GET."?id=$agent", $channel));
+	}
+
+	public function update_agent_profile($update_data)
+	{
+		return ($this->request(self::PATH_API_AGENT_PROFILE_UPDATE, 0, "POST", $update_data));
+	}
+
 	# Payments
 	public function list_payments($params, $channel)
 	{
@@ -721,33 +739,27 @@ class TourCMS {
 	}
 
 	# Used for validating webhook signatures
-	public function validate_xml_hash($xml) {
-
+	public function validate_xml_hash($xml) 
+	{
 		return $this->generate_xml_hash($xml) == $xml->signed->hash;
-
 	}
 
-	public function generate_xml_hash($xml) {
-
+	public function generate_xml_hash($xml) 
+	{
 		$algorithm = $xml->signed->algorithm;
-
 		$fields = explode(" ", $xml->signed->hash_fields);
 
+		$values = [];
 		foreach($fields as $field) {
-
 			$xpath_result = $xml->xpath($field);
-
 			foreach($xpath_result as $result) {
 				$values[] = (string)$result[0];
 			}
 		}
 
 		$string_to_hash = implode("|", $values);
-
 		$hash = $this->get_hash($algorithm, $string_to_hash);
-
 		return $hash;
-
 	}
 
 	public function get_hash($algorithm, $string_to_hash) :string 
@@ -899,12 +911,10 @@ class TourCMS {
 	* @param $channel Channel ID
 	* @return String
 	*/
-	protected function generate_signature($path, $verb, $channel, $outbound_time) {
-
+	protected function generate_signature($path, $verb, $channel, $outbound_time) 
+	{
 		$string_to_sign = trim($channel."/".$this->marketp_id."/".$verb."/".$outbound_time.$path);
-
-		$signature = rawurlencode(base64_encode((hash_hmac("sha256", utf8_encode($string_to_sign), $this->private_key, TRUE ))));
-
+		$signature = rawurlencode(base64_encode((hash_hmac("sha256", mb_convert_encoding($string_to_sign, 'UTF-8', 'ISO-8859-1'), $this->private_key, TRUE ))));
 		return $signature;
 	}
 
