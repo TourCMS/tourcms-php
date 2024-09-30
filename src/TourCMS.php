@@ -52,6 +52,9 @@ class TourCMS {
 	const HTTP_VERB_POST = 'POST';
 	const HTTP_VERB_GET  = 'GET';
 
+	// OBJECTS CONST
+	const SimpleXMLElement = 'SimpleXMLElement';
+
 	// General settings
 	protected $base_url = "https://api.tourcms.com";
 	protected $marketp_id = 0;
@@ -124,10 +127,16 @@ class TourCMS {
 		*/
 		// curl_setopt($ch, CURLOPT_CAINFO, "c:/path/to/ca-bundle.crt");
 
-		if($verb == "POST") {
-			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'POST' );
-				if(!is_null($post_data))
+		if($verb == self::HTTP_VERB_POST) {
+			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, self::HTTP_VERB_POST );
+			if(!is_null($post_data)) {
+				if (is_string($post_data)) {
+					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+				}
+				if ($this->isXMLObject($post_data)) {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
+				}
+			}
 		}
 
 		// Callback function to populate the response headers on curl_exec
@@ -916,6 +925,10 @@ class TourCMS {
 		$string_to_sign = trim($channel."/".$this->marketp_id."/".$verb."/".$outbound_time.$path);
 		$signature = rawurlencode(base64_encode((hash_hmac("sha256", mb_convert_encoding($string_to_sign, 'UTF-8', 'ISO-8859-1'), $this->private_key, TRUE ))));
 		return $signature;
+	}
+
+	protected function isXMLObject($postData){
+		return is_object($postData) && get_class($postData) == self::SimpleXMLElement;
 	}
 
 }
