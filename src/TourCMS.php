@@ -53,7 +53,7 @@ class TourCMS {
 	const HTTP_VERB_GET  = 'GET';
 
 	// OBJECTS CONST
-	const SimpleXMLElement = 'SimpleXMLElement';
+	const CLASS_SimpleXMLElement  = 'SimpleXMLElement';
 
 	// General settings
 	protected $base_url = "https://api.tourcms.com";
@@ -928,7 +928,7 @@ class TourCMS {
 	}
 
 	protected function isXMLObject($postData){
-		return is_object($postData) && get_class($postData) == self::SimpleXMLElement;
+		return is_object($postData) && get_class($postData) == self::CLASS_SimpleXMLElement ;
 	}
 
 }
