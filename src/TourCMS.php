@@ -691,21 +691,12 @@ class TourCMS {
 		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
 	}
 
-	public function customer_verification($method,$username,$redirect_url,$token_placement = ''){
-		if ($token_placement !== ''){
-			return($this->request('/c/customer/verification.xml?verification_methods.method='.$method.'&username='.$username.'&redirect_url='.$redirect_url.'&token_placement='.$token_placement));
-		} else {
-			return($this->request('/c/customer/verification.xml?verification_methods.method='.$method.'&username='.$username.'&redirect_url='.$redirect_url));
-		}
-		
+	public function customer_verification($customer,$channel = 0){
+		return($this->request('/c/customer/verification.xml',$channel,self::HTTP_VERB_POST,$customer));	
 	}
 
-	public function create_customer($email,$firstname,$surname,$username = ''){
-		if ($firstname !== ''){
-			return($this->request('/c/customer/create.xml?email='.$email.'&username='.$username.'&firstname='.$firstname.'&surname='.$surname));
-		} else {
-			return($this->request('/c/customer/create.xml?email='.$email.'&username='.$username.'&surname='.$surname));
-		}
+	public function create_customer($customer,$channel = 0){
+		return($this->request('/c/customer/create.xml',$channel,self::HTTP_VERB_POST,$customer));	
 	}
 
 	# Agents
