@@ -696,7 +696,7 @@ class TourCMS {
 		return ($this->request('/c/customer/verification.xml', $channel, self::HTTP_VERB_POST, $customer));
 	}
 
-	public function create_customer($customer, $channel = 0)
+	public function create_customer($customer, $channel)
 	{
 		return ($this->request('/c/customer/create.xml', $channel, self::HTTP_VERB_POST, $customer));
 	}
