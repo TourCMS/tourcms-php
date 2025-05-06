@@ -691,7 +691,7 @@ class TourCMS {
 		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
 	}
 
-	public function customer_verification($customer, $channel = 0)
+	public function customer_verification($customer, $channel)
 	{
 		return ($this->request('/c/customer/verification.xml', $channel, self::HTTP_VERB_POST, $customer));
 	}
