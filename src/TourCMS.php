@@ -52,9 +52,6 @@ class TourCMS {
 	const HTTP_VERB_POST = 'POST';
 	const HTTP_VERB_GET  = 'GET';
 
-	// OBJECTS CONST
-	const CLASS_SimpleXMLElement  = 'SimpleXMLElement';
-
 	// General settings
 	protected $base_url = "https://api.tourcms.com";
 	protected $marketp_id = 0;
@@ -127,13 +124,13 @@ class TourCMS {
 		*/
 		// curl_setopt($ch, CURLOPT_CAINFO, "c:/path/to/ca-bundle.crt");
 
-		if($verb == self::HTTP_VERB_POST) {
-			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, self::HTTP_VERB_POST );
-			if(!is_null($post_data)) {
+		if ($verb == self::HTTP_VERB_POST) {
+			curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, self::HTTP_VERB_POST);
+			if (!is_null($post_data)) {
 				if (is_string($post_data)) {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 				}
-				if ($this->isXMLObject($post_data)) {
+				if ($post_data instanceof SimpleXMLElement) {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data->asXML());
 				}
 			}
@@ -664,11 +661,6 @@ class TourCMS {
 		return($this->request('/c/enquiry/new.xml', $channel, "POST", $enquiry_data));
 	}
 
-	public function update_customer($customer_data, $channel)
-	{
-		return($this->request('/c/customer/update.xml', $channel, "POST", $customer_data));
-	}
-
 	public function search_enquiries($params = "", $channel = 0) {
 		$params = $this->validateParams($params);
 		if($channel==0)
@@ -682,23 +674,28 @@ class TourCMS {
 		return($this->request('/c/enquiry/show.xml?enquiry_id='.$enquiry, $channel));
 	}
 
-	public function show_customer($customer, $channel)
-	{
-		return($this->request('/c/customer/show.xml?customer_id='.$customer, $channel));
-	}
-
 	public function check_customer_login($customer, $password, $channel) {
-		return($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
-	}
-
-	public function customer_verification($customer, $channel)
-	{
-		return ($this->request('/c/customer/verification.xml', $channel, self::HTTP_VERB_POST, $customer));
+		return ($this->request('/c/customers/login_search.xml?customer_username='.$customer.'&customer_password='.$password, $channel));
 	}
 
 	public function create_customer($customer, $channel)
 	{
 		return ($this->request('/c/customer/create.xml', $channel, self::HTTP_VERB_POST, $customer));
+	}
+
+	public function show_customer($customer, $channel)
+	{
+		return ($this->request('/c/customer/show.xml?customer_id='.$customer, $channel));
+	}
+
+	public function update_customer($customer, $channel)
+	{
+		return ($this->request('/c/customer/update.xml', $channel, self::HTTP_VERB_POST, $customer));
+	}
+
+	public function verify_customer($customer, $channel)
+	{
+		return ($this->request('/c/customer/verification.xml', $channel, self::HTTP_VERB_POST, $customer));
 	}
 
 	# Agents
@@ -937,10 +934,4 @@ class TourCMS {
 		return $signature;
 	}
 
-	protected function isXMLObject($postData){
-		return is_object($postData) && get_class($postData) == self::CLASS_SimpleXMLElement ;
-	}
-
 }
-
-?>
