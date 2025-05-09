@@ -145,9 +145,11 @@ class TourCMS
 
 
     // Customer(s)
+    public const PATH_API_CUSTOMER_CREATE = '/c/customer/create.xml';
     public const PATH_API_CUSTOMER_SHOW = '/c/customer/show.xml';
     public const PATH_API_CUSTOMER_UPDATE = '/c/customer/update.xml';
     public const PATH_API_CUSTOMER_LOGIN_SEARCH = '/c/customers/login_search.xml';
+    public const PATH_API_CUSTOMER_VERIFICATION = '/c/customer/verification.xml';
 
 
     // Pickups
@@ -276,7 +278,7 @@ class TourCMS
                 if (is_string($postData)) {
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
                 }
-                if ($this->isXMLObject($postData)) {
+                if ($postData instanceof SimpleXMLElement) {
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData->asXML());
                 }
             }
@@ -826,6 +828,11 @@ class TourCMS
         return $this->request(self::PATH_API_ENQUIRY_SHOW . '?enquiry_id=' . $enquiryId, $channel);
     }
 
+    public function create_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement|string
+	{
+		return $this->request(self::PATH_API_CUSTOMER_CREATE, $channel, self::HTTP_VERB_POST, $customer);
+	}
+
     public function show_customer(int $customerId, int $channel): SimpleXMLElement|string
     {
         return $this->request(self::PATH_API_CUSTOMER_SHOW . '?customer_id=' . $customerId, $channel);
@@ -835,6 +842,11 @@ class TourCMS
     {
         return $this->request(self::PATH_API_CUSTOMER_LOGIN_SEARCH . '?customer_username=' . $username . '&customer_password=' . $password, $channel);
     }
+
+    public function verify_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement|string
+	{
+		return $this->request(self::PATH_API_CUSTOMER_VERIFICATION, $channel, self::HTTP_VERB_POST, $customer);
+	}
 
     # Agents
     public function search_agents(string $params, int $channel): SimpleXMLElement|string
@@ -1086,8 +1098,4 @@ class TourCMS
         return $signature;
     }
 
-    protected function isXMLObject(mixed $postData): bool
-    {
-        return $postData instanceof SimpleXMLElement;
-    }
 }
