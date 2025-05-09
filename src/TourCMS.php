@@ -215,8 +215,8 @@ class TourCMS
      * __construct
      *
      * @author Paul Slugocki
-     * @param $mp Marketplace ID
-     * @param $k API Private Key
+     * @param $marketplaceId Marketplace ID
+     * @param $key API Private Key
      * @param $resultType Result type, defaults to raw
      * @param $timeout Timeout, default 0
      */
@@ -232,9 +232,10 @@ class TourCMS
      * request
      *
      * @author Paul Slugocki
-     * @param $path API path to call
-     * @param $channel Channel ID, defaults to zero
-     * @param $verb HTTP Verb, defaults to GET
+     * @param string $path API path to call
+     * @param int $channel Channel ID, defaults to zero
+     * @param string $verb HTTP Verb, defaults to GET
+     * @param null|string|SimpleXMLElement $postData POST data to send
      * @return string|SimpleXMLElement
      */
     public function request(string $path, int $channel = 0, string $verb = self::HTTP_VERB_GET, null|string|SimpleXMLElement $postData = null): bool|SimpleXMLElement|string
@@ -306,8 +307,8 @@ class TourCMS
 
         $this->lastResponseHeaders = $apiResponseHeaders;
 
-        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $result = substr($response, $header_size);
+        $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $result = substr($response, $headerSize);
 
         // Check whether we need to return raw XML or
         // convert to SimpleXML first
@@ -1046,8 +1047,8 @@ class TourCMS
 
         $values = [];
         foreach ($fields as $field) {
-            $xpath_result = $xml->xpath($field);
-            foreach ($xpath_result as $result) {
+            $xpathResult = $xml->xpath($field);
+            foreach ($xpathResult as $result) {
                 $values[] = (string)$result[0];
             }
         }
