@@ -339,9 +339,11 @@ class TourCMS
      * @param $url New base url
      * @return bool
      */
-    public function set_base_url(string $url): void
+    public function set_base_url(string $url): bool
     {
         $this->baseUrl = $url;
+
+        return true;
     }
 
     /**
@@ -350,10 +352,12 @@ class TourCMS
      * @author Francisco Martinez Ramos
      * @return bool
      */
-    public function set_user_agent(string $user_agent, bool $prepend = true): void
+    public function set_user_agent(string $user_agent, bool $prepend = true): bool
     {
         $this->prependCallerToUserAgent = $prepend;
         $this->userAgent = $user_agent;
+
+        return true;
     }
 
     /**
@@ -362,9 +366,9 @@ class TourCMS
      * @author Francisco Martínez Ramos
      * @param string $header Key of the header
      * @param string $value Value of the header
-     * @return void
+     * @return bool
      */
-    public function add_header(string $header, string $value, bool $permanent = false): void
+    public function add_header(string $header, string $value, bool $permanent = false): bool
     {
         $newHeader = "$header: $value";
 
@@ -373,6 +377,8 @@ class TourCMS
         } else {
             array_push($this->headers, $newHeader);
         }
+
+        return true;
     }
 
     /**
@@ -396,7 +402,7 @@ class TourCMS
 
     # Get last response headers
 
-    public function get_lastResponseHeaders(): array
+    public function get_last_response_headers(): array
     {
         return $this->lastResponseHeaders;
     }
