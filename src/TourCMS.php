@@ -352,10 +352,10 @@ class TourCMS
      * @author Francisco Martinez Ramos
      * @return bool
      */
-    public function set_user_agent(string $user_agent, bool $prepend = true): bool
+    public function set_user_agent(string $userAgent, bool $prepend = true): bool
     {
         $this->prependCallerToUserAgent = $prepend;
-        $this->userAgent = $user_agent;
+        $this->userAgent = $userAgent;
 
         return true;
     }
@@ -509,9 +509,9 @@ class TourCMS
         return $this->request(self::PATH_API_TOURS_FILTERS, $channel);
     }
 
-    public function update_tour($tour_data, int $channel): SimpleXMLElement|string
+    public function update_tour(SimpleXMLElement|string $tour, int $channel): SimpleXMLElement|string
     {
-        return $this->request(self::PATH_API_TOUR_UPDATE, $channel, self::HTTP_VERB_POST, $tour_data);
+        return $this->request(self::PATH_API_TOUR_UPDATE, $channel, self::HTTP_VERB_POST, $tour);
     }
 
     public function update_tour_url(int $tourId, int $channel, string $tourUrl): SimpleXMLElement|string
@@ -974,9 +974,9 @@ class TourCMS
         return $this->request($url, 0);
     }
 
-    public function create_channel(SimpleXMLElement|string $channel_info, int $channel): SimpleXMLElement|string
+    public function create_channel(SimpleXMLElement|string $newChannel, int $channel): SimpleXMLElement|string
     {
-        return $this->request(self::PATH_API_CHANNEL_CREATE, $channel, self::HTTP_VERB_POST, $channel_info);
+        return $this->request(self::PATH_API_CHANNEL_CREATE, $channel, self::HTTP_VERB_POST, $newChannel);
     }
 
     public function update_channel(SimpleXMLElement|string $channelInfo, int $channel): SimpleXMLElement|string
