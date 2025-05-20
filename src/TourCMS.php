@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 namespace TourCMS\Utils;
 
+use InvalidArgumentException;
 use \SimpleXMLElement;
 
 class TourCMS
@@ -195,14 +196,14 @@ class TourCMS
     public const HTTP_VERB_GET  = 'GET';
     public const HEADER_X_REQUEST_ID = 'X-Request-Id';
 
-    public const RESULT_TYPE_RAW = "raw";
-    public const RESULT_TYPE_XML = "simplexml";
+    // ERRORS CONSTS
+    public const ERROR_MESSAGE_INVALID_CHANNEL_ID = 'Channel ID must be greater than 0';
+    public const ERROR_MESSAGE_INVALID_TOUR_ID = 'Tour ID must be greater than 0';
 
     // General settings
     protected string $baseUrl = "https://api.tourcms.com";
     protected int $marketplaceId = 0;
     protected string $privateKey = "";
-    protected string $resultType = "";
     protected int $timeout = 0;
     protected array $lastRequestHeaders = [];
     protected array $lastResponseHeaders = [];
@@ -217,14 +218,12 @@ class TourCMS
      * @author Paul Slugocki
      * @param $marketplaceId Marketplace ID
      * @param $key API Private Key
-     * @param $resultType Result type, defaults to raw
      * @param $timeout Timeout, default 0
      */
-    public function __construct(int $marketplaceId, string $key, string $resultType = self::RESULT_TYPE_RAW, int $timeout = 0)
+    public function __construct(int $marketplaceId, string $key, int $timeout = 0)
     {
         $this->marketplaceId = $marketplaceId;
         $this->privateKey = $key;
-        $this->resultType = $resultType;
         $this->timeout = $timeout;
     }
 
@@ -236,9 +235,9 @@ class TourCMS
      * @param int $channel Channel ID, defaults to zero
      * @param string $verb HTTP Verb, defaults to GET
      * @param null|string|SimpleXMLElement $postData POST data to send
-     * @return string|SimpleXMLElement
+     * @return SimpleXMLElement
      */
-    public function request(string $path, int $channel = 0, string $verb = self::HTTP_VERB_GET, null|string|SimpleXMLElement $postData = null): bool|SimpleXMLElement|string
+    public function request(string $path, int $channel = 0, string $verb = self::HTTP_VERB_GET, null|string|SimpleXMLElement $postData = null): bool|SimpleXMLElement
     {
         // Prepare the URL we are sending to
         $url = $this->baseUrl . $path;
@@ -310,10 +309,8 @@ class TourCMS
         $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $result = substr($response, $headerSize);
 
-        // Check whether we need to return raw XML or
-        // convert to SimpleXML first
-        if ($this->resultType == self::RESULT_TYPE_XML)
-            $result = simplexml_load_string($result);
+        // We have to convert the result to a SimpleXMLElement object
+        $result = simplexml_load_string($result);
 
         $this->lastRequestHeaders = $this->headers;
         $this->headers = [];
@@ -373,9 +370,9 @@ class TourCMS
         $newHeader = "$header: $value";
 
         if ($permanent) {
-            array_push($this->permanentHeaders, $newHeader);
+            $this->permanentHeaders[] = $newHeader;
         } else {
-            array_push($this->headers, $newHeader);
+            $this->headers[] = $newHeader;
         }
 
         return true;
@@ -416,34 +413,34 @@ class TourCMS
 
     # API methods (Housekeeping)
 
-    public function api_rate_limit_status(int $channel = 0): SimpleXMLElement|string
+    public function api_rate_limit_status(int $channel = 0): SimpleXMLElement
     {
         return $this->request(self::PATH_API_RATE_LIMIT, $channel);
     }
 
     # Channel methods
 
-    public function list_channels(string $params = ""): SimpleXMLElement|string
+    public function list_channels(string $params = ""): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CHANNELS_LIST . $this->validateParams($params));
     }
 
-    public function channel_upload_logo_get_url(int $channel): SimpleXMLElement|string
+    public function channel_upload_logo_get_url(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CHANNEL_LOGO_UPLOAD_GET_URL, $channel);
     }
 
-    public function channel_upload_logo_process(int $channel, SimpleXMLElement|string $uploadInfo)
+    public function channel_upload_logo_process(int $channel, SimpleXMLElement|string $uploadInfo): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CHANNEL_LOGO_UPLOAD_PROCESS, $channel, self::HTTP_VERB_POST, $uploadInfo);
     }
 
-    public function show_channel(int $channel): SimpleXMLElement|string
+    public function show_channel(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CHANNEL_SHOW, $channel);
     }
 
-    public function channel_performance(int $channel = 0): SimpleXMLElement|string
+    public function channel_performance(int $channel = 0): SimpleXMLElement
     {
 
         if ($channel == 0) return $this->request(self::PATH_API_P_CHANNELS_PERFORMANCE);
@@ -453,7 +450,7 @@ class TourCMS
 
     # Tour/Hotel methods
 
-    public function search_tours(string $params = "", int $channel = 0): SimpleXMLElement|string
+    public function search_tours(string $params = "", int $channel = 0): SimpleXMLElement
     {
 
         $params = $this->validateParams($params);
@@ -463,7 +460,7 @@ class TourCMS
         return $this->request(self::PATH_API_C_TOURS_SEARCH . $params, $channel);
     }
 
-    public function search_hotels_range(string $params = "", ?int $tourId = null, int $channel = 0)
+    public function search_hotels_range(string $params = "", ?int $tourId = null, int $channel = 0): SimpleXMLElement
     {
 
         $params = $this->validateParams($params);
@@ -484,7 +481,7 @@ class TourCMS
         return $this->request(self::PATH_API_C_HOTELS_SEARCH_RANGE . $params, $channel);
     }
 
-    public function search_hotels_specific(string $params = "", ?int $tourId = null, int $channel = 0)
+    public function search_hotels_specific(string $params = "", ?int $tourId = null, int $channel = 0): SimpleXMLElement
     {
         $params = $this->validateParams($params);
 
@@ -504,17 +501,17 @@ class TourCMS
         return $this->request(self::PATH_API_C_HOTELS_SEARCH_AVAIL . $params, $channel);
     }
 
-    public function list_product_filters(int $channel = 0): SimpleXMLElement|string
+    public function list_product_filters(int $channel = 0): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOURS_FILTERS, $channel);
     }
 
-    public function update_tour(SimpleXMLElement|string $tour, int $channel): SimpleXMLElement|string
+    public function update_tour(SimpleXMLElement|string $tour, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_UPDATE, $channel, self::HTTP_VERB_POST, $tour);
     }
 
-    public function update_tour_url(int $tourId, int $channel, string $tourUrl): SimpleXMLElement|string
+    public function update_tour_url(int $tourId, int $channel, string $tourUrl): SimpleXMLElement
     {
 
         $urlData = new SimpleXMLElement('<tour />');
@@ -524,7 +521,7 @@ class TourCMS
         return $this->update_tour($urlData, $channel);
     }
 
-    public function list_tours(int $channel = 0, string $params = ""): SimpleXMLElement|string
+    public function list_tours(int $channel = 0, string $params = ""): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         if ($channel == 0) return $this->request(self::PATH_API_P_TOURS_LIST . $params);
@@ -532,7 +529,7 @@ class TourCMS
         return $this->request(self::PATH_API_C_TOURS_LIST . $params, $channel);
     }
 
-    public function list_tour_images(int $channel = 0, string $params = ""): SimpleXMLElement|string
+    public function list_tour_images(int $channel = 0, string $params = ""): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         if ($channel == 0) return $this->request(self::PATH_API_P_TOURS_IMAGES_LIST . $params);
@@ -540,7 +537,7 @@ class TourCMS
         return $this->request(self::PATH_API_C_TOURS_IMAGES_LIST . $params, $channel);
     }
 
-    public function list_tour_locations(int $channel = 0, string $params = ""): SimpleXMLElement|string
+    public function list_tour_locations(int $channel = 0, string $params = ""): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         if ($channel == 0) return $this->request(self::PATH_API_P_TOURS_LOCATIONS . $params);
@@ -548,84 +545,127 @@ class TourCMS
         return $this->request(self::PATH_API_C_TOURS_LOCATIONS . $params, $channel);
     }
 
-    public function delete_tour(int $tourId, int $channel): SimpleXMLElement|string
+    public function delete_tour(int $tourId, int $channel): SimpleXMLElement
     {
         $url = self::PATH_API_TOUR_DELETE .'?id=' . $tourId;
         return $this->request($url, $channel, self::HTTP_VERB_POST);
     }
 
-    public function show_tour(int $tourId, int $channel, ?string $params = null)
+    /**
+     * Show Tour
+     * @param int $tourId
+     * @param int $channel
+     * @param mixed $params
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement|string
+     */
+    public function show_tour(int $tourId, int $channel, ?string $params = null): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         $url = self::PATH_API_TOUR_SHOW . '?id=' . $tourId;
 
-        /*
-
-			Third param for show tour could be:
-
-			- bool: show_options=1 / 0 (deprecated)
-
-			- string: params
-
-		*/
-
         if (is_string($params)) {
-
             $url .= "&" . $params;
         } else {
-
-            if ($params)
-                $url .= "&show_options=1";
+            if ($params) $url .= "&show_options=1";
         }
 
-        if ($tourId > 0) {
-            return $this->request($url, $channel);
-        }
+        return $this->request($url, $channel);
     }
 
-    public function tour_upload_file_get_url($tour, $channel, $file_type, $file_id): SimpleXMLElement|string
+    /**
+     * Tour upload file get URL
+     * @param int $tourId
+     * @param int $channel
+     * @param string $file_type
+     * @param string $file_id
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function tour_upload_file_get_url(int $tourId, int $channel, string $file_type, string $file_id): SimpleXMLElement
     {
-        $url = self::PATH_API_TOURS_FILE_UPLOAD_GET_URL . "?id=$tour&file_type=$file_type&file_id=$file_id";
+        $this->validateTourId($tourId);
+
+        $url = self::PATH_API_TOURS_FILE_UPLOAD_GET_URL . "?id=$tourId&file_type=$file_type&file_id=$file_id";
         return $this->request($url, $channel, self::HTTP_VERB_GET);
     }
 
-    public function tour_upload_file_process(int $channel, SimpleXMLElement|string $uploadInfo): SimpleXMLElement|string
+    public function tour_upload_file_process(int $channel, SimpleXMLElement|string $uploadInfo): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOURS_FILES_UPLOAD_PROCESS, $channel, self::HTTP_VERB_POST, $uploadInfo);
     }
 
-    public function delete_tour_image(int $channel, SimpleXMLElement|string $image_info): SimpleXMLElement|string
+    public function delete_tour_image(int $channel, SimpleXMLElement|string $image_info): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_IMAGES_DELETE, $channel, self::HTTP_VERB_POST, $image_info);
     }
 
-    public function delete_tour_document(int $channel, $documentXML): SimpleXMLElement|string
+    public function delete_tour_document(int $channel, SimpleXMLElement|string $documentXML): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_DOCUMENT_DELETE, $channel, self::HTTP_VERB_POST, $documentXML);
     }
 
-
-    public function check_tour_availability(string $params, int $tourId, int $channel): SimpleXMLElement|string
+    /**
+     * Check Tour Availability
+     * @param string $params
+     * @param int $tourId
+     * @param int $channel
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function check_tour_availability(string $params, int $tourId, int $channel): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::PATH_API_SHOW_TOUR_AVAILABILITY . '?id=' . $tourId . $this->validateParams($params), $channel);
     }
 
-    public function show_tour_datesanddeals(int $tourId, int $channel, string $params = ""): SimpleXMLElement|string
+    /**
+     * Show Tour Dates and Deals
+     * @param int $tourId
+     * @param int $channel
+     * @param string $params
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function show_tour_datesanddeals(int $tourId, int $channel, string $params = ""): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::PATH_API_TOUR_DATES_AND_DEALS .'?id=' . $tourId . $this->validateParams($params), $channel);
     }
 
-
-    public function show_tour_departures(int $tourId, int $channel, string $params = ""): SimpleXMLElement|string
+    /**
+     * Show Tour Departures
+     * @param int $tourId
+     * @param int $channel
+     * @param string $params
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function show_tour_departures(int $tourId, int $channel, string $params = ""): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::PATH_API_SHOW_TOUR_DEPARTURES . '?id=' . $tourId . $this->validateParams($params), $channel);
     }
 
-    public function show_tour_freesale(int $tourId, int $channel): SimpleXMLElement|string
+    /**
+     * Show Tour Freesale
+     * @param int $tourId
+     * @param int $channel
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function show_tour_freesale(int $tourId, int $channel): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::API_PATH_SHOW_TOUR_FREESALE . '?id=' . $tourId, $channel);
     }
 
-    public function tours_search_criteria(int $channel): SimpleXMLElement|string
+    public function tours_search_criteria(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOURS_SEARCH_CRITERIA_GET, $channel);
     }
@@ -634,28 +674,57 @@ class TourCMS
 		Raw departure methods
 	*/
 
-    public function search_raw_departures(int $tourId, int $channel, string $params = ""): SimpleXMLElement|string
+    /**
+     * Search Raw Departures
+     * @param int $tourId
+     * @param int $channel
+     * @param string $params
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function search_raw_departures(int $tourId, int $channel, string $params = ""): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::PATH_API_SEARCH_RAW_DEPARTURES . '?id=' . $tourId . $this->validateParams($params), $channel);
     }
 
-    public function show_departure(int $departure, int $tour, int $channel): SimpleXMLElement|string
+    /**
+     * Show Departure
+     * @param int $departure
+     * @param int $tourId
+     * @param int $channel
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function show_departure(int $departure, int $tourId, int $channel): SimpleXMLElement
     {
-        return $this->request(self::PATH_API_DEPARTURE_SHOW . '?id=' . $tour . '&departure_id=' . $departure, $channel);
+        $this->validateTourId($tourId);
+
+        return $this->request(self::PATH_API_DEPARTURE_SHOW . '?id=' . $tourId . '&departure_id=' . $departure, $channel);
     }
 
-    public function create_departure(SimpleXMLElement|string $departureData, int $channel): SimpleXMLElement|string
+    public function create_departure(SimpleXMLElement|string $departureData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_DEPARTURE_CREATE, $channel, self::HTTP_VERB_POST, $departureData);
     }
 
-    public function update_departure(SimpleXMLElement|string $departureData, int $channel): SimpleXMLElement|string
+    public function update_departure(SimpleXMLElement|string $departureData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_DEPARTURE_UPDATE, $channel, self::HTTP_VERB_POST, $departureData);
     }
 
-    public function delete_departure(int $departureId, int $tourId, int $channelId): SimpleXMLElement|string
+    /**
+     * Delete Departure
+     * @param int $departureId
+     * @param int $tourId
+     * @param int $channelId
+     * @return SimpleXMLElement
+     */
+    public function delete_departure(int $departureId, int $tourId, int $channelId): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::PATH_API_DEPARTURE_DELETE . '?id=' . $tourId . '&departure_id=' . $departureId, $channelId, self::HTTP_VERB_POST);
     }
 
@@ -663,7 +732,7 @@ class TourCMS
 		Promo code
 	*/
 
-    public function show_promo(int $promoId, int $channel): SimpleXMLElement|string
+    public function show_promo(int $promoId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PROMO_SHOW . '?promo_code=' . $promoId, $channel);
     }
@@ -674,17 +743,17 @@ class TourCMS
 		Making bookings
 	*/
 
-    public function get_booking_redirect_url(SimpleXMLElement|string $urlData, int $channel): SimpleXMLElement|string
+    public function get_booking_redirect_url(SimpleXMLElement|string $urlData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_GET_REDIRECT_URL, $channel, self::HTTP_VERB_POST, $urlData);
     }
 
-    public function start_new_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement|string
+    public function start_new_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_START, $channel, self::HTTP_VERB_POST, $bookingData);
     }
 
-    public function commit_new_booking(SimpleXMLElement|string $bookingData, $channel)
+    public function commit_new_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_COMMIT, $channel, self::HTTP_VERB_POST, $bookingData);
     }
@@ -693,7 +762,7 @@ class TourCMS
 		Retrieving bookings
 	*/
 
-    public function search_bookings(string $params = "", int $channel = 0): SimpleXMLElement|string
+    public function search_bookings(string $params = "", int $channel = 0): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         if ($channel == 0) return $this->request(self::PATH_API_P_BOOKINGS_SEARCH . $params);
@@ -701,7 +770,7 @@ class TourCMS
         return $this->request(self::PATH_API_C_BOOKINGS_SEARCH . $params, $channel);
     }
 
-    public function list_bookings(string $params = "", int $channel = 0): SimpleXMLElement|string
+    public function list_bookings(string $params = "", int $channel = 0): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         if ($channel == 0) return $this->request(self::PATH_API_P_BOOKINGS_LIST . $params);
@@ -709,12 +778,12 @@ class TourCMS
         return $this->request(self::PATH_API_C_BOOKINGS_LIST . $params, $channel);
     }
 
-    public function show_booking(int $bookingId, int $channel): SimpleXMLElement|string
+    public function show_booking(int $bookingId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKINGS_SHOW . '?booking_id=' . $bookingId, $channel);
     }
 
-    public function search_voucher(SimpleXMLElement|string|null $voucherData = null, $channel = 0): SimpleXMLElement|string
+    public function search_voucher(SimpleXMLElement|string|null $voucherData = null, $channel = 0): SimpleXMLElement
     {
 
         if ($voucherData == null) {
@@ -733,62 +802,62 @@ class TourCMS
 		Updating bookings
 	*/
 
-    public function update_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement|string
+    public function update_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_UPDATE, $channel, self::HTTP_VERB_POST, $bookingData);
     }
 
-    public function create_payment(SimpleXMLElement|string $paymentData, int $channel): SimpleXMLElement|string
+    public function create_payment(SimpleXMLElement|string $paymentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PAYMENT_NEW, $channel, self::HTTP_VERB_POST, $paymentData);
     }
 
-    public function log_failed_payment(SimpleXMLElement|string $paymentData, int $channel): SimpleXMLElement|string
+    public function log_failed_payment(SimpleXMLElement|string $paymentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PAYMENT_FAIL, $channel, self::HTTP_VERB_POST, $paymentData);
     }
 
-    public function spreedly_create_payment(SimpleXMLElement|string $paymentData, int $channel): SimpleXMLElement|string
+    public function spreedly_create_payment(SimpleXMLElement|string $paymentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PAYMENT_SPREEDLY_CREATE, $channel, self::HTTP_VERB_POST, $paymentData);
     }
 
-    public function spreedly_complete_payment(string $transactionId, int $channel): SimpleXMLElement|string
+    public function spreedly_complete_payment(string $transactionId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PAYMENT_SPREEDLY_COMPLETE . '?id=' . $transactionId, $channel, self::HTTP_VERB_POST);
     }
 
-    public function cancel_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement|string
+    public function cancel_booking(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_CANCEL, $channel, self::HTTP_VERB_POST, $bookingData);
     }
 
-    public function delete_booking(int $bookingId, int $channel): SimpleXMLElement|string
+    public function delete_booking(int $bookingId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_DELETE . '?booking_id=' . $bookingId, $channel, self::HTTP_VERB_POST);
     }
 
-    public function check_option_availability(int $bookingId, string $tourComponentId, int $channel): SimpleXMLElement|string
+    public function check_option_availability(int $bookingId, string $tourComponentId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_OPTION_CHECK_AVAILABILITY . '?booking_id=' . $bookingId . '&tour_component_id=' . $tourComponentId, $channel);
     }
 
-    public function booking_add_component(SimpleXMLElement|string $componentData, int $channel): SimpleXMLElement|string
+    public function booking_add_component(SimpleXMLElement|string $componentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_COMPONENT_NEW, $channel, self::HTTP_VERB_POST, $componentData);
     }
 
-    public function booking_remove_component(SimpleXMLElement|string $componentData, int $channel): SimpleXMLElement|string
+    public function booking_remove_component(SimpleXMLElement|string $componentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_COMPONENT_DELETE, $channel, self::HTTP_VERB_POST, $componentData);
     }
 
-    public function booking_update_component(SimpleXMLElement|string $componentData, int $channel): SimpleXMLElement|string
+    public function booking_update_component(SimpleXMLElement|string $componentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_COMPONENT_UPDATE, $channel, self::HTTP_VERB_POST, $componentData);
     }
 
-    public function add_note_to_booking(int $bookingId, int $channel, string $text, string $noteType): SimpleXMLElement|string
+    public function add_note_to_booking(int $bookingId, int $channel, string $text, string $noteType): SimpleXMLElement
     {
 
         $bookingData = new SimpleXMLElement('<booking />');
@@ -800,29 +869,29 @@ class TourCMS
         return $this->request(self::PATH_API_BOOKING_NOTE_NEW, $channel, self::HTTP_VERB_POST, $bookingData);
     }
 
-    public function send_booking_email(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement|string
+    public function send_booking_email(SimpleXMLElement|string $bookingData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_BOOKING_EMAIL_SEND, $channel, self::HTTP_VERB_POST, $bookingData);
     }
 
-    public function redeem_voucher(SimpleXMLElement|string $voucherData, int $channel = 0): SimpleXMLElement|string
+    public function redeem_voucher(SimpleXMLElement|string $voucherData, int $channel = 0): SimpleXMLElement
     {
         return $this->request(self::PATH_API_VOUCHER_REDEEM, $channel, self::HTTP_VERB_POST, $voucherData);
     }
 
     # Enquiry and customer methods
 
-    public function create_enquiry(SimpleXMLElement|string $enquiryData, int $channel): SimpleXMLElement|string
+    public function create_enquiry(SimpleXMLElement|string $enquiryData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_ENQUIRY_NEW, $channel, self::HTTP_VERB_POST, $enquiryData);
     }
 
-    public function update_customer(SimpleXMLElement|string $customerData, int $channel): SimpleXMLElement|string
+    public function update_customer(SimpleXMLElement|string $customerData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CUSTOMER_UPDATE, $channel, self::HTTP_VERB_POST, $customerData);
     }
 
-    public function search_enquiries(string $params = "", int $channel = 0): SimpleXMLElement|string
+    public function search_enquiries(string $params = "", int $channel = 0): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         if ($channel == 0) return $this->request(self::PATH_API_P_ENQUIRIES_SEARCH . $params);
@@ -830,202 +899,211 @@ class TourCMS
         return $this->request(self::PATH_API_C_ENQUIRIES_SEARCH . $params, $channel);
     }
 
-    public function show_enquiry(int $enquiryId, int $channel): SimpleXMLElement|string
+    public function show_enquiry(int $enquiryId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_ENQUIRY_SHOW . '?enquiry_id=' . $enquiryId, $channel);
     }
 
-    public function create_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement|string
+    public function create_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement
 	{
 		return $this->request(self::PATH_API_CUSTOMER_CREATE, $channel, self::HTTP_VERB_POST, $customer);
 	}
 
-    public function show_customer(int $customerId, int $channel): SimpleXMLElement|string
+    public function show_customer(int $customerId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CUSTOMER_SHOW . '?customer_id=' . $customerId, $channel);
     }
 
-    public function check_customer_login(string $username, string $password, int $channel): SimpleXMLElement|string
+    public function check_customer_login(string $username, string $password, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CUSTOMER_LOGIN_SEARCH . '?customer_username=' . $username . '&customer_password=' . $password, $channel);
     }
 
-    public function verify_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement|string
+    public function verify_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement
 	{
 		return $this->request(self::PATH_API_CUSTOMER_VERIFICATION, $channel, self::HTTP_VERB_POST, $customer);
 	}
 
     # Agents
-    public function search_agents(string $params, int $channel): SimpleXMLElement|string
+    public function search_agents(string $params, int $channel): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         return $this->request(self::PATH_API_AGENTS_SEARCH . $params, $channel);
     }
 
-    public function start_new_agent_login(string $params, int $channel): SimpleXMLElement|string
+    public function start_new_agent_login(string $params, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_START_AGENT_LOGIN, $channel, self::HTTP_VERB_POST, $params);
     }
 
-    public function retrieve_agent_booking_key(string $privateToken, int $channel): SimpleXMLElement|string
+    public function retrieve_agent_booking_key(string $privateToken, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_AGENT_BOOKING_KEY_RETRIEVE . '?k=' . $privateToken, $channel);
     }
 
-    public function update_agent(SimpleXMLElement|string $agentData, int $channel): SimpleXMLElement|string
+    public function update_agent(SimpleXMLElement|string $agentData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_AGENTS_UPDATE, $channel, self::HTTP_VERB_POST, $agentData);
     }
 
-    public function show_agent_profile(SimpleXMLElement|string $agent, int $channel = 0): SimpleXMLElement|string
+    public function show_agent_profile(SimpleXMLElement|string $agent, int $channel = 0): SimpleXMLElement
     {
         return $this->request(self::PATH_API_AGENT_PROFILE_GET . "?id=$agent", $channel);
     }
 
-    public function update_agent_profile(SimpleXMLElement|string $agentProfileData): SimpleXMLElement|string
+    public function update_agent_profile(SimpleXMLElement|string $agentProfileData): SimpleXMLElement
     {
         return $this->request(self::PATH_API_AGENT_PROFILE_UPDATE, 0, self::HTTP_VERB_POST, $agentProfileData);
     }
 
     # Payments
-    public function list_payments($params, $channel): SimpleXMLElement|string
+    public function list_payments($params, $channel): SimpleXMLElement
     {
         $params = $this->validateParams($params);
         return $this->request(self::PATH_API_PAYMENTS_LIST . $params, $channel);
     }
 
-    public function payworks_booking_payment_new(SimpleXMLElement|string $payment, int $channel): SimpleXMLElement|string
+    public function payworks_booking_payment_new(SimpleXMLElement|string $payment, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PAYMENTS_PAYWORKS_NEW, $channel, self::HTTP_VERB_POST, $payment);
     }
 
     # Staff members
-    public function list_staff_members(int $channel): SimpleXMLElement|string
+    public function list_staff_members(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_STAFF_LIST, $channel);
     }
 
     # Internal supplier methods
-    public function show_supplier(int $supplierId, int $channel): SimpleXMLElement|string
+    public function show_supplier(int $supplierId, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_SUPPLIER_SHOW . '?supplier_id=' . $supplierId, $channel);
     }
 
     # CRUD Pickup points
-    public function list_pickups(string $params, int $channel): SimpleXMLElement|string
+    public function list_pickups(string $params, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PICKUPS_LIST . $this->validateParams($params), $channel);
     }
 
-    public function create_pickup(SimpleXMLElement|string $pickupData, int $channel): SimpleXMLElement|string
+    public function create_pickup(SimpleXMLElement|string $pickupData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PICKUPS_NEW, $channel, self::HTTP_VERB_POST, $pickupData);
     }
 
-    public function update_pickup(SimpleXMLElement|string $pickupData, int $channel): SimpleXMLElement|string
+    public function update_pickup(SimpleXMLElement|string $pickupData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PICKUPS_UPDATE, $channel, self::HTTP_VERB_POST, $pickupData);
     }
 
-    public function delete_pickup(SimpleXMLElement|string $pickupData, int $channel): SimpleXMLElement|string
+    public function delete_pickup(SimpleXMLElement|string $pickupData, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_PICKUPS_DELETE, $channel, self::HTTP_VERB_POST, $pickupData);
     }
 
-    public function show_tours_pickup_routes(int $tourId, int $channel): SimpleXMLElement|string
+    /**
+     * Show Tour Pickup Routes
+     * @param int $tourId
+     * @param int $channel
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
+    public function show_tours_pickup_routes(int $tourId, int $channel): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_SHOW . "?id=$tourId", $channel);
     }
 
-    public function update_tours_pickup_routes(SimpleXMLElement|string $data, int $channel): SimpleXMLElement|string
+    public function update_tours_pickup_routes(SimpleXMLElement|string $data, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_UPDATE, $channel, self::HTTP_VERB_POST, $data);
     }
 
-    public function tours_pickup_routes_add_pickup(SimpleXMLElement|string $data, int $channel): SimpleXMLElement|string
+    public function tours_pickup_routes_add_pickup(SimpleXMLElement|string $data, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_ADD_PICKUP, $channel, self::HTTP_VERB_POST, $data);
     }
 
-    public function tours_pickup_routes_update_pickup(SimpleXMLElement|string $data, int $channel): SimpleXMLElement|string
+    public function tours_pickup_routes_update_pickup(SimpleXMLElement|string $data, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_UPDATE_PICKUP, $channel, self::HTTP_VERB_POST, $data);
     }
 
-    public function tours_pickup_routes_delete_pickup(SimpleXMLElement|string $data, int $channel): SimpleXMLElement|string
+    public function tours_pickup_routes_delete_pickup(SimpleXMLElement|string $data, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_PICKUP_ROUTES_DELETE_PICKUP, $channel, self::HTTP_VERB_POST, $data);
     }
 
     # Account
-    public function create_account(SimpleXMLElement|string $uploadInfo): SimpleXMLElement|string
+    public function create_account(SimpleXMLElement|string $uploadInfo): SimpleXMLElement
     {
         return $this->request(self::PATH_API_ACCOUNT_CREATE, 0, self::HTTP_VERB_POST, $uploadInfo);
     }
 
-    public function update_account(SimpleXMLElement|string $uploadInfo, int $channel): SimpleXMLElement|string
+    public function update_account(SimpleXMLElement|string $uploadInfo, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_ACCOUNT_UPDATE, $channel, self::HTTP_VERB_POST, $uploadInfo);
     }
 
-    public function show_account(int $accountId): SimpleXMLElement|string
+    public function show_account(int $accountId): SimpleXMLElement
     {
         $url = self::PATH_API_ACCOUNT_SHOW . "?account_id=" . $accountId;
         return $this->request($url, 0);
     }
 
-    public function create_channel(SimpleXMLElement|string $newChannel, int $channel): SimpleXMLElement|string
+    public function create_channel(SimpleXMLElement|string $newChannel, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CHANNEL_CREATE, $channel, self::HTTP_VERB_POST, $newChannel);
     }
 
-    public function update_channel(SimpleXMLElement|string $channelInfo, int $channel): SimpleXMLElement|string
+    public function update_channel(SimpleXMLElement|string $channelInfo, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_CHANNEL_UPDATE, $channel, self::HTTP_VERB_POST, $channelInfo);
     }
 
-    public function show_markup_scheme(int $channel): SimpleXMLElement|string
+    public function show_markup_scheme(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_MARKUP_SCHEME_SHOW, $channel, self::HTTP_VERB_GET);
     }
 
-    public function create_tour_geopoint(SimpleXMLElement|string $geopoint, int $channel): SimpleXMLElement|string
+    public function create_tour_geopoint(SimpleXMLElement|string $geopoint, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_GEOS_CREATE, $channel, self::HTTP_VERB_POST, $geopoint);
     }
 
-    public function update_tour_geopoint(SimpleXMLElement|string $geopoint, int $channel): SimpleXMLElement|string
+    public function update_tour_geopoint(SimpleXMLElement|string $geopoint, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_GEOS_UPDATE, $channel, self::HTTP_VERB_POST, $geopoint);
     }
 
-    public function delete_tour_geopoint(SimpleXMLElement|string $geopoint, int $channel): SimpleXMLElement|string
+    public function delete_tour_geopoint(SimpleXMLElement|string $geopoint, int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_GEOS_DELETE, $channel, self::HTTP_VERB_POST, $geopoint);
     }
 
-    public function get_custom_fields(int $channel): SimpleXMLElement|string
+    public function get_custom_fields(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_ACCOUNT_CUSTOM_FIELDS_GET, $channel, self::HTTP_VERB_GET);
     }
 
-    public function get_tour_facets(int $channel): SimpleXMLElement|string
+    public function get_tour_facets(int $channel): SimpleXMLElement
     {
         return $this->request(self::PATH_API_TOUR_FACETS_GET, $channel, self::HTTP_VERB_GET);
     }
 
-    public function get_list_tours(int $channel, string $queryString): SimpleXMLElement|string
+    public function get_list_tours(int $channel, string $queryString): SimpleXMLElement
     {
         $queryString = $this->validateParams($queryString);
         return $this->request(self::PATH_API_LIST_TOURS_GET . $queryString, $channel, self::HTTP_VERB_GET);
     }
 
-    public function get_import_tours_status(int $channel, SimpleXMLElement|string $codes): SimpleXMLElement|string
+    public function get_import_tours_status(int $channel, SimpleXMLElement|string $codes): SimpleXMLElement
     {
         return $this->request(self::PATH_API_IMPORT_TOURS_STATUS, $channel, self::HTTP_VERB_POST, $codes);
     }
 
-    public function list_tour_booking_restrictions(int $channel, string $queryString): SimpleXMLElement|string
+    public function list_tour_booking_restrictions(int $channel, string $queryString): SimpleXMLElement
     {
         $queryString = $this->validateParams($queryString);
         return $this->request(self::PATH_API_LIST_TOUR_BOOKINGS_RESTRICTIONS . $queryString, $channel, self::HTTP_VERB_GET);
@@ -1087,6 +1165,19 @@ class TourCMS
         }
 
         return $params;
+    }
+
+    /**
+     * Validate Tour ID
+     * @param int $tourId
+     * @throws \InvalidArgumentException
+     * @return void
+     */
+    protected function validateTourId(int $tourId): void
+    {
+        if ($tourId <= 0) {
+            throw new InvalidArgumentException(self::ERROR_MESSAGE_INVALID_TOUR_ID);
+        }
     }
 
     /**
