@@ -785,7 +785,6 @@ class TourCMS
 
     public function search_voucher(SimpleXMLElement|string|null $voucherData = null, $channel = 0): SimpleXMLElement
     {
-
         if ($voucherData == null) {
             $voucherData = new SimpleXMLElement('<voucher />');
             $voucherData->addChild('barcode_data', '');
@@ -859,7 +858,6 @@ class TourCMS
 
     public function add_note_to_booking(int $bookingId, int $channel, string $text, string $noteType): SimpleXMLElement
     {
-
         $bookingData = new SimpleXMLElement('<booking />');
         $bookingData->addChild('booking_id', $bookingId);
         $note = $bookingData->addChild('note');
@@ -920,9 +918,9 @@ class TourCMS
     }
 
     public function verify_customer(SimpleXMLElement|string $customer, int $channel): SimpleXMLElement
-	{
-		return $this->request(self::PATH_API_CUSTOMER_VERIFICATION, $channel, self::HTTP_VERB_POST, $customer);
-	}
+    {
+        return $this->request(self::PATH_API_CUSTOMER_VERIFICATION, $channel, self::HTTP_VERB_POST, $customer);
+    }
 
     # Agents
     public function search_agents(string $params, int $channel): SimpleXMLElement
