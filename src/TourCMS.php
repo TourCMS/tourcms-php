@@ -460,12 +460,22 @@ class TourCMS
         return $this->request(self::PATH_API_C_TOURS_SEARCH . $params, $channel);
     }
 
+    /**
+     * Summary of search_hotels_range
+     * @param string $params
+     * @param mixed $tourId
+     * @param int $channel
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
     public function search_hotels_range(string $params = "", ?int $tourId = null, int $channel = 0): SimpleXMLElement
     {
 
         $params = $this->validateParams($params);
 
         if (!is_null($tourId)) {
+
+            $this->validateTourId($tourId);
 
             if (empty($params)) {
                 $params = '?single_tour_id=';
@@ -486,6 +496,8 @@ class TourCMS
         $params = $this->validateParams($params);
 
         if (!is_null($tourId)) {
+
+            $this->validateTourId($tourId);
 
             if (empty($params)) {
                 $params = '?single_tour_id=';
@@ -545,8 +557,17 @@ class TourCMS
         return $this->request(self::PATH_API_C_TOURS_LOCATIONS . $params, $channel);
     }
 
+    /**
+     * Summary of delete_tour
+     * @param int $tourId
+     * @param int $channel
+     * @throws \InvalidArgumentException
+     * @return SimpleXMLElement
+     */
     public function delete_tour(int $tourId, int $channel): SimpleXMLElement
     {
+        $this->validateTourId($tourId);
+
         $url = self::PATH_API_TOUR_DELETE .'?id=' . $tourId;
         return $this->request($url, $channel, self::HTTP_VERB_POST);
     }
