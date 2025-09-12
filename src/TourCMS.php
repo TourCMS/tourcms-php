@@ -47,6 +47,8 @@ class TourCMS {
 	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
 	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
 	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/search_criteria/get.xml";
+	const PATH_API_CHECK_PAYMENT_STATUS_GET = '/api/payments/status/get.xml';
+    const PATH_API_CREATE_PAYMENT_LINK_CREATE = '/api/payments/link/create.xml';
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -613,6 +615,16 @@ class TourCMS {
 	{
 		return($this->request('/c/booking/cancel.xml', $channel, "POST", $booking_data));
 	}
+
+	public function create_payment_link($postData, $channel)
+	{
+        return $this.request(self::PATH_API_CHECK_PAYMENT_STATUS_GET, $channel,self::HTTP_VERB_POST, $postData);
+    }
+
+    public function check_payment_status($paymentUUID, $channel)
+	{
+        return $this.request(self::PATH_API_CREATE_PAYMENT_LINK_CREATE.'?uuid='.$paymentUUID, $channel, self::HTTP_VERB_GET);
+    }
 
 	public function delete_booking($booking, $channel)
 	{
