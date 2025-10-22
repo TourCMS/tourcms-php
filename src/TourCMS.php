@@ -90,7 +90,7 @@ class TourCMS {
 	 * @param $path API path to call
 	 * @param $channel Channel ID, defaults to zero
 	 * @param $verb HTTP Verb, defaults to GET
-	 * @return String or SimpleXML
+	 * @return string|SimpleXMLElement
 	 */
 	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
 		// Prepare the URL we are sending to
@@ -177,7 +177,7 @@ class TourCMS {
 	 * get_base_url
 	 *
 	 * @author Paul Slugocki
-	 * @return String
+	 * @return string
 	 */
 	public function get_base_url() {
 		return $this->base_url;
@@ -188,7 +188,7 @@ class TourCMS {
 	 *
 	 * @author Paul Slugocki
 	 * @param $url New base url
-	 * @return Boolean
+	 * @return bool
 	 */
 	public function set_base_url($url) {
 		$this->base_url = $url;
@@ -618,12 +618,12 @@ class TourCMS {
 
 	public function create_payment_link($postData, $channel)
 	{
-        return $this.request(self::PATH_API_CHECK_PAYMENT_STATUS_GET, $channel,self::HTTP_VERB_POST, $postData);
+        return $this->request(self::PATH_API_CHECK_PAYMENT_STATUS_GET, $channel,self::HTTP_VERB_POST, $postData);
     }
 
     public function check_payment_status($paymentUUID, $channel)
 	{
-        return $this.request(self::PATH_API_CREATE_PAYMENT_LINK_CREATE.'?uuid='.$paymentUUID, $channel, self::HTTP_VERB_GET);
+        return $this->request(self::PATH_API_CREATE_PAYMENT_LINK_CREATE.'?uuid='.$paymentUUID, $channel, self::HTTP_VERB_GET);
     }
 
 	public function delete_booking($booking, $channel)
@@ -937,7 +937,7 @@ class TourCMS {
 	* @param $path API Path
 	* @param $verb HTTP Verb
 	* @param $channel Channel ID
-	* @return String
+	* @return string
 	*/
 	protected function generate_signature($path, $verb, $channel, $outbound_time) 
 	{
