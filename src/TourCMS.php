@@ -47,6 +47,11 @@ class TourCMS {
 	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
 	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
 	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/search_criteria/get.xml";
+	const PATH_API_TOURS_TIERS_ADD = "/api/tours/tour_tiers/tour_tier_add.xml";
+	const PATH_API_TOURS_TIERS_UPDATE = "/api/tours/tour_tiers/tour_tier_update.xml";
+	const PATH_API_TOURS_TIERS_DELETE = "/api/tours/tour_tiers/tour_tier_delete.xml";
+	const PATH_API_TOURS_TIERS_SHOW = "/api/tours/tour_tiers/tour_tier_show.xml";
+	const PATH_API_TOURS_TIERS_LIST = "/api/tours/tour_tiers/tour_tier_list.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -901,6 +906,31 @@ class TourCMS {
 	{
 		$query_string = $this->validateParams($query_string);
 		return $this->request(self::PATH_API_LIST_TOUR_BOOKINGS_RESTRICTIONS.$query_string, $channel, self::HTTP_VERB_GET);
+	}
+
+	public function list_tiers($tierData, $channel)
+	{
+		return $this->request(self::PATH_API_TOURS_TIERS_LIST, $channel, self::HTTP_VERB_POST, $tierData);
+	}
+
+	public function get_tier($tierData, $channel)
+	{
+		return $this->request(self::PATH_API_TOURS_TIERS_SHOW, $channel, self::HTTP_VERB_POST, $tierData);
+	}
+
+	public function delete_tier($tierData, $channel)
+	{
+		return $this->request(self::PATH_API_TOURS_TIERS_DELETE, $channel, self::HTTP_VERB_POST, $tierData);
+	}
+
+	public function update_tier($tierData, $channel)
+	{
+		return $this->request(self::PATH_API_TOURS_TIERS_UPDATE, $channel, self::HTTP_VERB_POST, $tierData);
+	}
+
+	public function add_tier($tierData, $channel)
+	{
+		return $this->request(self::PATH_API_TOURS_TIERS_ADD, $channel, self::HTTP_VERB_POST, $tierData);
 	}
 
 // Internal Functions
