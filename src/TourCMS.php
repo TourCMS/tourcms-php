@@ -736,11 +736,6 @@ class TourCMS {
 		$params = $this->validateParams($params);
 		return($this->request('/c/booking/payment/list.xml'.$params, $channel));
 	}
-  
-  	public function payworks_booking_payment_new($payment, $channel)
-  	{
-  		return ($this->request('/c/booking/payment/payworks/new.xml', $channel, "POST", $payment));
-  	}
 
 	# Staff members
 	public function list_staff_members($channel)
