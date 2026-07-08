@@ -47,6 +47,7 @@ class TourCMS {
 	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
 	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
 	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/search_criteria/get.xml";
+	const PATH_API_BOOKING_WEBHOOK_TRIGGER = "/api/booking/webhook/trigger.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -648,6 +649,16 @@ class TourCMS {
 
 	public function send_booking_email($booking_data, $channel){
 			return($this->request('/c/booking/email/send.xml', $channel, "POST", $booking_data));
+	}
+
+	public function trigger_booking_webhook($booking, $event, $channel)
+	{
+
+		$booking_data = new SimpleXMLElement('<booking />');
+		$booking_data->addChild('booking_id', $booking);
+		$booking_data->addChild('event', $event);
+
+		return($this->request(self::PATH_API_BOOKING_WEBHOOK_TRIGGER, $channel, self::HTTP_VERB_POST, $booking_data));
 	}
 
 	public function redeem_voucher($voucher_data, $channel = 0) {
