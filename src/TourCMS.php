@@ -47,6 +47,9 @@ class TourCMS {
 	const PATH_API_AGENT_PROFILE_GET = "/api/agent/profile/get.xml";
 	const PATH_API_AGENT_PROFILE_UPDATE = "/api/agent/profile/update.xml";
 	const PATH_API_TOURS_SEARCH_CRITERIA_GET = "/api/tours/search_criteria/get.xml";
+	const PATH_API_CHECK_PAYMENT_STATUS_GET = '/api/payments/status/get.xml';
+    const PATH_API_CREATE_PAYMENT_LINK_CREATE = '/api/payments/link/create.xml';
+	const PATH_API_BOOKING_WEBHOOK_TRIGGER = "/api/booking/webhook/trigger.xml";
 
 	// HTTP VERBS CONST
 	const HTTP_VERB_POST = 'POST';
@@ -88,7 +91,7 @@ class TourCMS {
 	 * @param $path API path to call
 	 * @param $channel Channel ID, defaults to zero
 	 * @param $verb HTTP Verb, defaults to GET
-	 * @return String or SimpleXML
+	 * @return string|SimpleXMLElement
 	 */
 	public function request($path, $channel = 0, $verb = 'GET', $post_data = null) {
 		// Prepare the URL we are sending to
@@ -175,7 +178,7 @@ class TourCMS {
 	 * get_base_url
 	 *
 	 * @author Paul Slugocki
-	 * @return String
+	 * @return string
 	 */
 	public function get_base_url() {
 		return $this->base_url;
@@ -186,7 +189,7 @@ class TourCMS {
 	 *
 	 * @author Paul Slugocki
 	 * @param $url New base url
-	 * @return Boolean
+	 * @return bool
 	 */
 	public function set_base_url($url) {
 		$this->base_url = $url;
@@ -614,6 +617,16 @@ class TourCMS {
 		return($this->request('/c/booking/cancel.xml', $channel, "POST", $booking_data));
 	}
 
+	public function create_payment_link($postData, $channel)
+	{
+        return $this->request(self::PATH_API_CHECK_PAYMENT_STATUS_GET, $channel,self::HTTP_VERB_POST, $postData);
+    }
+
+    public function check_payment_status($paymentUUID, $channel)
+	{
+        return $this->request(self::PATH_API_CREATE_PAYMENT_LINK_CREATE.'?uuid='.$paymentUUID, $channel, self::HTTP_VERB_GET);
+    }
+
 	public function delete_booking($booking, $channel)
 	{
 		return($this->request('/c/booking/delete.xml?booking_id='.$booking, $channel, "POST"));
@@ -648,6 +661,16 @@ class TourCMS {
 
 	public function send_booking_email($booking_data, $channel){
 			return($this->request('/c/booking/email/send.xml', $channel, "POST", $booking_data));
+	}
+
+	public function trigger_booking_webhook($booking, $event, $channel)
+	{
+
+		$booking_data = new SimpleXMLElement('<booking />');
+		$booking_data->addChild('booking_id', $booking);
+		$booking_data->addChild('event', $event);
+
+		return($this->request(self::PATH_API_BOOKING_WEBHOOK_TRIGGER, $channel, self::HTTP_VERB_POST, $booking_data));
 	}
 
 	public function redeem_voucher($voucher_data, $channel = 0) {
@@ -925,7 +948,7 @@ class TourCMS {
 	* @param $path API Path
 	* @param $verb HTTP Verb
 	* @param $channel Channel ID
-	* @return String
+	* @return string
 	*/
 	protected function generate_signature($path, $verb, $channel, $outbound_time) 
 	{
